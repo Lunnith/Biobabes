@@ -16,7 +16,6 @@ class Protein():
         self.score = 0
         self.add_aminoacid(sequence)
 
-        self.directions = [-1, 1, 2, -2]
 
     def add_aminoacid(self, sequence):
         """
@@ -43,17 +42,22 @@ class Protein():
         directions = [[1, 0, 1], [-1, 0, -1], [0, 1, 2], [0, -1, -2]]
 
         for acid in self.sequence_list:
-            direction = random.choice(directions)
             
-            direction_x = direction[0]
-            direction_y = direction[1]
-            acid.step = direction[2]
-
             if acid == self.sequence_list[0]:
                 pass
 
-            else: 
+            else:
+                # Select a direction with change in x and y cordinates
+                direction = random.choice(directions)
+                
+                # define direction that x and y will go in
+                direction_x = direction[0]
+                direction_y = direction[1]
 
+                # Define step for the acid
+                acid.step = direction[2]
+
+                # Set location of the acid
                 acid.location_x = previous_acid.location_x + direction_x
                 acid.location_y = previous_acid.location_y + direction_y
 
