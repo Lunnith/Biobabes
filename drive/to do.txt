@@ -1,7 +1,3 @@
 - Zorgen dat bij het creeëren van de bindingen de binding niet 'terug' kan
 - Zorgen dat bij het creeëren van de bindingen er geen bindingen over elkaar heen kunnen
 
-- Functie implementeren om te checken in het geval van een H of er een andere H in de omgeving is
-- Deze functie vervolgens uitbreiden voor interacties tussen C en C en tussen een C en H
-- Zorgen dat de functie alleen een score geeft als er geen binding is met het aminozuur in de nabije omgeving
-- Totale score geven aan eiwit na vouwing
