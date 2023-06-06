@@ -54,6 +54,7 @@ class Protein():
 
         for acid in self.sequence_list:
             
+
             if acid == self.sequence_list[0]:
                 pass
 
@@ -66,7 +67,7 @@ class Protein():
                 direction_y = direction[1]
 
                 # Define step for the acid
-                acid.step = direction[2]
+                previous_acid.step = direction[2]
 
                 # Set location of the acid
                 acid.location_x = previous_acid.location_x + direction_x
