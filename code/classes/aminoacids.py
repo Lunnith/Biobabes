@@ -11,7 +11,7 @@ class Protein():
 
         Initiate the possible directions.
         """
-        self.sequence_dict = {}
+        self.sequence_list = []
         self.add_aminoacid(sequence)
 
         self.directions = [-1, 1, 2, -2]
@@ -25,20 +25,51 @@ class Protein():
         """
         for acid in sequence.lower():
             if acid == 'p':
-                self.sequence_dict[Polar()] = None
+                self.sequence_list.append(Polar())
             elif acid == 'h':
-                self.sequence_dict[Hydrophobic()] = None
+                self.sequence_list.append(Hydrophobic())
             elif acid == 'c':
-                self.sequence_dict[Cysteine()] = None
+                self.sequence_list.append(Cysteine())
     
     def create_bonds(self):
         """
         For each aminoacid, determine the direction of the bond.
         """
-        for acid in self.sequence_dict:
-            self.sequence_dict[acid] = random.choice(self.directions)
+        self.sequence_list[0].location_x = 0
+        self.sequence_list[0].location_y = 0
+        previous_acid = self.sequence_list[0]
+        
+        for acid in self.sequence_list:
+            acid.step = random.choice(self.directions)
 
-    
+            if acid == self.sequence_list[0]:
+                pass
+
+            else: 
+                step_taken = previous_acid.step
+                old_location_x = previous_acid.location_x
+                old_location_y = previous_acid.location_y
+
+                if step_taken == -1:
+                    acid.location_x = old_location_x - 1
+                    acid.location_y = old_location_y
+            
+                elif step_taken == 1:
+                    acid.location_x = old_location_x + 1
+                    acid.location_y = old_location_y
+
+                elif step_taken == -2:
+                    acid.location_x = old_location_x
+                    acid.location_y = old_location_y - 1
+
+                elif step_taken == 2:
+                    acid.location_x = old_location_x
+                    acid.location_y = old_location_y + 1
+
+            previous_acid = acid
+
+
+
     def check_bonds(self):
         """
         """
@@ -47,7 +78,7 @@ class Protein():
     def create_output(self):
         """
         """
-        pass
+        
 
 
 
@@ -59,7 +90,9 @@ class Aminoacid():
     def __init__(self):
         """
         """
-        pass
+        self.location_x = None
+        self.location_y = None
+        self.step = None
 
     def interact(self, other):
         """
@@ -100,4 +133,7 @@ class Cysteine(Aminoacid):
 
 protein = Protein("HPCHP")
 protein.create_bonds()
-print(protein.sequence_dict)
+# print(protein.sequence_list)
+
+for acid in protein.sequence_list:
+    print(f"Class = {acid}, Step = {acid.step}, Coordinates = ({acid.location_x}, {acid.location_y})")
