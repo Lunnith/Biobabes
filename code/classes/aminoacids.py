@@ -33,6 +33,17 @@ class Protein():
             elif acid == 'c':
                 self.sequence_list.append(Cysteine())
     
+    def initialize_neighbours(self):
+        """
+        
+        """
+        for i in range(len(self.sequence_list)):
+            self.sequence_list[i].neighbour1 = self.sequence_list[i - 1]
+            self.sequence_list[i].neighbour2 = self.sequence_list[i + 1]
+
+        self.sequence_list[0].neighbour1 = None
+        self.sequence_list[-1].neighbour2 = None
+
     def create_bonds(self):
         """
         For each aminoacid, determine the direction of the bond.
@@ -60,30 +71,30 @@ class Protein():
 
             previous_acid = acid
 
-
+    def distance(self, other):
+        return math.sqrt((self.location_x - other.location_x) ** 2 + (self.location_y - other.location_y) ** 2)
+    
     def check_interactions(self):
         """
         Check surrounding of aminoacid for other aminoacids, if they are present, check type
         and change score according to the interaction type.
         """
-        for acid in self.sequence_list:
-            if acid.location_x == self.location_x + 1 and acid.location_y == self.location_y:
-                other = acid
-            elif acid.location_x == self.location_x - 1 and acid.location_y == self.location_y:
-                other = acid
-            elif acid.location_x == self.location_x and acid.location_y == self.location_y + 1:
-                other = acid
-            elif acid.location_x == self.location_x and acid.location_y == self.location_y - 1:
-                other = acid
 
-        if type(self) == Hydrophobic() and type(other) == Hydrophobic():
-            self.score -= 1
+        for acid in self.sequence_list:
+            if acid != self.neighbour1 or acid != self.neighbour2:
+                if distance(self, acid) == 1:
+                    potential_interactor = acid
+
+                if type(self) == Hydrophobic() and type(potential_interactor) == Hydrophobic():
+                    self.score -= 1
         
-        if type(self) == Hydrophobic() and type(other) == Cysteine():
-            self.score -= 1
+                if type(self) == Hydrophobic() and type(potential_interactor) == Cysteine():
+                    self.score -= 1
         
-        if type(self) == Cysteine() and type(other) == Cysteine():
-            self.score -= 5
+                if type(self) == Cysteine() and type(potential_interactor) == Cysteine():
+                    self.score -= 5
+            
+            potential_interactor = None
 
     def create_output(self):
         """
@@ -122,6 +133,9 @@ class Aminoacid():
         self.location_x = None
         self.location_y = None
         self.step = None
+        
+        self.neighbour1 = None
+        self.neighbour2 = None
 
     def interact(self, other):
         """
