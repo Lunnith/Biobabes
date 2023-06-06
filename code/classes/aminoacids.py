@@ -14,7 +14,10 @@ class Protein():
         """
         self.sequence_list = []
         self.score = 0
+
         self.add_aminoacid(sequence)
+        self.initialize_neighbours()
+        self.check_interactions()
 
 
     def add_aminoacid(self, sequence):
@@ -87,7 +90,7 @@ class Protein():
 
         for acid in self.sequence_list:
             if acid != self.neighbour1 or acid != self.neighbour2:
-                if distance(self, acid) == 1:
+                if self.distance(self, acid) == 1:
                     potential_interactor = acid
 
                 if type(self) == Hydrophobic() and type(potential_interactor) == Hydrophobic():
@@ -137,7 +140,7 @@ class Aminoacid():
         """
         self.location_x = None
         self.location_y = None
-        self.step = None
+        self.step = 0
         
         self.neighbour1 = None
         self.neighbour2 = None
