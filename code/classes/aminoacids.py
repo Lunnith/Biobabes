@@ -61,11 +61,29 @@ class Protein():
             previous_acid = acid
 
 
+    def check_interactions(self):
+        """
+        Check surrounding of aminoacid for other aminoacids, if they are present, check type
+        and change score according to the interaction type.
+        """
+        for acid in self.sequence_list:
+            if acid.location_x == self.location_x + 1 and acid.location_y == self.location_y:
+                other = acid
+            elif acid.location_x == self.location_x - 1 and acid.location_y == self.location_y:
+                other = acid
+            elif acid.location_x == self.location_x and acid.location_y == self.location_y + 1:
+                other = acid
+            elif acid.location_x == self.location_x and acid.location_y == self.location_y - 1:
+                other = acid
 
-    def check_bonds(self):
-        """
-        """
-        pass
+        if type(self) == Hydrophobic() and type(other) == Hydrophobic():
+            self.score -= 1
+        
+        if type(self) == Hydrophobic() and type(other) == Cysteine():
+            self.score -= 1
+        
+        if type(self) == Cysteine() and type(other) == Cysteine():
+            self.score -= 5
 
     def create_output(self):
         """
