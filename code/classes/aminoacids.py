@@ -78,9 +78,7 @@ class Protein():
 
             previous_acid = acid
 
-    def distance(self, other):
-        return math.sqrt((self.location_x - other.location_x) ** 2 + (self.location_y - other.location_y) ** 2)
-    
+   
     def check_interactions(self, aminoacid):
         """
         Check surrounding of aminoacid for other aminoacids, if they are present, check type
@@ -89,7 +87,8 @@ class Protein():
 
         for acid in self.sequence_list:
             if acid != aminoacid.neighbour1 or acid != aminoacid.neighbour2:
-                if self.distance(aminoacid, acid) == 1:
+
+                if acid.distance(aminoacid) == 1:
                     potential_interactor = acid
 
                 if type(aminoacid) == Hydrophobic() and type(potential_interactor) == Hydrophobic():
@@ -144,10 +143,9 @@ class Aminoacid():
         self.neighbour1 = None
         self.neighbour2 = None
 
-    def interact(self, other):
-        """
-        """
-        pass
+    def distance(self, other):
+        return math.sqrt((self.location_x - other.location_x) ** 2 + (self.location_y - other.location_y) ** 2)
+    
         
     
 class Polar(Aminoacid):
