@@ -89,8 +89,8 @@ class Protein():
             pos_y.append(aminoacid.location_y)
             color.append(aminoacid.color)
 
-        plt.scatter(pos_x, pos_y, color)
-        plt.plot(pos_x, pos_y, 'black-')
+        plt.scatter(pos_x, pos_y, c = color)
+        plt.plot(pos_x, pos_y, 'b-')
         plt.grid(True)
         plt.show()
         
