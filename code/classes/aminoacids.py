@@ -1,4 +1,5 @@
 import random
+import matplotlib.pyplot as plt
 
 class Protein():
     """
@@ -78,6 +79,20 @@ class Protein():
     def create_output(self):
         """
         """
+    
+    def visualize(self):
+        pos_x = []
+        pos_y = []
+        color = []
+        for aminoacid in self.sequence_list:
+            pos_x.append(aminoacid.location_x)
+            pos_y.append(aminoacid.location_y)
+            color.append(aminoacid.color)
+
+        plt.scatter(pos_x, pos_y, color)
+        plt.plot(pos_x, pos_y, 'black-')
+        plt.grid(True)
+        plt.show()
         
 
 
@@ -137,3 +152,11 @@ protein.create_bonds()
 
 for acid in protein.sequence_list:
     print(f"Class = {acid}, Step = {acid.step}, Coordinates = ({acid.location_x}, {acid.location_y})")
+
+##################################3
+
+
+
+protein.visualize()
+
+
