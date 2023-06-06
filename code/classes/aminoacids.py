@@ -137,7 +137,7 @@ class Aminoacid():
         """
         self.location_x = None
         self.location_y = None
-        self.step = None
+        self.step = 0
         
         self.neighbour1 = None
         self.neighbour2 = None
