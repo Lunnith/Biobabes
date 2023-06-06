@@ -1,5 +1,5 @@
 import random
-#import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 
 class Protein():
     """
@@ -40,33 +40,23 @@ class Protein():
         self.sequence_list[0].location_x = 0
         self.sequence_list[0].location_y = 0
         previous_acid = self.sequence_list[0]
-        
+        directions = [[1, 0, 1], [-1, 0, -1], [0, 1, 2], [0, -1, -2]]
+
         for acid in self.sequence_list:
-            acid.step = random.choice(self.directions)
+            direction = random.choice(directions)
+            
+            direction_x = direction[0]
+            direction_y = direction[1]
+            acid.step = direction[2]
 
             if acid == self.sequence_list[0]:
                 pass
 
             else: 
-                step_taken = previous_acid.step
-                old_location_x = previous_acid.location_x
-                old_location_y = previous_acid.location_y
 
-                if step_taken == -1:
-                    acid.location_x = old_location_x - 1
-                    acid.location_y = old_location_y
-            
-                elif step_taken == 1:
-                    acid.location_x = old_location_x + 1
-                    acid.location_y = old_location_y
+                acid.location_x = previous_acid.location_x + direction_x
+                acid.location_y = previous_acid.location_y + direction_y
 
-                elif step_taken == -2:
-                    acid.location_x = old_location_x
-                    acid.location_y = old_location_y - 1
-
-                elif step_taken == 2:
-                    acid.location_x = old_location_x
-                    acid.location_y = old_location_y + 1
 
             previous_acid = acid
 
@@ -166,6 +156,6 @@ for acid in protein.sequence_list:
 
 
 
-#protein.visualize()
+protein.visualize()
 protein.create_output()
 
