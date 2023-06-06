@@ -1,5 +1,5 @@
 import random
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 
 class Protein():
     """
@@ -13,6 +13,7 @@ class Protein():
         Initiate the possible directions.
         """
         self.sequence_list = []
+        self.score = 0
         self.add_aminoacid(sequence)
 
         self.directions = [-1, 1, 2, -2]
@@ -79,7 +80,12 @@ class Protein():
     def create_output(self):
         """
         """
+        print('amino,fold')
+        for aminoacid in self.sequence_list:
+            print(f'{aminoacid.type},{aminoacid.step}')
+        print(f'score,{self.score}')
     
+
     def visualize(self):
         pos_x = []
         pos_y = []
@@ -125,6 +131,7 @@ class Polar(Aminoacid):
         super().__init__()
 
         self.color = 'royalblue'
+        self.type = 'P'
 
 class Hydrophobic(Aminoacid):
     """
@@ -134,6 +141,7 @@ class Hydrophobic(Aminoacid):
         super().__init__()
 
         self.color = 'red'
+        self.type = 'H'
 
 class Cysteine(Aminoacid):
     """
@@ -143,6 +151,7 @@ class Cysteine(Aminoacid):
         super().__init__()
 
         self.color = 'lime'
+        self.type = 'C'
     
 
 
@@ -157,6 +166,6 @@ for acid in protein.sequence_list:
 
 
 
-protein.visualize()
-
+#protein.visualize()
+protein.create_output()
 
