@@ -17,7 +17,6 @@ class Protein():
 
         self.add_aminoacid(sequence)
         self.initialize_neighbours()
-        self.check_interactions()
 
 
     def add_aminoacid(self, sequence):
@@ -41,10 +40,10 @@ class Protein():
         """
         for i in range(len(self.sequence_list)):
             self.sequence_list[i].neighbour1 = self.sequence_list[i - 1]
-            self.sequence_list[i].neighbour2 = self.sequence_list[i + 1]
+            if i < len(self.sequence_list) - 1:
+                self.sequence_list[i].neighbour2 = self.sequence_list[i + 1]
 
         self.sequence_list[0].neighbour1 = None
-        self.sequence_list[-1].neighbour2 = None
 
     def create_bonds(self):
         """
@@ -82,24 +81,24 @@ class Protein():
     def distance(self, other):
         return math.sqrt((self.location_x - other.location_x) ** 2 + (self.location_y - other.location_y) ** 2)
     
-    def check_interactions(self):
+    def check_interactions(self, aminoacid):
         """
         Check surrounding of aminoacid for other aminoacids, if they are present, check type
         and change score according to the interaction type.
         """
 
         for acid in self.sequence_list:
-            if acid != self.neighbour1 or acid != self.neighbour2:
-                if self.distance(self, acid) == 1:
+            if acid != aminoacid.neighbour1 or acid != aminoacid.neighbour2:
+                if self.distance(aminoacid, acid) == 1:
                     potential_interactor = acid
 
-                if type(self) == Hydrophobic() and type(potential_interactor) == Hydrophobic():
+                if type(aminoacid) == Hydrophobic() and type(potential_interactor) == Hydrophobic():
                     self.score -= 1
         
-                if type(self) == Hydrophobic() and type(potential_interactor) == Cysteine():
+                if type(aminoacid) == Hydrophobic() and type(potential_interactor) == Cysteine():
                     self.score -= 1
         
-                if type(self) == Cysteine() and type(potential_interactor) == Cysteine():
+                if type(aminoacid) == Cysteine() and type(potential_interactor) == Cysteine():
                     self.score -= 5
             
             potential_interactor = None
