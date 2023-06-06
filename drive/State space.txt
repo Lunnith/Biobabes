@@ -1,0 +1,56 @@
+1.
+order = no | repetition = no | n = 20 | r = 12
+125970
+
+2.
+order = yes | repetition = yes | n = 2 | r = 20
+3^20
+
+3.
+order = no | repetition = yes | n = 3 | r = 25
+351
+
+4.
+met 30 vakken = 8.36 * e26 opties
+met 31 vakken = 2.15 * e27 opties
+met 32 vakken = 5.33 * e27 opties
+order = no | repetition = no | n = 110 | r = 30
+Totaal aantal opties (som van antwoorden) = 8.316 * e27
+
+5.
+order = yes | repetition = no | n = 26 | r = 7
+1 op 3315312000
+
+6.
+Als je het aantal mogelijkheden uitrekent met één broodje in de wagen, blijkt dit 45 opties te zijn.
+Met twee broodjes is dit 44.
+Dus de berekening wordt: 46 (geen broodjes) + 45 + 44 + ....... + 16 (30 broodjes) = 961
+
+
+7.
+case:
+Protein Pow(d)er
+
+Variabelen:
+Hoeveelheid Aminozuren
+Hydrofoob/Polair
+Richting van de binding
+
+Versimpelde aannames:
+Eerste aminozuur bestaat. Vanaf het tweede aminozuur kan elke binding één van de drie overige richtingen aannemen. In werkelijkheid, kan dit niet altijd, omdat er configuraties bestaan waar een aminozuur naast een ander aminozuur komt te liggen, welke al onderdeel is van het eiwit, en hierom kan er niet in deze richting gevouwen worden, wat resulteert in minder mogelijkheden voor de bindingsrichting. 
+Bij het berekenen van de state space, nemen we echter aan dat elk aminozuur alle drie de kanten op kan binden.
+
+In dit model is spiegelsymmetrie niet meegenomen. Een gespiegeld eiwit wordt in ons model gezien als een extra uitkomst, met dezelfde score. In principe is dit éénzelfde antwoord, maar in de berekening kiezen we om dit als twee aparte vouw-opties te zien.
+
+Formule:
+3^[Aantal aminozuren - 2])
+
+klein voorbeeld:
+https://ibb.co/dWk59hn
+
+Berekeningen:
+HHPHHHPHPHHHPH -> 14 aminozuren -> 3^12 = 531441
+HPHPPHHPHPPHPHHPPHPH -> 20 aminozuren -> 3^20 = 3486784401
+
+PPCHHPPCHPPPPCHHHHCHHPPHHPPPPHHPPHPP -> 36 aminozuren -> 3^36 = 1.5 *e17
+CPPCHPPCHPPCPPHHHHHHCCPCHPPCPCHPPHPC -> 36 aminozuren
