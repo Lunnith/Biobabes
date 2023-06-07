@@ -67,6 +67,7 @@ class Protein():
 
             else:
                 location_valid = False
+                amount_of_tries = 0
 
                 while location_valid == False:
 
@@ -85,8 +86,11 @@ class Protein():
                     acid.location_y = previous_acid.location_y + direction_y
 
                     coordinates = (acid.location_x, acid.location_y)
-                    if coordinates not in used_coordinates:
+
+                    if coordinates not in used_coordinates and amount_of_tries < 20:
                         location_valid = True
+                    else: amount_of_tries += 1
+                    
                 used_coordinates.add(coordinates)
 
                 acid.check_interactions(self)
