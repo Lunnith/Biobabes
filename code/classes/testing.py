@@ -10,3 +10,4 @@ for acid in protein.sequence_list:
 protein.visualize()
 protein.create_output()
 
+
