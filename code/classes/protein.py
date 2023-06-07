@@ -14,7 +14,6 @@ class Protein():
         Initiate the possible directions.
         """
         self.sequence_list = []
-        self.score = 0
 
         self.add_aminoacid(sequence)
         self.initialize_neighbours()
@@ -103,6 +102,7 @@ class Aminoacid():
         self.location_x = None
         self.location_y = None
         self.step = 0
+        self.score = 0
         
         self.neighbour1 = None
         self.neighbour2 = None
@@ -118,8 +118,9 @@ class Aminoacid():
 
         for acid in protein.temporary_acids:
             if acid != self.neighbour1 or acid != self.neighbour2:
-
+                print(self.distance(acid))
                 if math.isclose(self.distance(acid), 1):
+                    print('if', self.distance(acid))
                     potential_interactor = acid
 
                     if type(self) == Hydrophobic() and type(potential_interactor) == Hydrophobic():
@@ -148,6 +149,7 @@ class Polar(Aminoacid):
 
         self.color = 'royalblue'
         self.type = 'P'
+        self.score = 0
 
 class Hydrophobic(Aminoacid):
     """
@@ -158,6 +160,7 @@ class Hydrophobic(Aminoacid):
 
         self.color = 'red'
         self.type = 'H'
+        self.score = 0
 
 class Cysteine(Aminoacid):
     """
@@ -168,4 +171,5 @@ class Cysteine(Aminoacid):
 
         self.color = 'limegreen'
         self.type = 'C'
+        self.score = 0
     
