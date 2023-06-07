@@ -179,6 +179,6 @@ class Cysteine(Aminoacid):
     def __init__(self):
         super().__init__()
 
-        self.color = 'lime'
+        self.color = 'limegreen'
         self.type = 'C'
     
