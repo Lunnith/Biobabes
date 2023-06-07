@@ -1,7 +1,7 @@
 from code.classes.protein import Protein
 from code.visualisation.visualize import visualize
 
-proteinA = Protein("HPCHPCHH")
+proteinA = Protein("HPCHPCHHCCHPPHHC")
 proteinA.create_bonds()
 # print(protein.sequence_list)
 
