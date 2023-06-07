@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 
-def visualize(protein):
+def visualize_protein(protein):
     """
     Visualize the folded protein with aminoacids and bonds.
     """
@@ -15,3 +15,8 @@ def visualize(protein):
     plt.plot(pos_x, pos_y, c = 'black', linestyle = '-', linewidth = 1.5, zorder = 1)
     plt.grid(True, linestyle = '--')
     plt.show()
+
+def visualise_bonds(protein):
+    """
+    
+    """
