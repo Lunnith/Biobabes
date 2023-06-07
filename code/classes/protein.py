@@ -3,7 +3,6 @@ from Aminoacid import *
 import matplotlib.pyplot as plt
 import random
 
-
 class Protein():
     """
     
