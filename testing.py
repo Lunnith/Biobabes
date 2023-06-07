@@ -1,5 +1,4 @@
 from code.classes import protein
-from code.classes import aminoacid
 from code.visualisation import visualize
 
 proteinA = Protein("HPCHP")
