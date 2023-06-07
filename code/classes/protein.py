@@ -19,6 +19,10 @@ class Protein():
         self.initialize_neighbours()
         self.score = 0
 
+        self.hh_bonds = []
+        self.ch_bonds = []
+        self.cc_bonds = []
+
 
     def add_aminoacid(self, sequence):
         """
@@ -137,21 +141,27 @@ class Aminoacid():
  
                 if self.distance(acid) == 1:
                     potential_interactor = acid
+                    location_acid = (self.location_x, self.location_y)
+                    location_interactor = (acid.location_x, acid.location_y)
 
                     if type(self) == Hydrophobic and type(potential_interactor) == Hydrophobic:
                         protein.score -= 1
+                        protein.hh_bonds.append((location_acid, location_interactor))
                 
             
                     if type(self) == Hydrophobic and type(potential_interactor) == Cysteine:
                         protein.score -= 1
+                        protein.ch_bonds.append((location_acid, location_interactor))
                  
                     
                     if type(self) == Cysteine and type(potential_interactor) == Hydrophobic:
                         protein.score -= 1
+                        protein.ch_bonds.append((location_acid, location_interactor))
              
             
                     if type(self) == Cysteine and type(potential_interactor) == Cysteine:
                         protein.score -= 5
+                        protein.cc_bonds.append((location_acid, location_interactor))
               
             potential_interactor = None
         
