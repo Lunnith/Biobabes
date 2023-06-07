@@ -75,36 +75,11 @@ class Protein():
                 # Set location of the acid
                 acid.location_x = previous_acid.location_x + direction_x
                 acid.location_y = previous_acid.location_y + direction_y
-
+            
+            acid.check_interactions(self)
 
             previous_acid = acid
 
-
-    def check_interactions(self, aminoacid):
-        """
-        Check surrounding of aminoacid for other aminoacids, if they are present, check type
-        and change score according to the interaction type.
-        """
-
-        for acid in self.sequence_list:
-            if acid != aminoacid.neighbour1 or acid != aminoacid.neighbour2:
-
-                if math.isclose(acid.distance(aminoacid), 1):
-                    potential_interactor = acid
-
-                    if type(aminoacid) == Hydrophobic() and type(potential_interactor) == Hydrophobic():
-                        self.score -= 1
-            
-                    if type(aminoacid) == Hydrophobic() and type(potential_interactor) == Cysteine():
-                        self.score -= 1
-                    
-                    if type(aminoacid) == Cysteine() and type(potential_interactor) == Hydrophobic():
-                        self.score -= 1
-            
-                    if type(aminoacid) == Cysteine() and type(potential_interactor) == Cysteine():
-                        self.score -= 5
-            
-            potential_interactor = None
 
 
     def create_output(self):
@@ -132,7 +107,32 @@ class Aminoacid():
 
     def distance(self, other):
         return math.sqrt((self.location_x - other.location_x) ** 2 + (self.location_y - other.location_y) ** 2)
-    
+
+    def check_interactions(self, protein):
+        """
+        Check surrounding of aminoacid for other aminoacids, if they are present, check type
+        and change score according to the interaction type.
+        """
+
+        for acid in protein.sequence_list:
+            if acid != self.neighbour1 or acid != self.neighbour2:
+
+                if math.isclose(self.distance(acid), 1):
+                    potential_interactor = acid
+
+                    if type(self) == Hydrophobic() and type(potential_interactor) == Hydrophobic():
+                        self.score -= 1
+            
+                    if type(self) == Hydrophobic() and type(potential_interactor) == Cysteine():
+                        self.score -= 1
+                    
+                    if type(self) == Cysteine() and type(potential_interactor) == Hydrophobic():
+                        self.score -= 1
+            
+                    if type(self) == Cysteine() and type(potential_interactor) == Cysteine():
+                        self.score -= 5
+            
+            potential_interactor = None
         
     
 class Polar(Aminoacid):
