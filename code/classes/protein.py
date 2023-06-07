@@ -87,8 +87,6 @@ class Protein():
                     coordinates = (acid.location_x, acid.location_y)
                     if coordinates not in used_coordinates:
                         location_valid = True
-                        print(coordinates)
-                        print(used_coordinates)
                 used_coordinates.add(coordinates)
 
                 acid.check_interactions(self)
