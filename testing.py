@@ -11,3 +11,4 @@ for acid in proteinA.sequence_list:
 
 proteinA.create_output()
 visualize_protein(proteinA)
+visualise_bonds(proteinA)

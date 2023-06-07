@@ -20,3 +20,6 @@ def visualise_bonds(protein):
     """
     
     """
+    print(protein.hh_bonds)
+    print(protein.ch_bonds)
+    print(protein.cc_bonds)
