@@ -4,32 +4,45 @@ import math
 
 class Protein():
     """
-    
+    A class to represent a protein.
+    ...
+    Attributes:
+    -----------
+    sequence_list: list
+        list of all aminoacids in this protein
+    score: int
+        score representing the stability
+    hh_bonds: list of tuples
+        contains pairs of aminoacids that have HH-bonds
+    ch_bonds: list of tuples
+        contains pairs of aminoacids that have CH-bonds
+    cc_bonds: list of tuples
+        contains pairs of aminoacids that have CC-bonds
+
+    Methods:
+    -----------
+    add_aminoacid():
+        add aminoacids to list
+    initialize_neighbours():
+        assign neighbours to aminoacida
+    create_bonds():
+        create bonds between aminoacids and check possible interactions
+    create_output():
+        create asked output
     """
     def __init__(self, sequence):
-        """
-        Initiate the dictionary of all aminoacids.
-        For structure of this dictionary, see add_aminoacid.
-
-        Initiate the possible directions.
-        """
         self.sequence_list = []
-
-        self.add_aminoacid(sequence)
-        self.initialize_neighbours()
         self.score = 0
-
         self.hh_bonds = []
         self.ch_bonds = []
         self.cc_bonds = []
 
+        self.add_aminoacid(sequence)
+        self.initialize_neighbours()
 
     def add_aminoacid(self, sequence):
         """
-        Filling the dictionary of all aminoacids, using the string given on initiation.
-
-        The keys of this dictionary are the created aminoacid objects, 
-        The values are set on 'None', for now, but will later on be set to the direction of the bond.
+        Filling the list of all aminoacids, using the string given on initiation.
         """
         for acid in sequence.lower():
             if acid == 'p':
@@ -41,10 +54,11 @@ class Protein():
     
     def initialize_neighbours(self):
         """
-        
+        Assign neighbours to all aminoacids based on sequence.
         """
         for i in range(len(self.sequence_list)):
             self.sequence_list[i].neighbour1 = self.sequence_list[i - 1]
+
             if i < len(self.sequence_list) - 1:
                 self.sequence_list[i].neighbour2 = self.sequence_list[i + 1]
 
@@ -52,7 +66,8 @@ class Protein():
 
     def create_bonds(self):
         """
-        For each aminoacid, determine the direction of the bond.
+        For each aminoacid, determine the direction of the bond, 
+        and check for possible interactions.
         """
         self.sequence_list[0].location_x = 0
         self.sequence_list[0].location_y = 0
@@ -68,7 +83,6 @@ class Protein():
                 self.temporary_acids.append(acid)
                 used_coordinates.add((acid.location_x, acid.location_y))
                 
-
             else:
                 location_valid = False
                 amount_of_tries = 0
@@ -105,29 +119,48 @@ class Protein():
 
     def create_output(self):
         """
+        Create output in the asked format.
         """
         print('amino,fold')
+
         for aminoacid in self.sequence_list:
             print(f'{aminoacid.type},{aminoacid.step}')
+
         print(f'score,{self.score}')
 
 
 class Aminoacid():
     """
-    
+    A class to represent an aminoacid.
+    ...
+    Attributes:
+    -----------
+    location_x: int
+        the x coordinate of the position of the aminoacid after folding
+    location_y: int
+        the y coordinate of the position of the aminoacid after folding
+    step: int
+        the direction of the folding for this acid
+
+    Methods:
+    -----------
+    distance():
+        calculate distance between one aminoacid and another
+    check_interactions():
+        check for possible other interacting aminoacids
     """
     def __init__(self):
-        """
-        """
         self.location_x = None
         self.location_y = None
         self.step = 0
 
-        
         self.neighbour1 = None
         self.neighbour2 = None
 
     def distance(self, other):
+        """
+        Calculate distance between this aminoacid and another aminoacid.
+        """
         return math.sqrt((self.location_x - other.location_x) ** 2 + (self.location_y - other.location_y) ** 2)
 
     def check_interactions(self, protein):
@@ -135,7 +168,6 @@ class Aminoacid():
         Check surrounding of aminoacid for other aminoacids, if they are present, check type
         and change score according to the interaction type.
         """
-
         for acid in protein.temporary_acids:
             if acid != self.neighbour1 and acid != self.neighbour2:
  
@@ -164,15 +196,21 @@ class Aminoacid():
                         protein.cc_bonds.append((location_acid, location_interactor))
               
             potential_interactor = None
-        
-    
+
+
 class Polar(Aminoacid):
     """
-    Create a polar aminoacid.
+    A class to add specific attributes for Polar aminoacids. It inherits methods from class
+    Aminoacid.
+    ...
+    Attributes
+    ----------
+    color: string
+        color of this aminoacid in the visualization
+    type: string
+        type of aminoacid as a string
     """
     def __init__(self):
-        """
-        """
         super().__init__()
 
         self.color = 'royalblue'
@@ -181,7 +219,15 @@ class Polar(Aminoacid):
 
 class Hydrophobic(Aminoacid):
     """
-    Create a Hydrophobic aminoacid.
+    A class to add specific attributes for Hydrophobic aminoacids. It inherits methods from class
+    Aminoacid.
+    ...
+    Attributes
+    ----------
+    color: string
+        color of this aminoacid in the visualization
+    type: string
+        type of aminoacid as a string
     """
     def __init__(self):
         super().__init__()
@@ -192,7 +238,15 @@ class Hydrophobic(Aminoacid):
 
 class Cysteine(Aminoacid):
     """
-    Create a Cysteine aminoacid.
+    A class to add specific attributes for Cysteine aminoacids. It inherits methods from class
+    Aminoacid.
+    ...
+    Attributes
+    ----------
+    color: string
+        color of this aminoacid in the visualization
+    type: string
+        type of aminoacid as a string
     """
     def __init__(self):
         super().__init__()
