@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import random
+import math
 
 class Protein():
     """
@@ -102,6 +103,7 @@ class Protein():
             
             potential_interactor = None
 
+
     def create_output(self):
         """
         """
@@ -174,6 +176,6 @@ class Cysteine(Aminoacid):
     def __init__(self):
         super().__init__()
 
-        self.color = 'lime'
+        self.color = 'limegreen'
         self.type = 'C'
     
