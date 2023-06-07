@@ -1,4 +1,4 @@
-from Aminoacid import *
+from aminoacid import Aminoacid, Hydrophobic, Polar, Cysteine
 
 import matplotlib.pyplot as plt
 import random
