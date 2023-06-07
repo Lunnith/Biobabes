@@ -89,7 +89,8 @@ class Protein():
 
                     if coordinates not in used_coordinates and amount_of_tries < 20:
                         location_valid = True
-                    else: amount_of_tries += 1
+                    else: 
+                        amount_of_tries += 1
                     
                 used_coordinates.add(coordinates)
 
