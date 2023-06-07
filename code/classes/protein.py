@@ -55,10 +55,13 @@ class Protein():
         previous_acid = self.sequence_list[0]
         directions = [[1, 0, 1], [-1, 0, -1], [0, 1, 2], [0, -1, -2]]
 
+        self.temporary_acids = []
+
         for acid in self.sequence_list:
             
 
             if acid == self.sequence_list[0]:
+                self.temporary_acids.append(acid)
                 pass
 
             else:
@@ -77,10 +80,9 @@ class Protein():
                 acid.location_y = previous_acid.location_y + direction_y
             
             acid.check_interactions(self)
+            self.temporary_acids.append(acid)
 
             previous_acid = acid
-
-
 
     def create_output(self):
         """
@@ -114,7 +116,7 @@ class Aminoacid():
         and change score according to the interaction type.
         """
 
-        for acid in protein.sequence_list:
+        for acid in protein.temporary_acids:
             if acid != self.neighbour1 or acid != self.neighbour2:
 
                 if math.isclose(self.distance(acid), 1):
