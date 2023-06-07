@@ -1,5 +1,5 @@
-from code.classes import protein
-from code.visualisation import visualize
+from code.classes.protein import Protein
+from code.visualisation.visualize import visualize
 
 proteinA = Protein("HPCHP")
 proteinA.create_bonds()
