@@ -2,6 +2,7 @@ from Protein import *
 
 protein = Protein("HPCHP")
 protein.create_bonds()
+protein.check_interaction(protein.sequence_list[3])
 # print(protein.sequence_list)
 
 for acid in protein.sequence_list:
@@ -9,5 +10,6 @@ for acid in protein.sequence_list:
 
 protein.visualize()
 protein.create_output()
+
 
 

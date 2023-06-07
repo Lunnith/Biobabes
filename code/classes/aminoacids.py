@@ -55,7 +55,6 @@ class Protein():
         directions = [[1, 0, 1], [-1, 0, -1], [0, 1, 2], [0, -1, -2]]
 
         for acid in self.sequence_list:
-            
 
             if acid == self.sequence_list[0]:
                 pass
@@ -88,17 +87,20 @@ class Protein():
         for acid in self.sequence_list:
             if acid != aminoacid.neighbour1 or acid != aminoacid.neighbour2:
 
-                if acid.distance(aminoacid) == 1:
+                if math.isclose(acid.distance(aminoacid), 1):
                     potential_interactor = acid
 
-                if type(aminoacid) == Hydrophobic() and type(potential_interactor) == Hydrophobic():
-                    self.score -= 1
-        
-                if type(aminoacid) == Hydrophobic() and type(potential_interactor) == Cysteine():
-                    self.score -= 1
-        
-                if type(aminoacid) == Cysteine() and type(potential_interactor) == Cysteine():
-                    self.score -= 5
+                    if type(aminoacid) == Hydrophobic() and type(potential_interactor) == Hydrophobic():
+                        self.score -= 1
+            
+                    if type(aminoacid) == Hydrophobic() and type(potential_interactor) == Cysteine():
+                        self.score -= 1
+                    
+                    if type(aminoacid) == Cysteine() and type(potential_interactor) == Hydrophobic():
+                        self.score -= 1
+            
+                    if type(aminoacid) == Cysteine() and type(potential_interactor) == Cysteine():
+                        self.score -= 5
             
             potential_interactor = None
 
