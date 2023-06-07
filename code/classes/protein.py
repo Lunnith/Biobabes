@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import random
+import math
 
 class Protein():
     """
@@ -101,6 +102,7 @@ class Protein():
                     self.score -= 5
             
             potential_interactor = None
+
 
     def create_output(self):
         """
