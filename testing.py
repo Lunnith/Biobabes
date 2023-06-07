@@ -1,5 +1,5 @@
 from code.classes.protein import Protein
-from code.visualisation.visualize import *
+from code.visualization.visualize import *
 
 # proteinA = Protein("HPCHPCHH")
 proteinA = Protein("HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH")
@@ -11,4 +11,3 @@ for acid in proteinA.sequence_list:
 
 proteinA.create_output()
 visualize_protein(proteinA)
-visualise_bonds(proteinA)
