@@ -110,24 +110,7 @@ class Protein():
             print(f'{aminoacid.type},{aminoacid.step}')
         print(f'score,{self.score}')
     
-
-    def visualize(self):
-        pos_x = []
-        pos_y = []
-        color = []
-        for aminoacid in self.sequence_list:
-            pos_x.append(aminoacid.location_x)
-            pos_y.append(aminoacid.location_y)
-            color.append(aminoacid.color)
-
-        plt.plot(pos_x, pos_y, c = 'black', linestyle = '-', linewidth = 0.7, zorder = 1)
-        plt.scatter(pos_x, pos_y, c = color, s = 50, zorder = 2)
-        plt.grid(True, linestyle = '--')
-        plt.show()
         
-
-
-
 
 class Aminoacid():
     """
@@ -192,7 +175,4 @@ for acid in protein.sequence_list:
 ##################################3
 
 
-
-protein.visualize()
 protein.create_output()
-
