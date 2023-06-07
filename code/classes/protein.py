@@ -17,6 +17,7 @@ class Protein():
 
         self.add_aminoacid(sequence)
         self.initialize_neighbours()
+        self.score = 0
 
 
     def add_aminoacid(self, sequence):
@@ -102,7 +103,7 @@ class Aminoacid():
         self.location_x = None
         self.location_y = None
         self.step = 0
-        self.score = 0
+
         
         self.neighbour1 = None
         self.neighbour2 = None
@@ -124,16 +125,16 @@ class Aminoacid():
                     potential_interactor = acid
 
                     if type(self) == Hydrophobic() and type(potential_interactor) == Hydrophobic():
-                        self.score -= 1
+                        protein.score -= 1
             
                     if type(self) == Hydrophobic() and type(potential_interactor) == Cysteine():
-                        self.score -= 1
+                        protein.score -= 1
                     
                     if type(self) == Cysteine() and type(potential_interactor) == Hydrophobic():
-                        self.score -= 1
+                        protein.score -= 1
             
                     if type(self) == Cysteine() and type(potential_interactor) == Cysteine():
-                        self.score -= 5
+                        protein.score -= 5
             
             potential_interactor = None
         
@@ -149,7 +150,7 @@ class Polar(Aminoacid):
 
         self.color = 'royalblue'
         self.type = 'P'
-        self.score = 0
+    
 
 class Hydrophobic(Aminoacid):
     """
@@ -160,7 +161,7 @@ class Hydrophobic(Aminoacid):
 
         self.color = 'red'
         self.type = 'H'
-        self.score = 0
+     
 
 class Cysteine(Aminoacid):
     """
@@ -171,5 +172,5 @@ class Cysteine(Aminoacid):
 
         self.color = 'limegreen'
         self.type = 'C'
-        self.score = 0
+     
     
