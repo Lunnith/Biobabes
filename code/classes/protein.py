@@ -132,30 +132,26 @@ class Aminoacid():
         """
 
         for acid in protein.temporary_acids:
-            if acid != self.neighbour1 or acid != self.neighbour2:
-                print(self.distance(acid))
-                if math.isclose(self.distance(acid), 1):
-                    print('if', self.distance(acid))
+            if acid != self.neighbour1 and acid != self.neighbour2:
+ 
+                if self.distance(acid) == 1:
                     potential_interactor = acid
-                    print('pot', potential_interactor)
-                    print('t self', type(self))
-                    print('t pot', type(potential_interactor))
+
                     if type(self) == Hydrophobic and type(potential_interactor) == Hydrophobic:
                         protein.score -= 1
-                        print("erin")
+                
             
                     if type(self) == Hydrophobic and type(potential_interactor) == Cysteine:
                         protein.score -= 1
-                        print("erin")
+                 
                     
                     if type(self) == Cysteine and type(potential_interactor) == Hydrophobic:
                         protein.score -= 1
-                        print("erin")
+             
             
                     if type(self) == Cysteine and type(potential_interactor) == Cysteine:
                         protein.score -= 5
-                        print("erin")
-            
+              
             potential_interactor = None
         
     
