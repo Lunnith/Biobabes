@@ -3,6 +3,7 @@ from protein import Protein
 
 protein = Protein("HPCHP")
 protein.create_bonds()
+protein.check_interactions(protein.sequence_list[3])
 # print(protein.sequence_list)
 
 for acid in protein.sequence_list:
