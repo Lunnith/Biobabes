@@ -133,18 +133,24 @@ class Aminoacid():
                 if math.isclose(self.distance(acid), 1):
                     print('if', self.distance(acid))
                     potential_interactor = acid
-
-                    if type(self) == Hydrophobic() and type(potential_interactor) == Hydrophobic():
+                    print('pot', potential_interactor)
+                    print('t self', type(self))
+                    print('t pot', type(potential_interactor))
+                    if type(self) == Hydrophobic and type(potential_interactor) == Hydrophobic:
                         protein.score -= 1
+                        print("erin")
             
-                    if type(self) == Hydrophobic() and type(potential_interactor) == Cysteine():
+                    if type(self) == Hydrophobic and type(potential_interactor) == Cysteine:
                         protein.score -= 1
+                        print("erin")
                     
-                    if type(self) == Cysteine() and type(potential_interactor) == Hydrophobic():
+                    if type(self) == Cysteine and type(potential_interactor) == Hydrophobic:
                         protein.score -= 1
+                        print("erin")
             
-                    if type(self) == Cysteine() and type(potential_interactor) == Cysteine():
+                    if type(self) == Cysteine and type(potential_interactor) == Cysteine:
                         protein.score -= 5
+                        print("erin")
             
             potential_interactor = None
         
