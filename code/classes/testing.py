@@ -1,4 +1,5 @@
-from Protein import *
+from protein import Protein
+
 
 protein = Protein("HPCHP")
 protein.create_bonds()

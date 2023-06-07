@@ -1,13 +1,12 @@
 from code.classes import protein
-from code.classes import aminoacid
-from code. visualisation import visualize
+from code.visualisation import visualize
 
-protein = Protein("HPCHP")
-protein.create_bonds()
+proteinA = Protein("HPCHP")
+proteinA.create_bonds()
 # print(protein.sequence_list)
 
-for acid in protein.sequence_list:
+for acid in proteinA.sequence_list:
     print(f"Class = {acid}, Step = {acid.step}, Coordinates = ({acid.location_x}, {acid.location_y})")
 
-protein.visualize()
-protein.create_output()
+proteinA.create_output()
+visualize(proteinA)
