@@ -1,5 +1,4 @@
-from . import aminoacid
-from . import protein
+from Protein import *
 
 protein = Protein("HPCHP")
 protein.create_bonds()
