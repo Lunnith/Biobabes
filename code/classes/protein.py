@@ -22,7 +22,7 @@ class Protein():
     Methods:
     -----------
     add_aminoacid():
-        add aminoacids to list
+        add aminoacid to list
     initialize_neighbours():
         assign neighbours to aminoacida
     create_bonds():
@@ -32,10 +32,12 @@ class Protein():
     """
     def __init__(self, sequence):
         self.sequence_list = []
+        self.sequence = sequence
         self.score = 0
         self.hh_bonds = []
         self.ch_bonds = []
         self.cc_bonds = []
+        self.used_coordinates = set()
 
     def add_aminoacid(self, acid):
         """
@@ -51,71 +53,32 @@ class Protein():
 
         elif acid == 'c':
             self.sequence_list.append(Aminoacid('C'))
-    
-    def initialize_neighbours(self):
-        """
-        Assign neighbours to all aminoacids based on sequence.
-        """
-        for i in range(len(self.sequence_list)):
-            self.sequence_list[i].neighbour1 = self.sequence_list[i - 1]
 
-            if i < len(self.sequence_list) - 1:
-                self.sequence_list[i].neighbour2 = self.sequence_list[i + 1]
+        else:
+            print("SEQUENCE ERROR: Please only insert aminoacids of type 'H', 'P' or 'C'")
 
-        self.sequence_list[0].neighbour1 = None
-
-    def create_bonds(self):
+    def create_bond(self, acid, previous_acid, direction):
         """
-        For each aminoacid, determine the direction of the bond, 
+        For one aminoacid, determine the direction of the bond, 
         and check for possible interactions.
         """
-        self.sequence_list[0].location_x = 0
-        self.sequence_list[0].location_y = 0
-        previous_acid = self.sequence_list[0]
-        directions = [[1, 0, 1], [-1, 0, -1], [0, 1, 2], [0, -1, -2]]
+        # define direction that x and y will go in
+        direction_x = direction[0]
+        direction_y = direction[1]
 
-        self.temporary_acids = []
-        used_coordinates = set()
+        # Define step for the acid
+        previous_acid.step = direction[2]
 
-        for acid in self.sequence_list:
+        # Set location of the acid
+        acid.location_x = previous_acid.location_x + direction_x
+        acid.location_y = previous_acid.location_y + direction_y
+
+        coordinates = (acid.location_x, acid.location_y)
+
+        if coordinates not in self.used_coordinates:
+            acid.location_valid = True
             
-            if acid == self.sequence_list[0]:
-                self.temporary_acids.append(acid)
-                used_coordinates.add((acid.location_x, acid.location_y))
-                
-            else:
-                location_valid = False
-                amount_of_tries = 0
-
-                while location_valid == False:
-
-                    # Select a direction with change in x and y cordinates
-                    direction = random.choice(directions)
-                    
-                    # define direction that x and y will go in
-                    direction_x = direction[0]
-                    direction_y = direction[1]
-
-                    # Define step for the acid
-                    previous_acid.step = direction[2]
-
-                    # Set location of the acid
-                    acid.location_x = previous_acid.location_x + direction_x
-                    acid.location_y = previous_acid.location_y + direction_y
-
-                    coordinates = (acid.location_x, acid.location_y)
-
-                    if coordinates not in used_coordinates and amount_of_tries < 20:
-                        location_valid = True
-                    else: 
-                        amount_of_tries += 1
-                    
-                used_coordinates.add(coordinates)
-
-                acid.check_interactions(self)
-                self.temporary_acids.append(acid)
-
-                previous_acid = acid
+        self.used_coordinates.add(coordinates)
 
     def create_output(self):
         """
@@ -123,8 +86,8 @@ class Protein():
         """
         print('amino,fold')
 
-        for aminoacid in self.sequence_list:
-            print(f'{aminoacid.type},{aminoacid.step}')
+        for acid in self.sequence_list:
+            print(f'{acid.type},{acid.step}')
 
         print(f'score,{self.score}')
 
@@ -141,6 +104,10 @@ class Aminoacid():
         the y coordinate of the position of the aminoacid after folding
     step: int
         the direction of the folding for this acid
+    color:
+        polar = 'royalgreen'
+        hydrophobic = 'red'
+        cysteine = 'limegreen'
 
     Methods:
     -----------
@@ -152,22 +119,21 @@ class Aminoacid():
     def __init__(self, type):
         self.location_x = None
         self.location_y = None
+
         self.step = 0
         self.type = type
 
-        self.neighbour1 = None
-        self.neighbour2 = None
+        self.location_valid = False
 
         if self.type == 'P':
-            self.color = 'royalgreen'
+            self.color = 'b'
         
         elif self.type == 'H':
-            self.color = 'red'
+            self.color = 'r'
         
-        elif self.type = 'C':
-            self.color = 'limegreen'
+        elif self.type == 'C':
+            self.color = 'g'
     
-
     def distance(self, other):
         """
         Calculate distance between this aminoacid and another aminoacid.
@@ -179,32 +145,34 @@ class Aminoacid():
         Check surrounding of aminoacid for other aminoacids, if they are present, check type
         and change score according to the interaction type.
         """
-        for acid in protein.temporary_acids:
-            if acid != self.neighbour1 and acid != self.neighbour2:
+        for i in range(len(protein.sequence_list)):
+            if i == 0:
+                neighbour1 = None
+            else:
+                neighbour1 = protein.sequence_list[i - 1]
+
+            if i < len(protein.sequence_list) - 1:
+                neighbour2 = protein.sequence_list[i + 1]
+
+            potential_interactor = protein.sequence_list[i]
+            if potential_interactor != neighbour1 and potential_interactor != neighbour2:
  
-                if self.distance(acid) == 1:
-                    potential_interactor = acid
+                if self.distance(potential_interactor) == 1:
                     location_acid = (self.location_x, self.location_y)
-                    location_interactor = (acid.location_x, acid.location_y)
+                    location_interactor = (potential_interactor.location_x, potential_interactor.location_y)
 
                     if self.type == 'H' and potential_interactor.type == 'H':
                         protein.score -= 1
                         protein.hh_bonds.append((location_acid, location_interactor))
                 
-            
                     if self.type == 'H' and potential_interactor.type == 'C':
                         protein.score -= 1
                         protein.ch_bonds.append((location_acid, location_interactor))
-                 
                     
                     if self.type == 'C' and potential_interactor.type == 'H':
                         protein.score -= 1
                         protein.ch_bonds.append((location_acid, location_interactor))
              
-            
                     if self.type == 'C' and potential_interactor.type == 'C':
                         protein.score -= 5
                         protein.cc_bonds.append((location_acid, location_interactor))
-              
-            potential_interactor = None
-    
