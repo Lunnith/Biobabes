@@ -23,10 +23,8 @@ class Protein():
     -----------
     add_aminoacid():
         add aminoacid to list
-    initialize_neighbours():
-        assign neighbours to aminoacida
     create_bonds():
-        create bonds between aminoacids and check possible interactions
+        create bond between two aminoacids
     create_output():
         create asked output
     """
@@ -41,7 +39,7 @@ class Protein():
 
     def add_aminoacid(self, acid):
         """
-        Filling the list of all aminoacids, using the string given on initiation.
+        Add an aminoacid to the protein.
         """
         acid = acid.lower()
 
@@ -57,10 +55,12 @@ class Protein():
         else:
             print("SEQUENCE ERROR: Please only insert aminoacids of type 'H', 'P' or 'C'")
 
+        if len(self.sequence_list) > 1:
+            self.sequence_list[-1].neighbour1 = self.sequence_list[-2]
+
     def create_bond(self, acid, previous_acid, direction):
         """
-        For one aminoacid, determine the direction of the bond, 
-        and check for possible interactions.
+        For one aminoacid, determine the direction of the bond, and check for possible interactions.
         """
         # define direction that x and y will go in
         direction_x = direction[0]
@@ -104,7 +104,7 @@ class Aminoacid():
         the y coordinate of the position of the aminoacid after folding
     step: int
         the direction of the folding for this acid
-    color:
+    color: string
         polar = 'royalgreen'
         hydrophobic = 'red'
         cysteine = 'limegreen'
@@ -119,6 +119,7 @@ class Aminoacid():
     def __init__(self, type):
         self.location_x = None
         self.location_y = None
+        self.neighbour1 = None
 
         self.step = 0
         self.type = type
@@ -145,17 +146,8 @@ class Aminoacid():
         Check surrounding of aminoacid for other aminoacids, if they are present, check type
         and change score according to the interaction type.
         """
-        for i in range(len(protein.sequence_list)):
-            if i == 0:
-                neighbour1 = None
-            else:
-                neighbour1 = protein.sequence_list[i - 1]
-
-            if i < len(protein.sequence_list) - 1:
-                neighbour2 = protein.sequence_list[i + 1]
-
-            potential_interactor = protein.sequence_list[i]
-            if potential_interactor != neighbour1 and potential_interactor != neighbour2:
+        for potential_interactor in protein.sequence_list:
+            if potential_interactor != self.neighbour1:
  
                 if self.distance(potential_interactor) == 1:
                     location_acid = (self.location_x, self.location_y)
