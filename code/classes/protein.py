@@ -164,7 +164,7 @@ class Aminoacid():
         elif self.type == 'H':
             self.color = 'red'
         
-        elif self.type = 'C':
+        elif self.type == 'C':
             self.color = 'limegreen'
     
 
