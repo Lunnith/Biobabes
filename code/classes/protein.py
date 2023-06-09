@@ -35,7 +35,7 @@ class Protein():
         self.hh_bonds = []
         self.ch_bonds = []
         self.cc_bonds = []
-        self.used_coordinates = set((0, 0))
+        self.used_coordinates = set()
 
     def add_aminoacid(self, acid):
         """

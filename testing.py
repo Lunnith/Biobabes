@@ -26,6 +26,7 @@ def make_and_fold_protein(sequence, k=1):
         if i == 0:
             acid.location_x = 0
             acid.location_y = 0
+            protein.used_coordinates.add((acid.location_x, acid.location_y))
 
         if i != 0:
             tried_directions = set()
