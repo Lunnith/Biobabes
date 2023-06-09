@@ -37,20 +37,20 @@ class Protein():
         self.ch_bonds = []
         self.cc_bonds = []
 
-    def add_aminoacid(self, acid):
+        self.add_aminoacid(sequence)
+        self.initialize_neighbours()
+
+    def add_aminoacid(self, sequence):
         """
         Filling the list of all aminoacids, using the string given on initiation.
         """
-        acid = acid.lower()
-
-        if acid == 'p':
-            self.sequence_list.append(Aminoacid('P'))
-
-        elif acid == 'h':
-            self.sequence_list.append(Aminoacid('H'))
-
-        elif acid == 'c':
-            self.sequence_list.append(Aminoacid('C'))
+        for acid in sequence.lower():
+            if acid == 'p':
+                self.sequence_list.append(Polar())
+            elif acid == 'h':
+                self.sequence_list.append(Hydrophobic())
+            elif acid == 'c':
+                self.sequence_list.append(Cysteine())
     
     def initialize_neighbours(self):
         """
@@ -149,24 +149,13 @@ class Aminoacid():
     check_interactions():
         check for possible other interacting aminoacids
     """
-    def __init__(self, type):
+    def __init__(self):
         self.location_x = None
         self.location_y = None
         self.step = 0
-        self.type = type
 
         self.neighbour1 = None
         self.neighbour2 = None
-
-        if self.type == 'P':
-            self.color = 'royalgreen'
-        
-        elif self.type == 'H':
-            self.color = 'red'
-        
-        elif self.type = 'C':
-            self.color = 'limegreen'
-    
 
     def distance(self, other):
         """
@@ -187,24 +176,82 @@ class Aminoacid():
                     location_acid = (self.location_x, self.location_y)
                     location_interactor = (acid.location_x, acid.location_y)
 
-                    if self.type == 'H' and potential_interactor.type == 'H':
+                    if type(self) == Hydrophobic and type(potential_interactor) == Hydrophobic:
                         protein.score -= 1
                         protein.hh_bonds.append((location_acid, location_interactor))
                 
             
-                    if self.type == 'H' and potential_interactor.type == 'C':
+                    if type(self) == Hydrophobic and type(potential_interactor) == Cysteine:
                         protein.score -= 1
                         protein.ch_bonds.append((location_acid, location_interactor))
                  
                     
-                    if self.type == 'C' and potential_interactor.type == 'H':
+                    if type(self) == Cysteine and type(potential_interactor) == Hydrophobic:
                         protein.score -= 1
                         protein.ch_bonds.append((location_acid, location_interactor))
              
             
-                    if self.type == 'C' and potential_interactor.type == 'C':
+                    if type(self) == Cysteine and type(potential_interactor) == Cysteine:
                         protein.score -= 5
                         protein.cc_bonds.append((location_acid, location_interactor))
               
             potential_interactor = None
+
+
+class Polar(Aminoacid):
+    """
+    A class to add specific attributes for Polar aminoacids. It inherits methods from class
+    Aminoacid.
+    ...
+    Attributes
+    ----------
+    color: string
+        color of this aminoacid in the visualization
+    type: string
+        type of aminoacid as a string
+    """
+    def __init__(self):
+        super().__init__()
+
+        self.color = 'royalblue'
+        self.type = 'P'
+    
+
+class Hydrophobic(Aminoacid):
+    """
+    A class to add specific attributes for Hydrophobic aminoacids. It inherits methods from class
+    Aminoacid.
+    ...
+    Attributes
+    ----------
+    color: string
+        color of this aminoacid in the visualization
+    type: string
+        type of aminoacid as a string
+    """
+    def __init__(self):
+        super().__init__()
+
+        self.color = 'red'
+        self.type = 'H'
+     
+
+class Cysteine(Aminoacid):
+    """
+    A class to add specific attributes for Cysteine aminoacids. It inherits methods from class
+    Aminoacid.
+    ...
+    Attributes
+    ----------
+    color: string
+        color of this aminoacid in the visualization
+    type: string
+        type of aminoacid as a string
+    """
+    def __init__(self):
+        super().__init__()
+
+        self.color = 'limegreen'
+        self.type = 'C'
+     
     
