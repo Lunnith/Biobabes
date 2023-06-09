@@ -1,4 +1,1 @@
-- Zorgen dat bij het creeëren van de bindingen de binding niet 'terug' kan
-- Zorgen dat bij het creeëren van de bindingen er geen bindingen over elkaar heen kunnen
-
-- Visualize mooier maken
+- type prints
