@@ -33,8 +33,6 @@ def make_and_fold_protein(sequence, k=1):
 
             while acid.location_valid == False and tried_directions.difference(directions) == set():
                 direction = random.choice(tuple(directions))
-                print(direction)
-                print(acid.step)
                 protein.create_bond(acid, protein.sequence_list[i - 1], direction)
 
                 tried_directions.add(direction)
