@@ -124,6 +124,7 @@ class Aminoacid():
     def __init__(self, type):
         self.location_x = None
         self.location_y = None
+        self.location = None
         self.neighbour1 = None
 
         self.step = 0
@@ -141,18 +142,14 @@ class Aminoacid():
         elif self.type == 'C':
             self.color = 'g'
     
-    def distance(self, other):
+    def distance(self, other, 3D = False):
         """
         Calculate euclidian distance between this aminoacid and another aminoacid.
         """
-        # if self.location_x == None or self.location_y == None or other.location_x == None or other.location_y == None:
-        #     print(self)
-        #     print(other)
-        #     print(self.location_x)
-        #     print(self.location_y)
-        #     print(other.location_x)
-        #     print(other.location_y)
-        return math.sqrt((self.location_x - other.location_x) ** 2 + (self.location_y - other.location_y) ** 2)
+        if 3D = True:
+            return math.sqrt((x2 - x1)**2 + (y2 - y1)**2 + (z2 - z1)**2)
+        else:
+            return math.sqrt((self.location_x - other.location_x) ** 2 + (self.location_y - other.location_y) ** 2)
 
     def check_interactions(self, protein):
         """
