@@ -69,7 +69,8 @@ class Protein():
         # change of direction on x and y axis and step of previous acid
         direction_x = direction[0]
         direction_y = direction[1]
-        previous_acid.step = direction[2]
+        direction_z = direction[2]
+        previous_acid.step = direction[3]
 
         # create bond between previous and new acid based on step of previous acid
         acid.location_x = previous_acid.location_x + direction_x
@@ -124,7 +125,8 @@ class Aminoacid():
     def __init__(self, type):
         self.location_x = None
         self.location_y = None
-        self.location = None
+        self.location_z = None
+       # self.location = None
         self.neighbour1 = None
 
         self.step = 0
@@ -147,7 +149,7 @@ class Aminoacid():
         Calculate euclidian distance between this aminoacid and another aminoacid.
         """
         if 3D = True:
-            return math.sqrt((x2 - x1)**2 + (y2 - y1)**2 + (z2 - z1)**2)
+            return math.sqrt((self.location_x - other.location_x)**2 + (self.location_y - other.location_y)**2 + (self.location_z - other.location_z)**2)
         else:
             return math.sqrt((self.location_x - other.location_x) ** 2 + (self.location_y - other.location_y) ** 2)
 
