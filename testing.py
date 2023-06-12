@@ -43,6 +43,6 @@ def make_and_fold_protein(sequence, k=1):
     return protein
 
 sequence = 'HPHPCHCPHCH'
-protein = make_and_fold_protein(sequence)
+protein = make_and_fold_protein(Protein(sequence))
 protein.create_output()
 visualize_protein(protein)
