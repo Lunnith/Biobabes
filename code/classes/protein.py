@@ -145,6 +145,13 @@ class Aminoacid():
         """
         Calculate euclidian distance between this aminoacid and another aminoacid.
         """
+        # if self.location_x == None or self.location_y == None or other.location_x == None or other.location_y == None:
+        #     print(self)
+        #     print(other)
+        #     print(self.location_x)
+        #     print(self.location_y)
+        #     print(other.location_x)
+        #     print(other.location_y)
         return math.sqrt((self.location_x - other.location_x) ** 2 + (self.location_y - other.location_y) ** 2)
 
     def check_interactions(self, protein):
