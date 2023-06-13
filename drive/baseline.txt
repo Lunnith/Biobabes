@@ -1,4 +1,0 @@
-- resultaten laten zien in max 400 woorden
-- bias: voor eiwitten die in zichzelf vouwen en daardoor geen richting meer op kunnen wordt de vouwing gestopt en wordt er gewoon opnieuw gevouwen,
-echter zijn de eiwitten met de hoogste scores waarschijnlijk de eiwitten waarvan de aminozuren heel dicht op elkaar vouwen en dus ook af en toe vast komen te zitten.
-Hierdoor kan het dus zijn dat het random algoritme uiteindelijk een minder optimale oplossing vindt.
