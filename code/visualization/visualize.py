@@ -46,9 +46,9 @@ def visualize_protein3D(protein):
         pos_x.append(aminoacid.location[0])
         pos_y.append(aminoacid.location[1])
         pos_z.append(aminoacid.location[2])
-        ax.scatter(aminoacid.location[0], aminoacid.location[1], aminoacid.location[2], color = aminoacid.color)
+        ax.scatter(aminoacid.location[0], aminoacid.location[1], aminoacid.location[2], color = aminoacid.color, marker = f'${aminoacid.type}$', s=50)
 
-    ax.plot(pos_x, pos_y, pos_z, color = 'black')
+    ax.plot(pos_x, pos_y, pos_z, color = 'black', linewidth=1.5)
     ax.set_zlim3d(equal_axis(pos_x, pos_y, pos_z))
     fig.add_axes(ax).set_axis_off()
     fig.add_axes(visualize_bonds(protein, dimensions=3, axs=ax))
@@ -63,11 +63,9 @@ def equal_axis(x_list, y_list, z_list=None):
     min_x, max_x, length_x = get_min_max_length(x_list)
     min_y, max_y, length_y = get_min_max_length(y_list)
     max_length = max([length_x, length_y])
-
     if z_list != None:
         min_z, max_z, length_z = get_min_max_length(z_list)
         max_length = max([max_length, length_z])
-    
 
     if max_length == length_x:
         diff_xy = length_x - length_y
@@ -97,7 +95,6 @@ def equal_axis(x_list, y_list, z_list=None):
     if z_list != None:
         return [min_z - 1, max_z + 1]
         
-
 def get_min_max_length(list):
     min_list = min(list)
     max_list = max(list)
@@ -111,7 +108,6 @@ def calculate_axis_change(diff, min_smaller_axis, max_smaller_axis):
             max_smaller_axis += diff // 2 + 1
             min_smaller_axis -= diff // 2
         return min_smaller_axis, max_smaller_axis
-
 
 
 def visualize_bonds(protein, dimensions=2, axs=None):
@@ -132,12 +128,12 @@ def visualize_bonds(protein, dimensions=2, axs=None):
             xs = [bond[0][0], bond[1][0]]
             ys = [bond[0][1], bond[1][1]]
             zs = [bond[0][2], bond[1][2]]
-            axs.plot(xs, ys, zs, linestyle='dotted', linewidth=2, color='slategrey')
+            axs.plot(xs, ys, zs, linestyle='dotted', linewidth=1, color='slategrey')
         for bond in protein.cc_bonds:
             xs = [bond[0][0], bond[1][0]]
             ys = [bond[0][1], bond[1][1]]
             zs = [bond[0][2], bond[1][2]]
-            axs.plot(xs, ys, zs, linestyle='dotted', linewidth=2, color='slategrey')  
+            axs.plot(xs, ys, zs, linestyle='dotted', linewidth=1, color='slategrey')  
         return axs
 
     else:
