@@ -1,8 +1,2 @@
 - type prints
-- coordinaten als tuples implementeren ipv losse x en y
-- create bonds naar aminoacid of check interaction naar protein
-- kijk of if statement combinaties korter kunnen
-- zorg dat functies implementeerbaar zijn voor 2D én 3D
-
 - idee voor algoritme: C-C heeft grootste score dus check in eiwit of er tussen twee CCs twee aminozuren zitten en vouw dan om twee hoeken
-- twee losse bestanden voor protein en aminozuren
