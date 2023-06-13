@@ -1,3 +1,4 @@
+
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
@@ -20,7 +21,7 @@ def visualize_protein2D(protein):
     plt.grid(True, linestyle = '--')
     plt.show()
 
-def equal_axis(x_list, y_list):
+def equal_axis(x_list, y_list, z_list=None):
     """
     To_do: accept z_list. but also This function should be shortened.
     Make sure that the x-axis and y-axis are both of the same length, 
@@ -32,27 +33,73 @@ def equal_axis(x_list, y_list):
     min_y = min(y_list)
     length_x = max_x - min_x
     length_y = max_y - min_y
-    
-    if length_x < length_y:
-        diff = length_y - length_x
-        if diff % 2 == 0:
-            max_x += diff // 2
-            min_x -= diff // 2
-        elif diff % 2 == 1:
-            max_x += diff // 2 + 1
-            min_x -= diff // 2
+    max_length = max([length_x, length_y])
 
-    elif length_y < length_x:
-        diff = length_x - length_y
-        if diff % 2 == 0:
-            max_y += diff // 2
-            min_y -= diff // 2
-        elif diff % 2 == 1:
-            max_y += diff // 2 + 1
-            min_y -= diff // 2
+    if z_list != None:
+        max_z = max(z_list)
+        min_z = min(z_list)
+        length_z = max_z - min_z
+        max_length = max([max_length, length_z])
+    
+
+    if max_length == length_x:
+        diff_xy = length_x - length_y
+        if diff_xy % 2 == 0:
+            max_y += diff_xy // 2
+            min_y -= diff_xy // 2
+        elif diff_xy % 2 == 1:
+            max_y += diff_xy // 2 + 1
+            min_y -= diff_xy // 2
+
+        if z_list != None:
+            diff_xz = length_x - length_z
+            if diff_xz % 2 == 0:
+                max_z += diff_xz // 2
+                min_z -= diff_xz // 2
+            elif diff_xz % 2 == 1:
+                max_z += diff_xz // 2 + 1
+                min_z -= diff_xz // 2 
+
+    elif max_length == length_y:
+        diff_xy = length_y - length_x
+        if diff_xy % 2 == 0:
+            max_x += diff_xy // 2
+            min_x -= diff_xy // 2
+        elif diff_xy % 2 == 1:
+            max_x += diff_xy // 2 + 1
+            min_x -= diff_xy // 2
+        
+        if z_list != None:
+            diff_yz = length_y - length_z
+            if diff_yz % 2 == 0:
+                max_z += diff_yz // 2
+                min_z -= diff_yz // 2
+            elif diff_yz % 2 == 1:
+                max_z += diff_yz // 2 + 1
+                min_z -= diff_yz // 2  
+    
+    elif z_list != None and max_length == length_z:
+        diff_xz = length_z - length_x
+        if diff_xz % 2 == 0:
+            max_x += diff_xz // 2
+            min_x -= diff_xz // 2
+        elif diff_xz % 2 == 1:
+            max_x += diff_xz // 2 + 1
+            min_x -= diff_xz // 2 
+
+        diff_yz = length_z - length_y
+        if diff_yz % 2 == 0:
+            max_y += diff_yz // 2
+            min_y -= diff_yz // 2
+        elif diff_yz % 2 == 1:
+            max_y += diff_yz // 2 + 1
+            min_y -= diff_yz // 2  
 
     plt.xlim([min_x - 1, max_x + 1])
     plt.ylim([min_y - 1, max_y + 1])
+    if z_list != None:
+        return [min_z - 1, max_z + 1]
+
 
 
 def visualize_bonds(protein):
@@ -105,6 +152,6 @@ def visualize_protein3D(protein):
         ax.scatter(aminoacid.location[0], aminoacid.location[1], aminoacid.location[2], color = aminoacid.color)
 
     ax.plot(pos_x, pos_y, pos_z, color = 'black')
+    ax.set_zlim3d(equal_axis(pos_x, pos_y, pos_z))
     fig.add_axes(ax)
-
     plt.show()
