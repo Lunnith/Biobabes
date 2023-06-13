@@ -39,7 +39,7 @@ def visualize_protein3D(protein):
     pos_y = []
     pos_z = []
 
-    fig = plt.figure(figsize=(6,6))
+    fig = plt.figure(figsize=(7,6))
     ax = fig.add_subplot(111, projection = '3d')
 
     for aminoacid in protein.sequence_list:
@@ -90,10 +90,13 @@ def equal_axis(x_list, y_list, z_list=None):
         diff_yz = length_z - length_y
         min_y, max_y = calculate_axis_change(diff_yz, min_y, max_y) 
 
-    plt.xlim([min_x - 1, max_x + 1])
-    plt.ylim([min_y - 1, max_y + 1])
     if z_list != None:
-        return [min_z - 1, max_z + 1]
+        plt.xlim([min_x, max_x])
+        plt.ylim([min_y, max_y])
+        return [min_z, max_z]
+    else:
+        plt.xlim([min_x - 1, max_x + 1])
+        plt.ylim([min_y - 1, max_y + 1])
         
 def get_min_max_length(list):
     min_list = min(list)
