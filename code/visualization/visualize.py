@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import seaborn as sns
+import pandas as pd
 
 def visualize_protein2D(protein):
     """
@@ -98,15 +99,19 @@ def visualize_protein3D(protein):
     pos_x = []
     pos_y = []
     pos_z = []
+    aminoacids = []
 
     for aminoacid in protein.sequence_list:
         pos_x.append(aminoacid.location[0])
         pos_y.append(aminoacid.location[1])
         pos_z.append(aminoacid.location[2])
+        aminoacids.append(aminoacid)
         # print(pos_x)
         # print(pos_y)
         # print(pos_z)
-        plt.scatter(aminoacid.location[0], aminoacid.location[1], aminoacid.location[2], c = aminoacid.color)
+    df = pd.DataFrame(list(zip(pos_x, pos_y, pos_z)), columns = ['x', 'y', 'z'], index=aminoacids)
+    print(df)
+    plt.scatter(aminoacid.location[0], aminoacid.location[1], aminoacid.location[2], c = aminoacid.color)
 
     plt.subplots(subplot_kw={"projection":"3d"})
     plt.scatter(pos_x, pos_y, pos_z)
