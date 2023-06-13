@@ -23,8 +23,8 @@ def visualize_protein2D(protein):
 
 def equal_axis(x_list, y_list, z_list=None):
     """
-    To_do: accept z_list. but also This function should be shortened.
-    Make sure that the x-axis and y-axis are both of the same length, 
+    To_do: This function should be shortened.
+    Make sure that the x-axis, y-axis and z-axis are both of the same length, 
     so that the protein gets shown with equally long bonds.
     """
     max_x = max(x_list)
@@ -102,20 +102,35 @@ def equal_axis(x_list, y_list, z_list=None):
 
 
 
-def visualize_bonds(protein):
+def visualize_bonds(protein, dimensions=2, axs=None):
     """
     color hh = 'deepskyblue'
     color cc = 'lime'
     color ch = 'khaki'
     """
-    for bond in protein.hh_ch_bonds:
-        plt.plot((bond[0][0], bond[1][0]), (bond[0][1], bond[1][1]), linestyle='dotted', linewidth=2, c='slategrey')
-    
-    # for bond in protein.ch_bonds:
-    #     plt.plot((bond[0][0], bond[1][0]), (bond[0][1], bond[1][1]), linestyle='dotted', linewidth=2, c='slategrey')
+    if dimensions == 2:
+        for bond in protein.hh_ch_bonds:
+            plt.plot((bond[0][0], bond[1][0]), (bond[0][1], bond[1][1]), linestyle='dotted', linewidth=2, c='slategrey')
 
-    for bond in protein.cc_bonds:
-        plt.plot((bond[0][0], bond[1][0]), (bond[0][1], bond[1][1]), linestyle='dotted', linewidth=2, c='slategrey')
+        for bond in protein.cc_bonds:
+            plt.plot((bond[0][0], bond[1][0]), (bond[0][1], bond[1][1]), linestyle='dotted', linewidth=2, c='slategrey')
+
+    elif dimensions == 3:
+        for bond in protein.hh_ch_bonds:
+            xs = [bond[0][0], bond[1][0]]
+            ys = [bond[0][1], bond[1][1]]
+            zs = [bond[0][2], bond[1][2]]
+            axs.plot(xs, ys, zs, linestyle='dotted', linewidth=2, color='slategrey')
+        for bond in protein.cc_bonds:
+            xs = [bond[0][0], bond[1][0]]
+            ys = [bond[0][1], bond[1][1]]
+            zs = [bond[0][2], bond[1][2]]
+            axs.plot(xs, ys, zs, linestyle='dotted', linewidth=2, color='slategrey')  
+        return axs
+
+    else:
+        print("ERROR: This function is written for either 2 or 3 dimensions.")
+        return
 
 
 def visualize_scores(list_of_scores):
@@ -135,7 +150,6 @@ def visualize_protein(protein, dimensions):
 
 def visualize_protein3D(protein):
     """
-    To_do: implement bonds, improve visibility, see if you can make it interactive.
     Visualize the folded protein with aminoacids and bonds.
     """
     pos_x = []
@@ -153,5 +167,6 @@ def visualize_protein3D(protein):
 
     ax.plot(pos_x, pos_y, pos_z, color = 'black')
     ax.set_zlim3d(equal_axis(pos_x, pos_y, pos_z))
-    fig.add_axes(ax)
+    fig.add_axes(ax).set_axis_off()
+    fig.add_axes(visualize_bonds(protein, dimensions=3, axs=ax))
     plt.show()

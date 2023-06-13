@@ -9,9 +9,9 @@ if __name__ == "__main__":
     protein = Protein(sequence)
 
     # fold protein randomly and create output
-    folded_protein, score_list = random_reassignment(protein, 3, 100)
+    folded_protein, score_list = random_reassignment(protein, 3, 10)
     folded_protein.create_output()
 
     # visualize protein
-    visualize_scores(score_list)
+    # visualize_scores(score_list)
     visualize_protein(folded_protein, 3)
