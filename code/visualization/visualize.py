@@ -78,41 +78,33 @@ def visualize_scores(list_of_scores):
     plt.show()
 
 def visualize_protein(protein, dimensions):
-    plt.clf()
     if dimensions == 2:
         visualize_protein2D(protein)
     elif dimensions == 3:
-        print("Function not yet done, plotting in 2D for now")
-        # visualize_protein3D(protein)
-        visualize_protein2D(protein)
+        visualize_protein3D(protein)
     else:
         print("ERROR: This function is written for either 2 or 3 dimensions.")
         return
 
 def visualize_protein3D(protein):
     """
-    NOT YET DONE
-    SET IN DATAFRAME
-
+    To_do: implement bonds, improve visibility, see if you can make it interactive.
     Visualize the folded protein with aminoacids and bonds.
     """
     pos_x = []
     pos_y = []
     pos_z = []
-    aminoacids = []
+
+    fig = plt.figure(figsize=(6,6))
+    ax = fig.add_subplot(111, projection = '3d')
 
     for aminoacid in protein.sequence_list:
         pos_x.append(aminoacid.location[0])
         pos_y.append(aminoacid.location[1])
         pos_z.append(aminoacid.location[2])
-        aminoacids.append(aminoacid)
-        # print(pos_x)
-        # print(pos_y)
-        # print(pos_z)
-    df = pd.DataFrame(list(zip(pos_x, pos_y, pos_z)), columns = ['x', 'y', 'z'], index=aminoacids)
-    print(df)
-    plt.scatter(aminoacid.location[0], aminoacid.location[1], aminoacid.location[2], c = aminoacid.color)
+        ax.scatter(aminoacid.location[0], aminoacid.location[1], aminoacid.location[2], color = aminoacid.color)
 
-    plt.subplots(subplot_kw={"projection":"3d"})
-    plt.scatter(pos_x, pos_y, pos_z)
+    ax.plot(pos_x, pos_y, pos_z, color = 'black')
+    fig.add_axes(ax)
+
     plt.show()
