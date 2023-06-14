@@ -6,10 +6,8 @@ class Aminoacid():
     ...
     Attributes:
     -----------
-    location_x: int
-        the x coordinate of the position of the aminoacid after folding
-    location_y: int
-        the y coordinate of the position of the aminoacid after folding
+    location: list
+        the coordinates of the position of the aminoacid after folding
     step: int
         the direction of the folding for this acid
     type: string
@@ -21,9 +19,9 @@ class Aminoacid():
 
     Methods:
     -----------
-    distance():
+    distance(other):
         calculate distance between one aminoacid and another
-    check_interactions():
+    check_interactions(protein):
         check for possible other interacting aminoacids
     """
     def __init__(self, type):
