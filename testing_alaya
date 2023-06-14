@@ -1,4 +1,3 @@
-print("Hello World")
 from code.classes.protein import Protein
 from code.visualization.visualize import *
 from code.algorithms.greedy import greedy
@@ -7,8 +6,6 @@ import copy
 import matplotlib.pyplot as plt
 from operator import add
 
-
-#proteinD = Protein("HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH")
 
 sequence = "HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH"
 proteinD = Protein(sequence)
