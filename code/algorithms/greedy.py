@@ -7,9 +7,37 @@ from operator import add
 
 # class Greedy():
 
-#     def __init__(self, splits):
-
+#     def __init__(self, protein, splits):
+#         self.protein = protein
 #         self.splits = splits
+#         self.best_score = 0
+#         self.best_directions = []
+#         # if dimensions == 2:
+#         directions = set(((1, 0, 0, 1), (-1, 0, 0, -1), (0, 1, 0, 2), (0, -1, 0, -2)))
+#         # if dimensions == 3:
+#         #     directions = set(((1, 0, 0, 1), (-1, 0, 0, -1), (0, 1, 0, 2), (0, -1, 0, -2), (0, 0, 1, 3), (0, 0, -1, -3)))
+#     def all_bonds(self):
+
+#         for i in range(len(self.protein.sequence)):
+
+#             self.protein.add_aminoacid(self.protein.sequence[i])
+
+#             acid = protein.sequence_list[i]
+#             if i == 0:
+#                 acid.location = [0, 0, 0]
+            
+#                 protein.used_coordinates.add((tuple(acid.location)))
+            
+
+#             # for other aminoacids then the first create bond with previous acid
+#             elif i != 0:
+
+#                 # set best direction to a random choice (still have to make it a valid one)
+#                 best_direction = random.choice(tuple(directions))
+
+#                 # go trough all directions to see which direction leads to the lowest score
+#                 for direction in directions:
+
 
 def greedy(protein):
     
