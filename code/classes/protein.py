@@ -31,8 +31,9 @@ class Protein():
         allowed_types = set(('H', 'P', 'C'))
         sequence_set = set(sequence)
 
-        if allowed_types != sequence_set:
-            raise ValueError("SEQUENCE ERROR: Please only insert aminoacids of type 'H', 'P' or 'C'")
+        for type in sequence_set:
+            if type not in allowed_types:
+                raise ValueError("SEQUENCE ERROR: Please only insert aminoacids of type 'H', 'P' or 'C'")
         
         self.sequence = sequence
         self.sequence_list = []
