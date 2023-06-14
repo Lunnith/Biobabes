@@ -20,9 +20,9 @@ class Protein():
 
     Methods:
     -----------
-    add_aminoacid():
+    add_aminoacid(acid):
         add aminoacid to list
-    create_bonds():
+    create_bonds(acid, previous_acid, direction):
         create bond between two aminoacids
     create_output():
         create asked output
