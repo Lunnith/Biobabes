@@ -18,9 +18,9 @@ class DepthFirst():
         # initialize directions based on dimensions
         if dimensions == 2:
             self.directions = set(((1, 0, 0, 1), (-1, 0, 0, -1), (0, 1, 0, 2), (0, -1, 0, -2)))
-        else:
+        if dimensions == 3:
             self.directions = set(((1, 0, 0, 1), (-1, 0, 0, -1), (0, 1, 0, 2), (0, -1, 0, -2), (0, 0, 1, 3), (0, 0, -1, -3)))
-        
+
         self.states = [copy.deepcopy(self.protein)]
         self.best_state = None
         self.best_score = 0
