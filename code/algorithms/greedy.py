@@ -20,12 +20,14 @@ class Greedy():
         #     self.directions = set(((1, 0, 0, 1), (-1, 0, 0, -1), (0, 1, 0, 2), (0, -1, 0, -2), (0, 0, 1, 3), (0, 0, -1, -3)))
     
     def all_bonds(self):
-
-        for i in range(len(self.protein.sequence)):
-
+        i = 0
+        while i < len(self.protein.sequence):
+        #for i in range(len(self.protein.sequence)):
+            print(i)
             # for every element in the protein sequence, add an aminoacid
             self.protein.add_aminoacid(self.protein.sequence[i])
             self.acid = self.protein.sequence_list[i]
+            
 
             if i == 0:
                 self.acid.location = [0, 0, 0]
@@ -36,6 +38,13 @@ class Greedy():
             elif i != 0:
                 best_score = 0
                 best_direction = self.random_bond(i)
+                if best_direction == False:
+                    del self.protein.sequence_list[-2:]
+                    
+                    i = i-1
+                    
+                    #self.used_coordinates_G.add(tuple(acid.location))
+                    continue
                 
                 
                 # go trough all directions to see which direction leads to the lowest score
@@ -51,7 +60,7 @@ class Greedy():
                         
                         pass
                     else:
-                      
+                
                         self.acid_temp.check_interactions(self.protein_temp)
                         score_direction = self.protein_temp.score
 
@@ -61,6 +70,7 @@ class Greedy():
                             best_direction = direction
 
                 self.add_best_direction(best_direction, i)
+            i = i + 1
                                
     def add_best_direction(self, best_direction, i):
 
@@ -97,7 +107,7 @@ class Greedy():
             if tried_directions == self.directions:
                 print('ERROR STUCK')
 
-                return
+                return False
         
         return best_direction
                 
