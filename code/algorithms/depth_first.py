@@ -36,6 +36,7 @@ class DepthFirst():
         Creates all possible child-states with different folding directions and adds them to the list of states. 
         Ignores illegal states.
         """
+        count = 0
         for direction in self.directions:
 
             # only make a new state if direction is not the reverse direction of the previous bond
@@ -49,6 +50,15 @@ class DepthFirst():
 
                 to_add_aminoacid_type = new_fold.sequence[len(temp_sequence)]
 
+                # nog te implementeren: als 2 P's achter elkaar, neem niet dezelfde richting als de richting van de eerdere P
+                # if last_added_aminoacid.type == 'P' and to_add_aminoacid_type == 'P' and direction[3] == new_fold.sequence_list[-1].step:
+                #         print(direction[3])
+                #         print(last_added_aminoacid.step)
+                #         pass
+                
+                # else:
+
+
                 # expand new fold with aminoacid and create a bond in the given direction
                 new_fold.add_aminoacid(to_add_aminoacid_type)
                 new_fold.create_bond(new_fold.sequence_list[-1], new_fold.sequence_list[-2], direction)
@@ -58,6 +68,7 @@ class DepthFirst():
                     new_fold.sequence_list[-1].check_interactions(new_fold)
                     self.states.append(new_fold)
 
+                
     def check_solution(self, new_fold):
         """
         Checks and accepts better solutions than the current solution.
@@ -75,7 +86,7 @@ class DepthFirst():
         Runs the Depth First Algorithm until it has seen all possible states.
         """
         depth = len(self.protein.sequence)
-
+ 
         # loop through stack of foldings
         while self.states:
             new_fold = self.get_next_state()
@@ -83,7 +94,8 @@ class DepthFirst():
             # if protein is not complete yet, expand the folding, else check the score of the new folding
             if len(new_fold.sequence_list) < depth:
                 self.build_children(new_fold, new_fold.sequence_list[-1])
+
             else:
                 self.check_solution(new_fold)
 
-            self.protein = self.best_state
+            self.protein = self.best_state   

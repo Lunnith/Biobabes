@@ -8,7 +8,7 @@ import time
 if __name__ == "__main__":
 
     # initialize protein object and directions
-    sequence = "CCCHHCC"
+    sequence = "PPPHPPH"
     test_protein = Protein(sequence)
 
     # fold protein randomly and create output
@@ -18,4 +18,3 @@ if __name__ == "__main__":
 
     # visualize protein
     visualize_protein(depth_first.protein, 3)
-
