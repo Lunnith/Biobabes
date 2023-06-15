@@ -10,12 +10,11 @@ class Greedy():
     def __init__(self, protein):
         self.protein = protein
         #self.splits = splits
-        
 
         self.best_directions = []
         self.used_coordinates_G = set()
         #dimensions = 2
-       # if dimensions == 2:
+        #if dimensions == 2:
         self.directions = set(((1, 0, 0, 1), (-1, 0, 0, -1), (0, 1, 0, 2), (0, -1, 0, -2)))
         # if dimensions == 3:
         #     self.directions = set(((1, 0, 0, 1), (-1, 0, 0, -1), (0, 1, 0, 2), (0, -1, 0, -2), (0, 0, 1, 3), (0, 0, -1, -3)))
@@ -37,38 +36,35 @@ class Greedy():
             elif i != 0:
                 best_score = 0
                 best_direction = self.random_bond(i)
-
+                
+                
                 # go trough all directions to see which direction leads to the lowest score
                 for direction in self.directions:
-                  
+                    
                     self.protein_temp = copy.deepcopy(self.protein)
-                    self.acid_temp = copy.deepcopy(self.acid)
+                    self.acid_temp = self.protein_temp.sequence_list[i]
+                
                     self.protein_temp.score = 0
                     self.protein_temp.create_bond(self.acid_temp, self.protein_temp.sequence_list[i - 1], direction)
                 
                     if tuple(self.acid_temp.location) in self.used_coordinates_G:
                         pass
                     else:
-                        
+                      
                         self.acid_temp.check_interactions(self.protein_temp)
+                        print('score', self.protein_temp.score)
                         score_direction = self.protein_temp.score
-                        print(i)
-                        #print('score_direct', score_direction)
 
                         if score_direction < best_score:
                             print('inside', i)
+                            print('score direc', score_direction)
                             best_score = score_direction
                             best_direction = direction
-                            print('best_score', best_score)
-                            print('best_direction', best_direction)
 
-               
                 self.protein.create_bond(self.acid, self.protein.sequence_list[i - 1], best_direction)       
                 self.best_directions.append(best_direction)
                 self.acid.check_interactions(self.protein)
                 self.used_coordinates_G.add(tuple(self.acid.location))
-                    #print(self.used_coordinates_G)
-            
                                
     
     def random_bond(self, i):
