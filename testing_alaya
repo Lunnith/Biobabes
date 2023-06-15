@@ -18,11 +18,12 @@ from operator import add
 
 if __name__ == "__main__":
 
-    sequence = "HCPHPCPHPCHPPCHPCHCHCHH"
+    sequence = "HCPHPCPHPCHPPCHPPCHHCHHCPPCHCPCHCPCHCHPCHCPHCPPHCPCHCPCHHPCHCPPCHCPCHCPCHPPHCHCPCHCHCHH"
     #sequence = "HCPHPCPHPCHCH"
     protein = Protein(sequence)
     greedy_test = gr.Greedy(protein)
     greedy_test.all_bonds()
+    #greedy_test.add_best_direction()
     print(greedy_test)
     greedy_test.protein.create_output()
     visualize_protein(greedy_test.protein, 2)
