@@ -1,18 +1,36 @@
-print("Hello World")
 from code.classes.protein import Protein
 from code.visualization.visualize import *
-from code.algorithms.greedy import greedy
+#from code.algorithms.greedy import greedy
+from code.algorithms import greedy as gr
 import random
 import copy
 import matplotlib.pyplot as plt
 from operator import add
 
 
-#proteinD = Protein("HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH")
+# #sequence = "HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH"
+# sequence = "HCPHPCPHPCHCH"
+# proteinD = Protein(sequence)
+# best_direct = greedy(proteinD)
+# print(best_direct)
+# proteinD.create_output()
+# visualize_protein(proteinD, 2)
 
-sequence = "HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH"
-proteinD = Protein(sequence)
-best_direct = greedy(proteinD)
-print(best_direct)
-proteinD.create_output()
-visualize_protein(proteinD, 2)
+if __name__ == "__main__":
+
+    sequence = "HCPHPCPHPCHCHHPCPHPPPHPHHHCCHCHCHCHH"
+    #sequence = "HCPHPCPHPCHCH"
+    protein = Protein(sequence)
+    greedy_test = gr.Greedy(protein)
+    greedy_test.all_bonds()
+    print(greedy_test)
+    greedy_test.protein.create_output()
+    visualize_protein(greedy_test.protein, 2)
+
+# sequence = "HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH"
+# #sequence = "HCPHPCPHPCHCH"
+# proteinD = Protein(sequence)
+# best_direct = greedy(proteinD)
+# print(best_direct)
+# proteinD.create_output()
+# visualize_protein(proteinD, 2)
