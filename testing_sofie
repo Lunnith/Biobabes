@@ -1,1 +1,19 @@
-print("Hello World")
+from code.classes.protein import Protein
+from code.visualization.visualize import *
+from code.algorithms.randomise import *
+from code.algorithms import depth_first as df
+
+if __name__ == "__main__":
+
+    # initialize protein object and directions
+    sequence = "PHCCCHHH"
+    test_protein = Protein(sequence)
+
+    # fold protein randomly and create output
+    depth_first = df.DepthFirst(test_protein, 2)
+    depth_first.run()
+    depth_first.best_state.create_output()
+
+    # visualize protein
+    visualize_protein(depth_first.best_state, 3)
+

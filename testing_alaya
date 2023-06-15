@@ -1,1 +1,16 @@
-print("Hello World")
+from code.classes.protein import Protein
+from code.visualization.visualize import *
+from code.algorithms.greedy import greedy
+import random
+import copy
+import matplotlib.pyplot as plt
+from operator import add
+
+
+#sequence = "HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH"
+sequence = "HCPHPCPHPCHCH"
+proteinD = Protein(sequence)
+best_direct = greedy(proteinD)
+print(best_direct)
+proteinD.create_output()
+visualize_protein(proteinD, 2)
