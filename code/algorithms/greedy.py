@@ -37,29 +37,38 @@ class Greedy():
             elif i != 0:
                 best_score = 0
                 best_direction = self.random_bond(i)
-                print(best_direction)
 
                 # go trough all directions to see which direction leads to the lowest score
                 for direction in self.directions:
-                    self.protein.create_bond(self.acid, self.protein.sequence_list[i - 1], direction)
+                  
+                    self.protein_temp = copy.deepcopy(self.protein)
+                    self.acid_temp = copy.deepcopy(self.acid)
+                    self.protein_temp.score = 0
+                    self.protein_temp.create_bond(self.acid_temp, self.protein_temp.sequence_list[i - 1], direction)
                 
-                    if tuple(self.acid.location) in self.used_coordinates_G:
+                    if tuple(self.acid_temp.location) in self.used_coordinates_G:
                         pass
                     else:
-                        self.protein_temp = copy.deepcopy(self.protein)
-                        self.acid_temp = copy.deepcopy(self.acid)
+                        
                         self.acid_temp.check_interactions(self.protein_temp)
                         score_direction = self.protein_temp.score
+                        print(i)
+                        #print('score_direct', score_direction)
 
                         if score_direction < best_score:
+                            print('inside', i)
                             best_score = score_direction
                             best_direction = direction
+                            print('best_score', best_score)
+                            print('best_direction', best_direction)
 
+               
                 self.protein.create_bond(self.acid, self.protein.sequence_list[i - 1], best_direction)       
                 self.best_directions.append(best_direction)
                 self.acid.check_interactions(self.protein)
                 self.used_coordinates_G.add(tuple(self.acid.location))
-                #print(self.used_coordinates_G)
+                    #print(self.used_coordinates_G)
+            
                                
     
     def random_bond(self, i):

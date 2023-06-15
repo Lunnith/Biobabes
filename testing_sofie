@@ -7,23 +7,15 @@ import time
 
 if __name__ == "__main__":
 
-    start = time.time()
     # initialize protein object and directions
-    sequence = "HCPHPCPHPCHCHPHP"
+    sequence = "CCCHHCC"
     test_protein = Protein(sequence)
 
     # fold protein randomly and create output
-    depth_first = df.DepthFirst(test_protein, 2)
+    depth_first = df.DepthFirst(test_protein, 3)
     depth_first.run()
     depth_first.protein.create_output()
 
     # visualize protein
     visualize_protein(depth_first.protein, 3)
 
-    end = time.time()
-
-    print(f'Time: {end - start}')
-
-    # voor 8 AZs: 2 sec
-    # voor 12 AZs: ong 1 min
-    # voor 16 AZs: 
