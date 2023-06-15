@@ -6,7 +6,7 @@ protein = Protein("HPCPHHPC")
 hill_climber = Hill_climber(protein)
 folded_protein = hill_climber.protein
 visualize_protein(folded_protein, 3)
-hill_climber.change_n_bonds(protein)
+hill_climber.change_one_bond(protein)
 
 
 folded_protein = hill_climber.protein
