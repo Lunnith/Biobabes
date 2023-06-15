@@ -3,17 +3,19 @@ from code.visualization.visualize import *
 from code.algorithms.randomise import *
 from code.algorithms import depth_first as df
 
+import time
+
 if __name__ == "__main__":
 
     # initialize protein object and directions
-    sequence = "PHCCCHHH"
+    sequence = "CCCHHCC"
     test_protein = Protein(sequence)
 
     # fold protein randomly and create output
-    depth_first = df.DepthFirst(test_protein, 2)
+    depth_first = df.DepthFirst(test_protein, 3)
     depth_first.run()
-    depth_first.best_state.create_output()
+    depth_first.protein.create_output()
 
     # visualize protein
-    visualize_protein(depth_first.best_state, 3)
+    visualize_protein(depth_first.protein, 3)
 
