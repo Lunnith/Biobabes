@@ -75,6 +75,7 @@ class Greedy():
             if tuple(list(map(add, amino.location, direction[0:3]))) in self.used_coordinates_G:
                 k += 1
         if k == 4:
+            self.used_coordinates_G.add(tuple(amino.location))
             return False
         else:
             return True
