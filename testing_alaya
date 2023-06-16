@@ -23,7 +23,7 @@ if __name__ == "__main__":
     protein = Protein(sequence)
     greedy_test = gr.Greedy(protein)
     greedy_test.all_bonds()
-    #greedy_test.add_best_direction()
+    greedy_test.build_best_protein()
     print(greedy_test)
     greedy_test.protein.create_output()
     visualize_protein(greedy_test.protein, 2)
