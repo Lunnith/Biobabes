@@ -22,7 +22,7 @@ class DepthFirst():
 
         self.states = [copy.deepcopy(self.protein)]
         self.best_state = None
-        self.best_score = 1
+        self.best_score = 0
 
     def get_next_state(self):
         """
@@ -30,7 +30,7 @@ class DepthFirst():
         """
         return self.states.pop()
     
-    def build_children(self, temp_protein, last_added_aminoacid, P_pruning=False):
+    def create_child_states(self, temp_protein, last_added_aminoacid, P_pruning=False):
         """
         Creates all possible child-states with different folding directions and adds them to the list of states. 
         Ignores illegal states. Optional non-optimal pruning that ensures that several P's in a row don't fold in the same direction.
@@ -53,17 +53,16 @@ class DepthFirst():
                 new_fold.sequence_list[-1].check_interactions(new_fold)
                 self.states.append(new_fold)
 
-    def check_solution(self, new_fold):
+    def check_folding(self, new_fold):
         """
-        Checks and accepts better solutions than the current solution.
+        Checks and accepts foldings with higher stability and a lower score than the current best folding.
         """
         new_score = new_fold.score
         old_score = self.best_score
 
-        if new_score < old_score:
+        if new_score <= old_score:
             self.best_score = new_score
             self.best_state = new_fold
-            print(f'New best score: {self.best_score}')
     
     def number_of_used_directions(self, temp_protein):
         """
@@ -94,10 +93,10 @@ class DepthFirst():
                     if len(new_fold.sequence_list) >= (len(new_fold.sequence) * (2/3)) and self.number_of_used_directions(new_fold) < 3:
                         continue
 
-                self.build_children(new_fold, new_fold.sequence_list[-1], P_pruning)
+                self.create_child_states(new_fold, new_fold.sequence_list[-1], P_pruning)
             
             else:
-                self.check_solution(new_fold)
+                self.check_folding(new_fold)
             
             self.protein = self.best_state   
     
