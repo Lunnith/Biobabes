@@ -9,6 +9,7 @@ class Greedy():
 
     def __init__(self, protein):
         self.protein = protein
+        #self.best_protein = copy.deepcopy(protein)
         #self.splits = splits
 
         self.best_directions = []
@@ -32,6 +33,8 @@ class Greedy():
             if i == 0:
                 self.acid.location = [0, 0, 0]
                 self.used_coordinates_G.add((tuple(self.acid.location)))
+                # first_direction = [0,0,0,0]
+                # self.best_directions.append((tuple(first_direction)))
             
 
             # for other aminoacids then the first create bond with previous acid
@@ -40,6 +43,7 @@ class Greedy():
                 best_direction = self.random_bond(i)
                 if best_direction == False:
                     del self.protein.sequence_list[-2:]
+                    del self.best_directions[-1]
                     
                     i = i-1
                     
@@ -68,16 +72,37 @@ class Greedy():
                         
                             best_score = score_direction
                             best_direction = direction
-
-                self.add_best_direction(best_direction, i)
+                print(self.best_directions)
+                print(best_direction)
+                self.best_directions.append(best_direction)
+                self.used_coordinates_G.add(tuple(self.acid.location))
+            
             i = i + 1
-                               
+        
+
     def add_best_direction(self, best_direction, i):
 
         self.protein.create_bond(self.acid, self.protein.sequence_list[i - 1], best_direction)
-        self.best_directions.append(best_direction)
+        #self.best_directions.append(best_direction)
         self.acid.check_interactions(self.protein)
-        self.used_coordinates_G.add(tuple(self.acid.location))
+        #self.used_coordinates_G.add(tuple(self.acid.location))
+    
+    def build_best_protein(self):
+        self.protein.sequence_list = []
+        for i in range(len(self.protein.sequence)):
+        #for index, best_direction in enumerate(best_directions):
+            self.protein.add_aminoacid(self.protein.sequence[i])
+            self.best_acid = self.protein.sequence_list[i]
+            if i == 0: 
+                self.best_acid.location = [0,0,0]
+            
+            if i >= 1:
+
+                self.protein.create_bond(self.best_acid, self.protein.sequence_list[- 2], self.best_directions[i-1])
+                self.best_acid.check_interactions(self.protein)
+                
+        return self.protein
+
 
     def check_if_stuck(self, amino):
         k = 0
