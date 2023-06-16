@@ -34,6 +34,7 @@ def random_assignment(protein, dimensions):
 
                 # if protein can't fold anymore, return shorter folded protein
                 if tried_directions == directions:
+                    protein.valid = False
                     return protein
 
         # only start checking interactions after the third aminoacid has been added
@@ -56,7 +57,7 @@ def random_reassignment(protein, dimensions, k=20):
         folded_protein = random_assignment(protein, dimensions)
 
         # only check the score of proteins that were folded completely
-        if len(folded_protein.sequence_list) == len(protein.sequence):        
+        if folded_protein.valid == True:  
             current_score = folded_protein.score
             scores.append(current_score)
 
