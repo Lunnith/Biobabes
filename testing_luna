@@ -9,6 +9,8 @@ visualize_protein(folded_protein, 3)
 
 
 
-protein = hill_climber.change_n_bonds(protein, 3)
+folded_protein, best_score = hill_climber.run_n_iterations(protein, 5, 3)
+print(best_score)
 visualize_protein(folded_protein, 3)
-# visualize_protein(hill_climber.refold(folded_protein, index_changed_bond), 3)
+
+

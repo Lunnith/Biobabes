@@ -108,20 +108,10 @@ class Hill_climber():
             Problem found: Check_interactions is built thinking that future acids are not yet present.
             To do: find a way to give check_interactions only the protein up untill the acid of interest.
         """
-        start = time.time()
         protein.score = 0
-        print("Starting score =", self.lowest_score)
+        start = time.time()
         for acid in protein.sequence_list:
-            
             acid.check_interactions(protein)
-        
-        
-        #Maybe put this in the algorithm itself
-        print("Score now =", protein.score)
-        if protein.score < self.lowest_score:
-            print("Score updated")
-            self.lowest_score = protein.score
-            self.best_fold = protein
 
         end = time.time()
         print(f"Runtime check_score: {end-start} seconds.")
@@ -152,11 +142,10 @@ class Hill_climber():
         Loop over all functions n times
         while check_validity gives >0, first change these bonds
 
-        #NOTE TO SELF: Doe dit anders, zeg "verander er 1, ga vervolgens fouten fixen"
-        en that's it, dat is je verschil. 
-        -> je kunt wel n random bindingen veranderen en daarna pas de fouten fixen anders?
-        Maar anyways, niet eerst binding 3 aanpassen, dan fouten fixen waarna je 
-        binding 2 aanpast en exact dezelfde fouten opnieuw mag fixen
+        #NOTE TO SELF: zorg dat ie alleen de eerste dubbele vouwing fixt, pas als die goed is de rest
+            nu gebeurt het vaak dat ie binding 41, 48 en 51 fixt, 
+            om vervolgens te zien dat 41 nogsteeds niet correct is, dus die opnieuw aan te passen,
+            Waardoor uiteindelijk 51 weer dubbel zit.
         """
         start = time.time()
         for i in range(n):
@@ -165,17 +154,32 @@ class Hill_climber():
 
         #Fix the aminoacids that have been folded incorrectly
         while len(self.check_validity(protein)) > 0:
-            print("len of self.double_coords.keys() =", self.double_coords.keys())
+            print("Indexes of double acids =", self.double_coords.keys())
             for acid in self.double_coords.keys():
                 protein, index_changed_bond = self.change_one_bond(protein, given_index=acid)
                 self.refold(protein, index_changed_bond)
             # TO DO: Create safety to not get stuck.
 
-
-        self.check_score(protein)
         end = time.time()
         print(f"Runtime change_n_bonds: {end-start} seconds.")
         return protein
 
 
 
+    def run_n_iterations(self, protein, iterations, bonds):
+        """
+        runs the change_n_bonds
+        """
+        print("Starting score =", self.lowest_score)
+        print("\n")
+        for n in range(iterations):
+            new_protein = self.change_n_bonds(protein, bonds)
+            self.check_score(new_protein)
+
+            print("\n Score after n changed bonds", protein.score)
+            if protein.score < self.lowest_score:
+                print("Score updated to", protein.score, "\n\n")
+                self.lowest_score = protein.score
+                self.best_fold = protein
+
+        return self.best_fold, self.lowest_score
