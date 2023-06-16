@@ -24,6 +24,8 @@ class Protein():
         add aminoacid to list
     create_bonds(acid, previous_acid, direction):
         create bond between two aminoacids
+    get_temp_sequence(temp_protein):
+        returns temporary sequence of temporary protein
     create_output():
         create asked output
     """
@@ -72,6 +74,17 @@ class Protein():
             
         self.used_coordinates.add(coordinates)
 
+    def get_temp_sequence(self):
+        """
+        Method to get the temporary sequence of a protein that is being build.
+        """
+        temp_sequence = str()
+
+        for acid in self.sequence_list:
+            temp_sequence += acid.type
+        
+        return temp_sequence
+    
     def create_output(self):
         """
         Create output in the asked format.

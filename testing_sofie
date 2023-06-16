@@ -3,17 +3,15 @@ from code.visualization.visualize import *
 from code.algorithms.randomise import *
 from code.algorithms import depth_first as df
 
-import time
-
 if __name__ == "__main__":
 
     # initialize protein object and directions
-    sequence = "PPPHPPH"
+    sequence = "HHHHHHH"
     test_protein = Protein(sequence)
 
     # fold protein randomly and create output
     depth_first = df.DepthFirst(test_protein, 3)
-    depth_first.run()
+    depth_first.run(P_pruning=True, directions_pruning=True)
     depth_first.protein.create_output()
 
     # visualize protein

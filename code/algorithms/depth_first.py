@@ -12,7 +12,6 @@ class DepthFirst():
         self.protein = protein
         self.protein.add_aminoacid(self.protein.sequence[0])
         self.protein.sequence_list[0].location = [0,0,0]
-        self.protein.sequence_list[0].step = 1
         self.protein.used_coordinates.add((tuple([0,0,0])))
 
         # initialize directions based on dimensions
@@ -23,7 +22,7 @@ class DepthFirst():
 
         self.states = [copy.deepcopy(self.protein)]
         self.best_state = None
-        self.best_score = 0
+        self.best_score = 1
 
     def get_next_state(self):
         """
@@ -31,44 +30,29 @@ class DepthFirst():
         """
         return self.states.pop()
     
-    def build_children(self, temp_protein, last_added_aminoacid):
+    def build_children(self, temp_protein, last_added_aminoacid, P_pruning=False):
         """
         Creates all possible child-states with different folding directions and adds them to the list of states. 
-        Ignores illegal states.
+        Ignores illegal states. Optional non-optimal pruning that ensures that several P's in a row don't fold in the same direction.
         """
-        count = 0
         for direction in self.directions:
+            new_fold = copy.deepcopy(temp_protein)
+            to_add_aminoacid_type = new_fold.sequence[len(new_fold.get_temp_sequence())]
 
-            # only make a new state if direction is not the reverse direction of the previous bond
-            if direction[3] != -last_added_aminoacid.step:
-                new_fold = copy.deepcopy(temp_protein)
+            # expand new fold with aminoacid and create a bond in the given direction
+            new_fold.add_aminoacid(to_add_aminoacid_type)
+            new_fold.create_bond(new_fold.sequence_list[-1], new_fold.sequence_list[-2], direction)
 
-                # determine the new to add aminoacid based on the temporary sequence of the old state
-                temp_sequence = str()
-                for acid in new_fold.sequence_list:
-                    temp_sequence += acid.type
+            # non-optimal pruning which makes sure that several P's in a row don't fold in the same direction
+            if P_pruning and len(new_fold.sequence_list) > 2:
+                if new_fold.sequence_list[-1].type == 'P' and new_fold.sequence_list[-2].type == 'P' and new_fold.sequence_list[-2].step == new_fold.sequence_list[-3].step:
+                    continue
 
-                to_add_aminoacid_type = new_fold.sequence[len(temp_sequence)]
+            # only add new folding to the list if the folding is valid
+            if new_fold.sequence_list[-1].location_valid == True:
+                new_fold.sequence_list[-1].check_interactions(new_fold)
+                self.states.append(new_fold)
 
-                # nog te implementeren: als 2 P's achter elkaar, neem niet dezelfde richting als de richting van de eerdere P
-                # if last_added_aminoacid.type == 'P' and to_add_aminoacid_type == 'P' and direction[3] == new_fold.sequence_list[-1].step:
-                #         print(direction[3])
-                #         print(last_added_aminoacid.step)
-                #         pass
-                
-                # else:
-
-
-                # expand new fold with aminoacid and create a bond in the given direction
-                new_fold.add_aminoacid(to_add_aminoacid_type)
-                new_fold.create_bond(new_fold.sequence_list[-1], new_fold.sequence_list[-2], direction)
-
-                # only add new folding to the list if the folding is valid
-                if new_fold.sequence_list[-1].location_valid == True:
-                    new_fold.sequence_list[-1].check_interactions(new_fold)
-                    self.states.append(new_fold)
-
-                
     def check_solution(self, new_fold):
         """
         Checks and accepts better solutions than the current solution.
@@ -80,22 +64,44 @@ class DepthFirst():
             self.best_score = new_score
             self.best_state = new_fold
             print(f'New best score: {self.best_score}')
+    
+    def number_of_used_directions(self, temp_protein):
+        """
+        Method that counts the number of used directions during folding of the protein.
+        """
+        used_directions = set()
 
-    def run(self):
+        for acid in temp_protein.sequence_list:
+            used_directions.add(acid.step)
+
+        return len(used_directions)
+
+    def run(self, P_pruning=False, directions_pruning=False):
         """
         Runs the Depth First Algorithm until it has seen all possible states.
         """
         depth = len(self.protein.sequence)
- 
+
         # loop through stack of foldings
         while self.states:
             new_fold = self.get_next_state()
 
             # if protein is not complete yet, expand the folding, else check the score of the new folding
             if len(new_fold.sequence_list) < depth:
-                self.build_children(new_fold, new_fold.sequence_list[-1])
+                
+                # non-optimal pruning that skips states that have used less than 3 directions at 2/3 of the folding
+                if directions_pruning:
+                    if len(new_fold.sequence_list) >= (len(new_fold.sequence) * (2/3)) and self.number_of_used_directions(new_fold) < 3:
+                        continue
 
+                self.build_children(new_fold, new_fold.sequence_list[-1], P_pruning)
+            
             else:
                 self.check_solution(new_fold)
-
+            
             self.protein = self.best_state   
+    
+    
+
+
+
