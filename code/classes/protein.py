@@ -45,6 +45,8 @@ class Protein():
         
         self.hh_ch_bonds = []
         self.cc_bonds = []
+
+        self.valid = True
         
     def add_aminoacid(self, acid):
         """

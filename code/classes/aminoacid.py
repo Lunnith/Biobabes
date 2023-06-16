@@ -51,13 +51,13 @@ class Aminoacid():
         return math.sqrt((self.location[0] - other.location[0])**2 + (self.location[1] - other.location[1])**2 + (self.location[2] - other.location[2])**2)
    
 
-    def check_interactions(self, protein):
+    def check_interactions(self, protein, index = -1):
         """
         Check surrounding of aminoacid for other aminoacids, if they are present, check type
         and change score according to the interaction type.
         """
         # loop through all potential interactors for this aminoacid
-        for potential_interactor in protein.sequence_list:
+        for potential_interactor in protein.sequence_list[:index]:
 
             # only check for interactions with other acid than bound amino acids and interactors in close proximity
             if potential_interactor != self.neighbour1 and self.distance(potential_interactor) == 1:
