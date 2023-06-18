@@ -152,7 +152,7 @@ class Greedy():
         for i in range(1, len(self.protein.sequence), 3):
             print("ROUND", i)
             #part_sequence = self.protein.sequence[i:i+3]
-            best_state_directions = random.choice(self.list_directions)
+            best_state_directions = random.choice(self.list_directions) ###MOET VALID OPLOSSING ZIJN
             #self.acid_steps = {1: tuple((1,0,0,1)), -1: tuple((-1, 0, 0, -1)), 2: tuple((0, 1, 0, 2)) , -2: tuple((0, -1, 0, -2))}
             for state_directions in self.list_directions:
                 best_score = 0
