@@ -1,5 +1,6 @@
 from code.classes.protein import Protein
 from code.visualization.visualize import *
+from code.algorithms.depth_first import DepthFirst
 #from code.algorithms.greedy import greedy
 from code.algorithms import greedy as gr
 import random
@@ -8,30 +9,14 @@ import matplotlib.pyplot as plt
 from operator import add
 
 
-# #sequence = "HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH"
-# sequence = "HCPHPCPHPCHCH"
-# proteinD = Protein(sequence)
-# best_direct = greedy(proteinD)
-# print(best_direct)
-# proteinD.create_output()
-# visualize_protein(proteinD, 2)
-
 if __name__ == "__main__":
 
-    sequence = "HCPHPCPHPCHPPCHPPCHHCHHCPPCHCPCHCPCHCHPCHCPHCPPHCPCHCPCHHPCHCPPCHCPCHCPCHPPHCHCPCHCHCHH"
-    #sequence = "HCPHPCPHPCHCH"
+    #sequence = "HCPHPCPHPCHPPCHPPCHHCHHCPPCHCPCHCPCHCHPCHCPHCPPHCPCHCPCHHPCHCPPCHCPCHCPCHPPHCHCPCHCHCHH"
+    sequence = "PCHCPHCPPHCPCHCPCHHPCHCPPCHCPCHCPCHPPHCHCPCHCHCHH"
+    #sequence = "HPCPHPCHCH"
     protein = Protein(sequence)
-    greedy_test = gr.Greedy(protein)
-    greedy_test.all_bonds()
-    greedy_test.build_best_protein()
-    print(greedy_test)
-    greedy_test.protein.create_output()
-    visualize_protein(greedy_test.protein, 2)
+    greedy_test = gr.Greedy(protein, 2)
+    #greedy_test.run()
+    greedy_test.run_k()
+    visualize_protein(protein, 2)
 
-# sequence = "HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH"
-# #sequence = "HCPHPCPHPCHCH"
-# proteinD = Protein(sequence)
-# best_direct = greedy(proteinD)
-# print(best_direct)
-# proteinD.create_output()
-# visualize_protein(proteinD, 2)
