@@ -2,6 +2,7 @@ from .randomise import random_assignment
 import random
 import time
 import copy
+import matplotlib.pyplot as plt
 
 class Hill_climber():
     def __init__(self, protein, dimensions=3):
@@ -168,23 +169,58 @@ class Hill_climber():
             and make sure that the graph shows the improvement each step.
         """
         start = time.time()
+        starting_score = self.lowest_score
         print("Starting score =", self.lowest_score)
         print("\n")
+        scores = []
+        iteration = []
+        improvement = []
 
         for n in range(iterations):
+            iteration.append(n)
             protein = copy.deepcopy(self.protein)
             new_protein = self.change_n_bonds(protein, bonds)
             if new_protein == False: #If change turned out invalid, skip this change
                 print("Skipping this iteration \n")
+                scores.append(None)
+                improvement.append("white")
                 continue
             self.check_score(new_protein)
+            scores.append(new_protein.score)
 
             print("Score after n changed bonds", new_protein.score, "\n")
             if new_protein.score < self.lowest_score:
                 print("Score updated to", new_protein.score, "\n")
+                improvement.append("green")
                 self.lowest_score = new_protein.score
                 self.protein = new_protein
+            elif new_protein.score == self.lowest_score:
+                print("Score is the same as before")
+                improvement.append("yellow")
+            else:
+                print("No improvement") 
+                improvement.append("red")
 
         end = time.time()
         print(f"Runtime run_n_iterations: {end-start} seconds.\nIterations run: {iterations}")
+        print(f"Starting score was {starting_score}, new score is {self.lowest_score}")
+        print("Length protein =", len(self.protein.sequence_list))
+        self.visualise_hillclimb(iteration, scores, improvement)
         return self.protein, self.lowest_score
+    
+    def visualise_hillclimb(self, iterations, scores, improvement):
+        """
+        Roughly visualises the improvement of the algorithm
+        """
+        plt.scatter(iterations, scores, c=improvement)
+        plt.xlim(left=0)
+
+        scores_filtered = []
+        iterations_filtered = []
+
+        for n in range(len(iterations)):
+            if improvement[n] == "green" or improvement[n] == "yellow":
+                scores_filtered.append(scores[n])
+                iterations_filtered.append(iterations[n])
+        plt.plot(iterations_filtered, scores_filtered, "-b", linewidth=2)
+        plt.show()

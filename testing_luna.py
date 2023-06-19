@@ -2,6 +2,7 @@ from code.classes.protein import Protein
 from code.visualization.visualize import *
 from code.algorithms.hill_climber import *
 
+#NOTE TO SELF: 2D version is buggy
 protein = Protein("HPCPHHPCCHPHCCHPHHHCCCPPHCPHCPHCCCPHHHCPPCCHPCCCHPHCCHHHHPCCCPPPCH")
 # protein = Protein("HPPCCHPPH")
 hill_climber = Hill_climber(protein)
@@ -12,7 +13,7 @@ visualize_protein(folded_protein, 3)
 
 
 
-folded_protein, best_score = hill_climber.run_n_iterations(protein, 500, 1)
+folded_protein, best_score = hill_climber.run_n_iterations(protein, 1000, 1)
 print(best_score)
 visualize_protein(folded_protein, 3)
 
