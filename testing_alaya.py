@@ -14,9 +14,10 @@ if __name__ == "__main__":
     #sequence = "HCPHPCPHPCHPPCHPPCHHCHHCPPCHCPCHCPCHCHPCHCPHCPPHCPCHCPCHHPCHCPPCHCPCHCPCHPPHCHCPCHCHCHH"
     #sequence = "PCHCPHCPPHCPCHCPCHHPCHCPPCHCPCHCPCHPPHCHCPCHCHCHH"
     #sequence = "PCPHPCHCH"
-    sequence = "HPCPHHPCCHPHCCHPHHHCCCPPHCPHCPHCCCPHHHCPPCCHPCCCHPHCCHHHH"
+    sequence = "HPCPHHPCCHPHCCHPHHHCCCPPHCPHCPHCCCPHHHCPPCCHPCCCHPHCCHHHHPCCCPPPCHP"
+    #sequence = "HPCPHHPCCHPHCCHPHHHCCCPPHCPHCPHCCCPHHHCPPCCHPCCCHPHCCHHHHPCCCPPPCH"
     protein = Protein(sequence)
-    greedy_test = gr.Greedy(protein, 3, splits = 7)
+    greedy_test = gr.Greedy(protein, 3, splits = 6)
     #greedy_test.run()
     greedy_test.run_k()
     visualize_protein(protein, 3)
