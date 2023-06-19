@@ -5,7 +5,7 @@ from code.algorithms.randomise import *
 if __name__ == "__main__":
 
     # initialize protein object and directions
-    sequence = "HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH"
+    sequence = "HCPHPCPHP"
     protein = Protein(sequence)
 
     # fold protein randomly and create output
@@ -14,4 +14,4 @@ if __name__ == "__main__":
 
     # visualize protein
     # visualize_scores(score_list)
-    visualize_protein(folded_protein, 2)
+    visualize_protein(folded_protein, 3)
