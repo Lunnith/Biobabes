@@ -169,15 +169,14 @@ class Hill_climber():
             and make sure that the graph shows the improvement each step.
         """
         start = time.time()
-        starting_score = self.lowest_score
-        print("Starting score =", self.lowest_score)
+        starting_score = protein.score
+        self.lowest_score = starting_score
+        print("Starting score =", starting_score)
         print("\n")
-        scores = []
-        iteration = []
-        improvement = []
+        scores = [starting_score]
+        improvement = ["yellow"]
 
         for n in range(iterations):
-            iteration.append(n)
             protein = copy.deepcopy(self.protein)
             new_protein = self.change_n_bonds(protein, bonds)
             if new_protein == False: #If change turned out invalid, skip this change
@@ -205,22 +204,61 @@ class Hill_climber():
         print(f"Runtime run_n_iterations: {end-start} seconds.\nIterations run: {iterations}")
         print(f"Starting score was {starting_score}, new score is {self.lowest_score}")
         print("Length protein =", len(self.protein.sequence_list))
-        self.visualise_hillclimb(iteration, scores, improvement)
-        return self.protein, self.lowest_score
+        return self.protein, self.lowest_score, scores, improvement
     
-    def visualise_hillclimb(self, iterations, scores, improvement):
+
+    def plot_hillclimb(self, iterations, scores, improvement, n):
         """
         Roughly visualises the improvement of the algorithm
         """
-        plt.scatter(iterations, scores, c=improvement)
-        plt.xlim(left=0)
+        colors = ["blue", "purple", "red", "olive", "green", "orange", "brown", "pink", "grey", "cyan"]
+        # plt.scatter(iterations, scores, c=improvement)
+        plt.xlim(left=-1, right=len(iterations))
+        # plt.ylim(top=0)
 
         scores_filtered = []
         iterations_filtered = []
 
-        for n in range(len(iterations)):
-            if improvement[n] == "green" or improvement[n] == "yellow":
-                scores_filtered.append(scores[n])
-                iterations_filtered.append(iterations[n])
-        plt.plot(iterations_filtered, scores_filtered, "-b", linewidth=2)
+        for iteration in range(len(iterations)):
+            if improvement[iteration] == "green" or improvement[iteration] == "yellow":
+                scores_filtered.append(scores[iteration])
+                iterations_filtered.append(iterations[iteration])
+
+        #Make the lines continue untill the end, even without improvement
+        scores_filtered.append(scores_filtered[-1])
+        iterations_filtered.append(len(iterations))
+
+        plt.plot(iterations_filtered, scores_filtered, "-", linewidth=2, c=colors[n-1], label=n)
+        # plt.show()
+
+
+    def experiment(self, protein, iterations, max_n=10):
+        """
+        
+        """
+        start = time.time()
+        if max_n > 10:
+            print("ERROR: please only insert a max_n of 10 or smaller")
+            return
+        
+        first_random_fold = copy.deepcopy(protein)
+        best_protein = first_random_fold
+        best_score = first_random_fold.score
+        
+        for n in range(1, max_n+1):
+            print("\n\n\n\nStarting new N")
+            protein_for_n, lowest_score_for_n, scores, improvement = self.run_n_iterations(first_random_fold, iterations, n)
+            self.plot_hillclimb(range(iterations), scores, improvement, n)
+
+            if lowest_score_for_n < best_score:
+                best_protein = protein_for_n
+                best_score = lowest_score_for_n
+
+        plt.legend(range(1, n+1))
+        end = time.time()
+        print(f"Best score has become", best_score)
+        print(f"Runtime experiment: {end-start} seconds.")
+
         plt.show()
+
+        return best_protein
