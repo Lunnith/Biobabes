@@ -2,7 +2,6 @@ from code.classes.protein import Protein
 from code.visualization.visualize import *
 from code.algorithms.randomise import *
 from code.algorithms.depth_first import DepthFirst
-from code.algorithms.breadth_first import BreadthFirst
 
 if __name__ == "__main__":
 
