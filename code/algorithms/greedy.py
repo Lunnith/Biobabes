@@ -1,9 +1,12 @@
 # from code.classes.protein import Protein
 from code.visualization.visualize import *
+from code.classes.protein import Protein
 import random
 import copy
+from code.algorithms.depth_first import DepthFirst
 import matplotlib.pyplot as plt
 from operator import add
+import itertools
 
 class Greedy():
 
@@ -86,8 +89,94 @@ class Greedy():
             # go forward one iteration in the while loop
             i += 1
 
-    def add_best_direction(self, best_direction):
+    def parts(self, state_directions, i):
         
+        remove_k = 0
+        sequence_placement = i
+        temp_list_coordinates = []
+
+        for direction in state_directions:
+            remove_k += 1
+            #print("sequence placement", sequence_placement)
+            # for every element in the protein sequence, add and select the aminoacid
+            #print("KJKJKJKJ", self.protein.sequence[sequence_placement])
+            self.protein.add_aminoacid(self.protein.sequence[sequence_placement])
+            self.acid = self.protein.sequence_list[-1]
+            
+            # make a deepcopy of the protein and use this to index the acid
+            self.protein_temp = copy.deepcopy(self.protein)
+            self.acid_temp = self.protein_temp.sequence_list[-1]
+            
+            # reset the score of the temporary protein to zero
+            
+            #print("kkkk",self.protein_temp.sequence_list[-2].location)
+           # print(direction)
+            self.protein_temp.create_bond(self.acid_temp, self.protein_temp.sequence_list[-2], direction)
+            self.protein.create_bond(self.acid, self.protein.sequence_list[-2], direction)
+            #print(self.acid_temp.location)
+
+            # check if the acid location is not already occupied or a location that will be stuck
+            if tuple(self.acid_temp.location) not in self.used_coordinates_G and self.is_stuck(self.acid_temp) == False and self.acid_temp.location not in temp_list_coordinates:
+                
+                # check the new interations and assign the acquired score to score direction
+                self.acid_temp.check_interactions(self.protein_temp)
+                temp_list_coordinates.append(self.acid_temp.location)
+                
+            else:
+                del self.protein.sequence_list[-remove_k:]
+                return False
+            
+            sequence_placement += 1
+
+        del self.protein_temp.sequence_list[-remove_k:]
+        del self.protein.sequence_list[-remove_k:]
+        print(len(self.protein.sequence_list))
+        score = self.protein_temp.score
+        self.protein_temp.score = 0
+        return score
+
+    def create_directions(self):
+        
+        directions = []
+        for i in range(3):
+            directions.append([tuple((1, 0, 0, 1)), tuple((-1, 0, 0, -1)), tuple((0, 1, 0, 2)), tuple((0, -1, 0, -2))])
+        self.list_directions = list(itertools.product(*directions))
+    
+    def all_bonds_kk(self):
+        self.protein.add_aminoacid(self.protein.sequence[0])
+        self.acid = self.protein.sequence_list[0]
+        self.acid.location = [0, 0, 0]
+        self.used_coordinates_G.add((tuple(self.acid.location)))
+        self.create_directions()
+        
+        for i in range(1, len(self.protein.sequence), 3):
+            print("ROUND", i)
+            #part_sequence = self.protein.sequence[i:i+3]
+            best_state_directions = random.choice(self.list_directions) ###MOET VALID OPLOSSING ZIJN
+            #self.acid_steps = {1: tuple((1,0,0,1)), -1: tuple((-1, 0, 0, -1)), 2: tuple((0, 1, 0, 2)) , -2: tuple((0, -1, 0, -2))}
+            for state_directions in self.list_directions:
+                best_score = 0
+                score = self.parts(state_directions, i)
+                #print("SCORE", score)
+                if score == False:
+                    continue
+                
+                else:
+                    if score < best_score:
+                    
+                        best_score = score
+                        best_state_directions = state_directions
+            counter_score = i
+            for direction in best_state_directions:
+                #print("best_state_directions", best_state_directions)
+                self.protein.add_aminoacid(self.protein.sequence[counter_score])
+                self.acid = self.protein.sequence_list[-1]
+                self.add_best_direction(direction)
+                counter_score += 1
+        
+
+    def add_best_direction(self, best_direction):
+
         # create a bond for the best direction for this acid and add the location to used coordinates
         self.protein.create_bond(self.acid, self.protein.sequence_list[-2], best_direction)
         #self.best_directions.append(best_direction)
@@ -158,8 +247,11 @@ class Greedy():
         self.all_bonds()
         self.check_all_interactions()
         self.protein.create_output()
-        
-                
+    
+    def run_k(self):
+        self.all_bonds_kk()
+        self.check_all_interactions()
+        self.protein.create_output()
 
 
 
