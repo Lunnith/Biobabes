@@ -10,15 +10,15 @@ import itertools
 
 class Greedy():
 
-    def __init__(self, protein, dimensions):
+    def __init__(self, protein, dimensions, splits = 3):
         self.protein = protein
-        #self.splits = splits
-
-        #self.best_directions = []
+        self.splits = splits
+        self.dimensions = dimensions
         self.used_coordinates_G = set()
-        if dimensions == 2:
+
+        if self.dimensions == 2:
             self.directions = set(((1, 0, 0, 1), (-1, 0, 0, -1), (0, 1, 0, 2), (0, -1, 0, -2)))
-        if dimensions == 3:
+        elif self.dimensions == 3:
             self.directions = set(((1, 0, 0, 1), (-1, 0, 0, -1), (0, 1, 0, 2), (0, -1, 0, -2), (0, 0, 1, 3), (0, 0, -1, -3)))
     
     def all_bonds(self):
@@ -26,7 +26,7 @@ class Greedy():
         # initiate i and keep in the while loop until i has gone trough all protein_sequence elements
         i = 0
         while i < len(self.protein.sequence):
-            print(i)
+        
             # for every element in the protein sequence, add and select the aminoacid
             self.protein.add_aminoacid(self.protein.sequence[i])
             self.acid = self.protein.sequence_list[i]
@@ -91,89 +91,105 @@ class Greedy():
 
     def parts(self, state_directions, i):
         
-        remove_k = 0
-        sequence_placement = i
-        temp_list_coordinates = []
+        # initiate a set of coordinates that have been used within this direction state
+        temp_list_coordinates = set()
 
-        for direction in state_directions:
-            remove_k += 1
-            #print("sequence placement", sequence_placement)
+        # set protein score to zero to determine the score of adding this part of the sequence
+        self.protein.score = 0
+
+        for index, direction in enumerate(state_directions):
+            
             # for every element in the protein sequence, add and select the aminoacid
-            #print("KJKJKJKJ", self.protein.sequence[sequence_placement])
-            self.protein.add_aminoacid(self.protein.sequence[sequence_placement])
+            self.protein.add_aminoacid(self.protein.sequence[i + index])
             self.acid = self.protein.sequence_list[-1]
-            
-            # make a deepcopy of the protein and use this to index the acid
-            self.protein_temp = copy.deepcopy(self.protein)
-            self.acid_temp = self.protein_temp.sequence_list[-1]
-            
-            # reset the score of the temporary protein to zero
-            
-            #print("kkkk",self.protein_temp.sequence_list[-2].location)
-           # print(direction)
-            self.protein_temp.create_bond(self.acid_temp, self.protein_temp.sequence_list[-2], direction)
-            self.protein.create_bond(self.acid, self.protein.sequence_list[-2], direction)
-            #print(self.acid_temp.location)
 
+            # create a bond using the acid and the direction
+            self.protein.create_bond(self.acid, self.protein.sequence_list[-2], direction)
+
+     
             # check if the acid location is not already occupied or a location that will be stuck
-            if tuple(self.acid_temp.location) not in self.used_coordinates_G and self.is_stuck(self.acid_temp) == False and self.acid_temp.location not in temp_list_coordinates:
-                
+            if tuple(self.acid.location) not in self.used_coordinates_G and self.is_stuck(self.acid) == False and tuple(self.acid.location) not in temp_list_coordinates:
+        
                 # check the new interations and assign the acquired score to score direction
-                self.acid_temp.check_interactions(self.protein_temp)
-                temp_list_coordinates.append(self.acid_temp.location)
+                self.acid.check_interactions(self.protein)
+               
+                # add the coordinates to the temporary list of coordinates
+                temp_list_coordinates.add((tuple(self.acid.location)))
                 
             else:
-                del self.protein.sequence_list[-remove_k:]
-                return False
-            
-            sequence_placement += 1
 
-        del self.protein_temp.sequence_list[-remove_k:]
-        del self.protein.sequence_list[-remove_k:]
-        print(len(self.protein.sequence_list))
-        score = self.protein_temp.score
-        self.protein_temp.score = 0
-        return score
+                # remove the amount of aminoacids that have been added and return False
+                del self.protein.sequence_list[-(index + 1):]
+                return False
+ 
+        # remove the amount of aminoacids that have been added ### remove split amount because all directions tried
+        del self.protein.sequence_list[-(self.splits):]
+        
+        # return the protein score
+        return self.protein.score
 
     def create_directions(self):
         
         directions = []
-        for i in range(3):
-            directions.append([tuple((1, 0, 0, 1)), tuple((-1, 0, 0, -1)), tuple((0, 1, 0, 2)), tuple((0, -1, 0, -2))])
+        for i in range(self.splits):
+            if self.dimensions == 2:
+                directions.append([tuple((1, 0, 0, 1)), tuple((-1, 0, 0, -1)), tuple((0, 1, 0, 2)), tuple((0, -1, 0, -2))])
+            else:
+                directions.append([tuple((1, 0, 0, 1)), tuple((-1, 0, 0, -1)), tuple((0, 1, 0, 2)), tuple((0, -1, 0, -2)), tuple((0, 0, 1, 3)), tuple((0, 0, -1, -3))])
         self.list_directions = list(itertools.product(*directions))
+        print(len(self.list_directions))
+        
     
     def all_bonds_kk(self):
+
+        # set the first aminoacid at coordinate 0,0,0 and add to used coordinates
         self.protein.add_aminoacid(self.protein.sequence[0])
         self.acid = self.protein.sequence_list[0]
         self.acid.location = [0, 0, 0]
         self.used_coordinates_G.add((tuple(self.acid.location)))
+
+        # initiate all directions
         self.create_directions()
         
-        for i in range(1, len(self.protein.sequence), 3):
+        # iterate the lenght of the protein sequence (skipping the first) in steps of the split
+        for i in range(1, len(self.protein.sequence), self.splits):
             print("ROUND", i)
-            #part_sequence = self.protein.sequence[i:i+3]
-            best_state_directions = random.choice(self.list_directions) ###MOET VALID OPLOSSING ZIJN
-            #self.acid_steps = {1: tuple((1,0,0,1)), -1: tuple((-1, 0, 0, -1)), 2: tuple((0, 1, 0, 2)) , -2: tuple((0, -1, 0, -2))}
+            
+            # initiate a valid random direction for the whole split in case non of the directions lead to a better score than 0
+            best_state_directions = []
+
+            # make a set for the coordinates used within this split to make sure this part of the protein does not go over itself
+            self.used_coordinates_random = set()
+            for j in range(self.splits):
+
+                # for every aminoacid, add to the protein and 
+                self.protein.add_aminoacid(self.protein.sequence[i + j])
+                self.acid = self.protein.sequence_list[-1]
+
+                # append valid direction to the best state directions and add to the used random coordinates
+                best_state_directions.append(self.random_bond())
+                self.used_coordinates_random.add((tuple(self.acid.location)))
+
+            # delete the used aminoacids from the protein sequence list
+            del self.protein.sequence_list[-(self.splits):]
+
+            best_score = 0
+
             for state_directions in self.list_directions:
-                best_score = 0
-                score = self.parts(state_directions, i)
-                #print("SCORE", score)
-                if score == False:
-                    continue
                 
-                else:
-                    if score < best_score:
-                    
-                        best_score = score
-                        best_state_directions = state_directions
-            counter_score = i
-            for direction in best_state_directions:
-                #print("best_state_directions", best_state_directions)
-                self.protein.add_aminoacid(self.protein.sequence[counter_score])
+                score = self.parts(state_directions, i)
+
+                if score < best_score and score != False:
+    
+                    best_score = score
+                    best_state_directions = state_directions
+
+            for index, direction in enumerate(best_state_directions):
+
+                self.protein.add_aminoacid(self.protein.sequence[i + index])
                 self.acid = self.protein.sequence_list[-1]
                 self.add_best_direction(direction)
-                counter_score += 1
-        
+
 
     def add_best_direction(self, best_direction):
 
@@ -186,9 +202,16 @@ class Greedy():
         """
         Check all the interactions and adjust the score when an interaciton is found
         """
+        # set the lists of bonds to empty again (because they were filled during directions)
+        self.protein.hh_ch_bonds = []
+        self.protein.cc_bonds = []
+        self.protein.score = 0
+
+        # go through the protein sequence list and check the interaction for every aminoacid
         for index, acid in enumerate(self.protein.sequence_list):
             acid.check_interactions(self.protein, index)
-                
+        
+        # return the protein
         return self.protein
 
 
@@ -196,26 +219,17 @@ class Greedy():
         """
         Check if an acid is stuck, does not have any direction to go in
         """
-        # counter initialization
-        k = 0
-
+       
         # go trough all possible directions and add the direction to the acid location and check if it is in used coordinates
         for direction in self.directions:
-            if tuple(list(map(add, acid.location, direction[0:3]))) in self.used_coordinates_G:
+            if tuple(list(map(add, acid.location, direction[0:3]))) not in self.used_coordinates_G:
 
-                # if this direction is already occupied, add 1 to the counter
-                k += 1
-
-        # if all directions are occupied, add the acid.location to used coordinates because this location is stuck and therfore not usable
-        if k == 4:
-            self.used_coordinates_G.add(tuple(acid.location))
-
-            # return True because is_stuck is true
-            return True
-
-        # if not all directions are occupied, return False
-        return False
-        
+                # if any of the directions is not occupied
+                return False
+    
+        # return True because is_stuck is true
+        return True
+              
 
     def random_bond(self):
         """
@@ -227,7 +241,7 @@ class Greedy():
 
         # Until the acid location that is created is a valid location (not occupied or stuck) keep trying different directions
         tried_directions = set()
-        while tuple(self.acid.location) in self.used_coordinates_G or self.is_stuck(self.acid) == True:
+        while tuple(self.acid.location) in self.used_coordinates_G or self.is_stuck(self.acid) == True or tuple(self.acid.location) in self.used_coordinates_random:
 
             # repeat trying new directions to find a valid one
             best_direction = random.choice(tuple(self.directions))

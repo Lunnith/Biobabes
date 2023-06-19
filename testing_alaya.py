@@ -12,11 +12,12 @@ from operator import add
 if __name__ == "__main__":
 
     #sequence = "HCPHPCPHPCHPPCHPPCHHCHHCPPCHCPCHCPCHCHPCHCPHCPPHCPCHCPCHHPCHCPPCHCPCHCPCHPPHCHCPCHCHCHH"
-    sequence = "PCHCPHCPPHCPCHCPCHHPCHCPPCHCPCHCPCHPPHCHCPCHCHCHH"
-    #sequence = "HPCPHPCHCH"
+    #sequence = "PCHCPHCPPHCPCHCPCHHPCHCPPCHCPCHCPCHPPHCHCPCHCHCHH"
+    #sequence = "PCPHPCHCH"
+    sequence = "HPCPHHPCCHPHCCHPHHHCCCPPHCPHCPHCCCPHHHCPPCCHPCCCHPHCCHHHH"
     protein = Protein(sequence)
-    greedy_test = gr.Greedy(protein, 2)
+    greedy_test = gr.Greedy(protein, 3, splits = 7)
     #greedy_test.run()
     greedy_test.run_k()
-    visualize_protein(protein, 2)
+    visualize_protein(protein, 3)
 
