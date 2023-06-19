@@ -50,8 +50,10 @@ class Hill_climber():
 
             #Create new bond based on new direction
             protein.create_bond(acid, protein.sequence_list[index_changing_bond - 1], direction)
-            
+
             # if protein can't fold anymore, return shorter folded protein
+            if 0 in tried_directions: #Safety net for last aminoacid
+                tried_directions.remove(0)
             if tried_directions == self.directions.keys():
                 print('ended')
                 return protein, False     
@@ -140,6 +142,7 @@ class Hill_climber():
 
             protein, changed_bond = self.change_one_bond(protein, given_index=self.double_coords[0])
             if changed_bond == False: #If protein could not fold into a valid state
+                print(f"The changes resulted in an unfixable folding version")
                 return False
             self.refold(protein, changed_bond)
 
