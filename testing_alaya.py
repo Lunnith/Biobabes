@@ -26,7 +26,6 @@ if __name__ == "__main__":
     ##testing
     sequence = "CHCCCH"
     list_scores = []
-    protein = Protein(sequence)
     splits = [1, 2, 3, 4, 5]
     for split in splits:
         print(split)
