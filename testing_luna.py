@@ -50,10 +50,17 @@ def timing_for_multiple_n(sequence, max_n=10):
     start = time.time()
     for n in range(1, max_n):
         algorithm_timing(sequence)
-    plt.title("Hill_climber")
-    plt.legend(range(1, max_n))
     end = time.time()
     print("Runtime multiple n:", end-start)
+
+    plt.title("Hill_climber")
+    plt.legend(range(1, max_n))
+    plt.xlim(left=0, right=len(sequence))
+    # plt.ylim()
+    plt.title("Hill-climber", fontweight='bold')
+    plt.xlabel("Length protein-sequence", loc='right')
+    plt.ylabel("Time per 500 iterations\n(in seconds)", loc='top')
+    plt.legend(range(1, n+1), title="Minimum amount of bonds changed per iteration", ncol=n//2)
     plt.show()
 
 timing_for_multiple_n(sequence)

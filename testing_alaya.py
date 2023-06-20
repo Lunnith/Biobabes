@@ -24,15 +24,24 @@ if __name__ == "__main__":
     # visualize_protein(protein, 3)
 
     ##testing
-    sequence = "CHCCCH"
+    sequence = "HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH"
     list_scores = []
     splits = [1, 2, 3, 4, 5]
     for split in splits:
         print(split)
-        for i in range(50):
+        for i in range(5):
             protein = Protein(sequence)
             greedy_test = gr.Greedy(protein, 3, splits = split)
             greedy_test.run_k()
             list_scores.append([split, greedy_test.protein.score])
     #visualize_protein(protein, 3)
+    print(list_scores)
 
+    dict_scores = {}
+    for split in splits:
+        dict_scores[split] = []
+    
+    for run in list_scores:
+        dict_scores[run[0]].append(run[1])
+    
+    print(dict_scores)
