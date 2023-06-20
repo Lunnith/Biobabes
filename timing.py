@@ -95,18 +95,13 @@ def algorithm_timing(sequence):
     plt.plot(times.keys(), times.values())
     plt.xlim(left=0, right=len(sequence))
 
-    plt.title("Randomise", fontweight='bold')
-    plt.xlabel("Length protein-sequence", loc='right')
-    plt.ylabel("Time per 50 iterations\n(in seconds)", loc='top')
-    plt.show()
-
 
 def timing_for_multiple_iteration_amounts(sequence, max_n=500):
     """
     
     """
     start = time.time()
-    for n in range(0, max_n, 50):
+    for n in range(50, max_n+50, 50):
         algorithm_timing(sequence)
     end = time.time()
     print("Runtime multiple n:", end-start)
@@ -115,10 +110,10 @@ def timing_for_multiple_iteration_amounts(sequence, max_n=500):
     plt.title("Randomise", fontweight='bold')
     plt.xlabel("Length protein-sequence", loc='right')
     plt.ylabel("Time per n iterations\n(in seconds)", loc='top')
-    plt.legend(range(1, n+1), title="Amount of iterations", ncol=n//2)
+    plt.legend(range(50, max_n+50, 50), title="Amount of iterations", ncol=(n/50)//2)
     plt.show()
 
-timing_for_multiple_iteration_amounts(sequence)
+# timing_for_multiple_iteration_amounts(sequence)
 
 ########################## Depth First
 
@@ -159,7 +154,7 @@ def algorithm_timing(sequence):
     plt.show()
 
 
-# algorithm_timing(sequence)
+algorithm_timing(sequence)
 
 ########################### Greedy
 def algorithm_timing(sequence, iterations=50):
