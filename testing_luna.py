@@ -6,8 +6,8 @@ import time
 #NOTE TO SELF: 2D version is buggy
 # protein = Protein("HPCPHHPCCHPHCCHPHHHCCCPPHCPHCPHCCCPHHHCPPCCHPCCCHPHCCHHHHPCCCPPPCH")
 # protein = Protein("HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH")
-# sequence = "HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH"
-sequence = "HCPHCH"
+sequence = "HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH"
+# sequence = "HCPHCH"
 
 #Creating time thingy
 # def algorithm_timing(sequence, algorithm, *kwargs):
@@ -15,9 +15,10 @@ def algorithm_timing(sequence):
     """
     
     """
+    total_start = time.time()
     times = {}
     for seq_length in range(len(sequence)):
-        times[seq_length] = []
+        times[seq_length] = None
 
     for seq_length in range(len(sequence)):
         if seq_length <2:
@@ -28,9 +29,17 @@ def algorithm_timing(sequence):
         start = time.time()
         hill_climber.run_n_iterations(protein, 500, 1)
         end = time.time()
-        times[seq_length].append(end-start)
+        times[seq_length] = (end-start)
+        
+        #Make safety net for exponential algorithms
+        if end-start > 1200: #That's 20 minutes
+            break
 
-    print(times)
+    total_end = time.time()
+    print("Total runtime:", total_end-total_start)
+    plt.plot(times.keys(), times.values())
+    plt.title("Hill_climber")
+    plt.show()
 
 algorithm_timing(sequence)
 
