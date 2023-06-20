@@ -14,7 +14,12 @@ class Greedy():
         self.protein = protein
         self.splits = splits
         self.dimensions = dimensions
+
+
+        self.number_of_splits = (len(self.protein.sequence) - 1) // self.splits
+        self.amino_left = (len(self.protein.sequence) - 1) - (self.number_of_splits * self.splits)
         self.used_coordinates_G = set()
+        
 
         if self.dimensions == 2:
             self.directions = set(((1, 0, 0, 1), (-1, 0, 0, -1), (0, 1, 0, 2), (0, -1, 0, -2)))
@@ -98,12 +103,12 @@ class Greedy():
         self.protein.score = 0
 
         for index, direction in enumerate(state_directions):
-            
+        
             # for every element in the protein sequence, add and select the aminoacid
             self.protein.add_aminoacid(self.protein.sequence[i + index])
             self.acid = self.protein.sequence_list[-1]
 
-            # create a bond using the acid and the direction
+            # create a bond using the acid, the previous acid and the direction
             self.protein.create_bond(self.acid, self.protein.sequence_list[-2], direction)
 
      
@@ -122,22 +127,24 @@ class Greedy():
                 del self.protein.sequence_list[-(index + 1):]
                 return False
  
-        # remove the amount of aminoacids that have been added ### remove split amount because all directions tried
-        del self.protein.sequence_list[-(self.splits):]
+        # remove the amount of aminoacids that have been added
+        del self.protein.sequence_list[-(index + 1):]
         
         # return the protein score
         return self.protein.score
 
-    def create_directions(self):
+    def create_directions(self, size):
         
         directions = []
-        for i in range(self.splits):
+        for i in range(size):
             if self.dimensions == 2:
                 directions.append([tuple((1, 0, 0, 1)), tuple((-1, 0, 0, -1)), tuple((0, 1, 0, 2)), tuple((0, -1, 0, -2))])
             else:
                 directions.append([tuple((1, 0, 0, 1)), tuple((-1, 0, 0, -1)), tuple((0, 1, 0, 2)), tuple((0, -1, 0, -2)), tuple((0, 0, 1, 3)), tuple((0, 0, -1, -3))])
         self.list_directions = list(itertools.product(*directions))
         print(len(self.list_directions))
+
+        return self.list_directions
         
     
     def all_bonds_kk(self):
@@ -149,7 +156,7 @@ class Greedy():
         self.used_coordinates_G.add((tuple(self.acid.location)))
 
         # initiate all directions
-        self.create_directions()
+        self.list_directions = self.create_directions(self.splits)
         i = 1
         # iterate the lenght of the protein sequence (skipping the first) in steps of the split
         while i in range(len(self.protein.sequence)):
@@ -160,9 +167,15 @@ class Greedy():
 
             # make a set for the coordinates used within this split to make sure this part of the protein does not go over itself
             self.used_coordinates_random = set()
-            j = 0
-            while j in range(self.splits):
 
+            if i == 1 + (self.number_of_splits * self.splits):
+                splits = self.amino_left
+            else:
+                splits = self.splits
+            print('splits', splits)
+            j = 0 
+            while j in range(splits):
+                print('j', j)
                 # for every aminoacid, add to the protein and 
                 self.protein.add_aminoacid(self.protein.sequence[i + j])
                 self.acid = self.protein.sequence_list[-1]
@@ -188,14 +201,20 @@ class Greedy():
                     j += 1
 
             # delete the used aminoacids from the protein sequence list
-            del self.protein.sequence_list[-(self.splits):]
+            del self.protein.sequence_list[-(splits):]
 
             if random_bond == False:
                 continue
 
             best_score = 0
 
-            for state_directions in self.list_directions:
+            if splits == self.amino_left:
+                list_directions = [self.directions]
+            
+            else:
+                list_directions = self.list_directions
+
+            for state_directions in list_directions:
                 
                 score = self.parts(state_directions, i)
 
@@ -238,7 +257,7 @@ class Greedy():
 
     def is_stuck(self, acid):
         """
-        Check if an acid is stuck, does not have any direction to go in
+        Check if an acid placement is stuck, does not have any direction to go in
         """
        
         # go trough all possible directions and add the direction to the acid location and check if it is in used coordinates
