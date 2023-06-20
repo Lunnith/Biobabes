@@ -57,6 +57,7 @@ class ImportantParts(DepthFirst):
             protein_part = Protein(part)
             depth_first = DepthFirst(protein_part, 3)
             depth_first.run(directions_pruning=True, P_pruning=True)
+            print(f'Depth First for part {part} has been completed, score for this part is {depth_first.protein.score}')
 
             part_directions = []
 
