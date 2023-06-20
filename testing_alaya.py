@@ -1,6 +1,7 @@
 from code.classes.protein import Protein
 from code.visualization.visualize import *
 from code.algorithms.depth_first import DepthFirst
+from code.algorithms.randomise import random_reassignment
 #from code.algorithms.greedy import greedy
 from code.algorithms import greedy as gr
 import random
@@ -14,11 +15,23 @@ if __name__ == "__main__":
     #sequence = "HCPHPCPHPCHPPCHPPCHHCHHCPPCHCPCHCPCHCHPCHCPHCPPHCPCHCPCHHPCHCPPCHCPCHCPCHPPHCHCPCHCHCHH"
     #sequence = "PCHCPHCPPHCPCHCPCHHPCHCPPCHCPCHCPCHPPHCHCPCHCHCHH"
     #sequence = "PCPHPCHCH"
-    sequence = "HPCPHHPCCHPHCCHPHHHCCCPPHCPHCPHCCCPHHHCPPCCHPCCCHPHCCHHHHPCCCPPPCHP"
+    #sequence = "HPCPHHPCCHPHCCHPHHHCCCPPHCPHCPHCCCPHHHCPPCCHPCCCHPHCCHHHHPCCCPPPCHP"
     #sequence = "HPCPHHPCCHPHCCHPHHHCCCPPHCPHCPHCCCPHHHCPPCCHPCCCHPHCCHHHHPCCCPPPCH"
+
+    # protein = Protein(sequence)
+    # greedy_test = gr.Greedy(protein, 3, splits = 3)
+    # greedy_test.run_k()
+    # visualize_protein(protein, 3)
+
+    ##testing
+    sequence = ""
+    list_scores = []
     protein = Protein(sequence)
-    greedy_test = gr.Greedy(protein, 3, splits = 6)
-    #greedy_test.run()
-    greedy_test.run_k()
-    visualize_protein(protein, 3)
+    splits = [1, 2, 3, 4, 5]
+    for split in splits:
+        for i in range(50):
+            greedy_test = gr.Greedy(protein, 3, splits)
+            greedy_test.run_k()
+            list_scores.append([split, greedy_test.protein.score])
+    #visualize_protein(protein, 3)
 
