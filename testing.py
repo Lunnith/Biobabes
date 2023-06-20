@@ -4,6 +4,7 @@ import random
 import matplotlib.pyplot as plt
 from operator import add
 # proteinA = Protein("HPCHPCHH")
+# proteinA = Protein("HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH")
 proteinA = Protein("HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH")
 # print(protein.sequence_list)
 # random_assignment(proteinA)

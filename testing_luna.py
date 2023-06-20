@@ -3,7 +3,8 @@ from code.visualization.visualize import *
 from code.algorithms.hill_climber import *
 
 #NOTE TO SELF: 2D version is buggy
-protein = Protein("HPCPHHPCCHPHCCHPHHHCCCPPHCPHCPHCCCPHHHCPPCCHPCCCHPHCCHHHHPCCCPPPCH")
+# protein = Protein("HPCPHHPCCHPHCCHPHHHCCCPPHCPHCPHCCCPHHHCPPCCHPCCCHPHCCHHHHPCCCPPPCH")
+protein = Protein("HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH")
 
 # protein = Protein("HPPCCHPPH")
 hill_climber = Hill_climber(protein)
