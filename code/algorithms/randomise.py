@@ -43,7 +43,7 @@ def random_assignment(protein, dimensions):
 
     return protein
 
-def random_reassignment(protein, dimensions, k=20):
+def random_reassignment(protein, dimensions, k=20, func = random_assignment):
     """
     Algorithm that randomly tries several configurations of the same protein and saves the best
     configuration with the highest stability.
@@ -54,7 +54,7 @@ def random_reassignment(protein, dimensions, k=20):
     # randomly fold the protein k times and save the ones that are better than the previously saved
     for i in range(k):
         protein.__init__(protein.sequence)
-        folded_protein = random_assignment(protein, dimensions)
+        folded_protein = func(protein, dimensions)
 
         # only check the score of proteins that were folded completely
         if folded_protein.valid == True:  
