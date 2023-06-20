@@ -3,6 +3,8 @@ import random
 import time
 import copy
 import matplotlib.pyplot as plt
+import pandas as pd
+import numpy as np
 
 class Hill_climber():
     def __init__(self, protein, dimensions=3):
@@ -174,7 +176,7 @@ class Hill_climber():
         print("Starting score =", starting_score)
         print("\n")
         scores = [starting_score]
-        improvement = ["yellow"]
+        improvement = ["Y"]
 
         for n in range(iterations):
             protein = copy.deepcopy(self.protein)
@@ -182,7 +184,7 @@ class Hill_climber():
             if new_protein == False: #If change turned out invalid, skip this change
                 print("Skipping this iteration \n")
                 scores.append(None)
-                improvement.append("white")
+                improvement.append("NaN") #NaN
                 continue
             self.check_score(new_protein)
             scores.append(new_protein.score)
@@ -190,15 +192,15 @@ class Hill_climber():
             print("Score after n changed bonds", new_protein.score, "\n")
             if new_protein.score < self.lowest_score:
                 print("Score updated to", new_protein.score, "\n")
-                improvement.append("green")
+                improvement.append("Y") #Yes
                 self.lowest_score = new_protein.score
                 self.protein = new_protein
             elif new_protein.score == self.lowest_score:
                 print("Score is the same as before")
-                improvement.append("yellow")
+                improvement.append("S") #Same
             else:
                 print("No improvement") 
-                improvement.append("red")
+                improvement.append("N") #No
 
         end = time.time()
         print(f"Runtime run_n_iterations: {end-start} seconds.\nIterations run: {iterations}")
@@ -207,32 +209,29 @@ class Hill_climber():
         return self.protein, self.lowest_score, scores, improvement
     
 
-    def plot_hillclimb(self, iterations, scores, improvement, n):
+    def plot_hillclimb(self, iterations, scores, n):
         """
         Roughly visualises the improvement of the algorithm
         """
-        colors = ["blue", "purple", "red", "olive", "green", "orange", "brown", "pink", "grey", "cyan"]
-        # plt.scatter(iterations, scores, c=improvement)
-        plt.xlim(left=-1, right=len(iterations))
-        # plt.ylim(top=0)
+        colors = ['firebrick', 'orangered', 'darkorange','gold', 'yellowgreen', 'lightgreen', 'turquoise', 'lightskyblue', 'plum', 'lightpink']
 
-        scores_filtered = []
-        iterations_filtered = []
-
-        for iteration in range(len(iterations)):
-            if improvement[iteration] == "green" or improvement[iteration] == "yellow":
-                scores_filtered.append(scores[iteration])
-                iterations_filtered.append(iterations[iteration])
-
-        #Make the lines continue untill the end, even without improvement
-        scores_filtered.append(scores_filtered[-1])
-        iterations_filtered.append(len(iterations))
-
-        plt.plot(iterations_filtered, scores_filtered, "-", linewidth=2, c=colors[n-1], label=n)
+        plt.plot(iterations, scores, "-", linewidth=2, c=colors[n-1], label=n)
         # plt.show()
 
+    def optimize_graph(self, n, iterations):
+        """
+        
+        """
+        plt.xlim(left=0, right=iterations)
+        plt.ylim(top=0)
+        plt.title("Hill-climber", fontweight='bold')
+        plt.xlabel("Iterations", loc='right')
+        plt.ylabel("Score", loc='top')
+        plt.legend(range(1, n+1), title="Minimum amount of bonds changed per iteration", ncol=n//2)
+        plt.show()
 
-    def experiment(self, protein, iterations, max_n=10):
+
+    def experiment(self, protein, iterations, sample_size, max_n=10):
         """
         
         """
@@ -247,18 +246,35 @@ class Hill_climber():
         
         for n in range(1, max_n+1):
             print("\n\n\n\nStarting new N")
-            protein_for_n, lowest_score_for_n, scores, improvement = self.run_n_iterations(first_random_fold, iterations, n)
-            self.plot_hillclimb(range(iterations), scores, improvement, n)
 
-            if lowest_score_for_n < best_score:
-                best_protein = protein_for_n
-                best_score = lowest_score_for_n
+            all_scores = {}
+            for iteration in range(iterations+1):
+                all_scores[iteration] = []
 
-        plt.legend(range(1, n+1))
+            for sample in range(sample_size):
+                protein_for_n, lowest_score_for_n, scores, improvement = self.run_n_iterations(first_random_fold, iterations, n)
+
+                if lowest_score_for_n < best_score:
+                    best_protein = protein_for_n
+                    best_score = lowest_score_for_n
+
+                for iteration in range(iterations+1):
+                    if improvement[iteration] == "Y" or improvement[iteration] == "S":
+                        improved_score = scores[iteration]
+                        all_scores[iteration].append(improved_score)
+                    else:
+                        all_scores[iteration].append(None)
+                        
+            temp_df = pd.DataFrame.from_dict(all_scores, orient='index')
+            temp_df = temp_df.fillna(method='ffill')
+            temp_df['Average'] = temp_df.mean(axis=1)
+
+            self.plot_hillclimb(temp_df.index, temp_df['Average'], n)
+        
         end = time.time()
+        self.optimize_graph(max_n, iterations)
         print(f"Best score has become", best_score)
         print(f"Runtime experiment: {end-start} seconds.")
 
-        plt.show()
-
         return best_protein
+    
