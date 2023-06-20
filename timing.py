@@ -57,10 +57,7 @@ def timing_for_multiple_n(sequence, max_n=10):
     end = time.time()
     print("Runtime multiple n:", end-start)
 
-    plt.title("Hill_climber")
-    plt.legend(range(1, max_n))
     plt.xlim(left=0, right=len(sequence))
-    # plt.ylim()
     plt.title("Hill-climber", fontweight='bold')
     plt.xlabel("Length protein-sequence", loc='right')
     plt.ylabel("Time per 500 iterations\n(in seconds)", loc='top')
@@ -104,7 +101,24 @@ def algorithm_timing(sequence):
     plt.show()
 
 
-# algorithm_timing(sequence)
+def timing_for_multiple_iteration_amounts(sequence, max_n=500):
+    """
+    
+    """
+    start = time.time()
+    for n in range(0, max_n, 50):
+        algorithm_timing(sequence)
+    end = time.time()
+    print("Runtime multiple n:", end-start)
+
+    plt.xlim(left=0, right=len(sequence))
+    plt.title("Randomise", fontweight='bold')
+    plt.xlabel("Length protein-sequence", loc='right')
+    plt.ylabel("Time per n iterations\n(in seconds)", loc='top')
+    plt.legend(range(1, n+1), title="Amount of iterations", ncol=n//2)
+    plt.show()
+
+timing_for_multiple_iteration_amounts(sequence)
 
 ########################## Depth First
 
@@ -145,10 +159,10 @@ def algorithm_timing(sequence):
     plt.show()
 
 
-algorithm_timing(sequence)
+# algorithm_timing(sequence)
 
 ########################### Greedy
-def algorithm_timing(sequence):
+def algorithm_timing(sequence, iterations=50):
     """
 
     """
@@ -160,12 +174,13 @@ def algorithm_timing(sequence):
     for seq_length in range(len(sequence)):
         if seq_length <2:
             continue
-        protein = Protein(sequence[:seq_length+1])
+        
         
         start = time.time()
-        
-        greedy_test = gr.Greedy(protein, 3, 2)
-        greedy_test.run_k()
+        for i in range(iterations):
+            protein = Protein(sequence[:seq_length+1])
+            greedy_test = gr.Greedy(protein, 3, 2)
+            greedy_test.run_k()
 
         end = time.time()
         times[seq_length] = (end-start)
@@ -177,12 +192,25 @@ def algorithm_timing(sequence):
     total_end = time.time()
     print("Total runtime:", total_end-total_start)
     plt.plot(times.keys(), times.values())
-    plt.xlim(left=0, right=len(sequence))
+
+
+def timing_for_multiple_splits(sequence):
+    """
+    
+    """
+    start = time.time()
+    splits = [1, 2, 3, 4, 5]
+    for split in splits:
+        algorithm_timing(sequence)
+    end = time.time()
+    print("Runtime multiple n:", end-start)
 
     plt.title("Greedy", fontweight='bold')
+    plt.xlim(left=0, right=len(sequence))
     plt.xlabel("Length protein-sequence", loc='right')
     plt.ylabel("Time per run\n(in seconds)", loc='top')
+    plt.legend(range(1, len(splits)+1), title="Splits", ncol=len(splits)//2)
     plt.show()
 
 
-# algorithm_timing(sequence)
+timing_for_multiple_splits(sequence)
