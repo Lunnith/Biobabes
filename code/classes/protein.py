@@ -26,6 +26,8 @@ class Protein():
         create bond between two aminoacids
     get_temp_sequence(temp_protein):
         returns temporary sequence of temporary protein
+    is_valid():
+        checks if all locations of acids are valid
     create_output():
         create asked output
     """
@@ -74,7 +76,7 @@ class Protein():
         if coordinates not in self.used_coordinates:
             acid.location_valid = True
             
-        self.used_coordinates.add(coordinates)
+            self.used_coordinates.add(coordinates)
 
     def get_temp_sequence(self):
         """
@@ -87,9 +89,20 @@ class Protein():
         
         return temp_sequence
     
+    def is_valid(self):
+        """
+        Method to check if protein didn't fold over it self.
+        """
+        for acid in self.sequence_list:
+
+            if acid.location_valid == False:
+                self.valid = False
+        
+        return self.valid
+    
     def create_output(self):
         """
-        Create output in the asked format.
+        Method to create output in the asked format.
         """
         print('amino,fold')
 
