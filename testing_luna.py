@@ -38,10 +38,25 @@ def algorithm_timing(sequence):
     total_end = time.time()
     print("Total runtime:", total_end-total_start)
     plt.plot(times.keys(), times.values())
+    # plt.title("Hill_climber")
+    # plt.show()
+
+# algorithm_timing(sequence)
+
+def timing_for_multiple_n(sequence, max_n=10):
+    """
+    
+    """
+    start = time.time()
+    for n in range(1, max_n):
+        algorithm_timing(sequence)
     plt.title("Hill_climber")
+    plt.legend(range(1, max_n))
+    end = time.time()
+    print("Runtime multiple n:", end-start)
     plt.show()
 
-algorithm_timing(sequence)
+timing_for_multiple_n(sequence)
 
 # # protein = Protein("HPPCCHPPH")
 
