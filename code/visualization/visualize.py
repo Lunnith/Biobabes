@@ -145,7 +145,9 @@ def visualize_bonds(protein, dimensions=2, axs=None):
 
 
 def visualize_scores(list_of_scores):
-    sns.histplot(list_of_scores, kde=True)
-    plt.xlabel("Score")
-    plt.ylabel("Frequency")
+    sns.histplot(list_of_scores, kde=True, bins=len(set(list_of_scores)), discrete=True)
+    plt.xlabel("Score", loc='right')
+    plt.xticks(list_of_scores)
+    plt.ylabel("Frequency", loc='top')
+    plt.title("Randomise", fontweight='bold')
     plt.show()
