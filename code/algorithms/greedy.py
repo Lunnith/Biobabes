@@ -19,7 +19,7 @@ class Greedy():
         self.number_of_splits = (len(self.protein.sequence) - 1) // self.splits
         self.amino_left = (len(self.protein.sequence) - 1) - (self.number_of_splits * self.splits)
         self.used_coordinates_G = set()
-        
+
 
         if self.dimensions == 2:
             self.directions = set(((1, 0, 0, 1), (-1, 0, 0, -1), (0, 1, 0, 2), (0, -1, 0, -2)))
@@ -141,10 +141,9 @@ class Greedy():
                 directions.append([tuple((1, 0, 0, 1)), tuple((-1, 0, 0, -1)), tuple((0, 1, 0, 2)), tuple((0, -1, 0, -2))])
             else:
                 directions.append([tuple((1, 0, 0, 1)), tuple((-1, 0, 0, -1)), tuple((0, 1, 0, 2)), tuple((0, -1, 0, -2)), tuple((0, 0, 1, 3)), tuple((0, 0, -1, -3))])
-        self.list_directions = list(itertools.product(*directions))
-        print(len(self.list_directions))
+        list_directions = list(itertools.product(*directions))
 
-        return self.list_directions
+        return list_directions
         
     
     def all_bonds_kk(self):
@@ -157,6 +156,7 @@ class Greedy():
 
         # initiate all directions
         self.list_directions = self.create_directions(self.splits)
+        self.list_directions_left = self.create_directions(self.amino_left)
         i = 1
         # iterate the lenght of the protein sequence (skipping the first) in steps of the split
         while i in range(len(self.protein.sequence)):
@@ -209,7 +209,7 @@ class Greedy():
             best_score = 0
 
             if splits == self.amino_left:
-                list_directions = [self.directions]
+                list_directions = self.list_directions_left
             
             else:
                 list_directions = self.list_directions
@@ -306,7 +306,7 @@ class Greedy():
         self.all_bonds_kk()
         self.check_all_interactions()
         self.protein.create_output()
-        print(len(self.protein.sequence_list))
+        
 
 
 
