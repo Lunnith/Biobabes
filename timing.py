@@ -2,6 +2,8 @@ from code.classes.protein import Protein
 from code.visualization.visualize import *
 from code.algorithms.hill_climber import *
 from code.algorithms.randomise import *
+from code.algorithms.important_parts import *
+from code.algorithms import greedy as gr
 from operator import add
 import matplotlib.pyplot as plt
 import random
@@ -102,4 +104,85 @@ def algorithm_timing(sequence):
     plt.show()
 
 
+# algorithm_timing(sequence)
+
+########################## Depth First
+
+def algorithm_timing(sequence):
+    """
+
+    """
+    total_start = time.time()
+    times = {}
+    for seq_length in range(len(sequence)):
+        times[seq_length] = None
+
+    for seq_length in range(len(sequence)):
+        if seq_length <2:
+            continue
+        protein = Protein(sequence[:seq_length+1])
+        
+        start = time.time()
+        
+        important_parts = ImportantParts(protein, 3)
+        important_parts.run_in_parts(n=1000, split_on_P=True, split_on_size=False)
+
+        end = time.time()
+        times[seq_length] = (end-start)
+
+        #Make safety net for exponential algorithms
+        if end-start > 1200: #That's 20 minutes
+            break
+
+    total_end = time.time()
+    print("Total runtime:", total_end-total_start)
+    plt.plot(times.keys(), times.values())
+    plt.xlim(left=0, right=len(sequence))
+
+    plt.title("Depth First", fontweight='bold')
+    plt.xlabel("Length protein-sequence", loc='right')
+    plt.ylabel("Time per run\n(in seconds)", loc='top')
+    plt.show()
+
+
 algorithm_timing(sequence)
+
+########################### Greedy
+def algorithm_timing(sequence):
+    """
+
+    """
+    total_start = time.time()
+    times = {}
+    for seq_length in range(len(sequence)):
+        times[seq_length] = None
+
+    for seq_length in range(len(sequence)):
+        if seq_length <2:
+            continue
+        protein = Protein(sequence[:seq_length+1])
+        
+        start = time.time()
+        
+        greedy_test = gr.Greedy(protein, 3, 2)
+        greedy_test.run_k()
+
+        end = time.time()
+        times[seq_length] = (end-start)
+
+        #Make safety net for exponential algorithms
+        if end-start > 1200: #That's 20 minutes
+            break
+
+    total_end = time.time()
+    print("Total runtime:", total_end-total_start)
+    plt.plot(times.keys(), times.values())
+    plt.xlim(left=0, right=len(sequence))
+
+    plt.title("Greedy", fontweight='bold')
+    plt.xlabel("Length protein-sequence", loc='right')
+    plt.ylabel("Time per run\n(in seconds)", loc='top')
+    plt.show()
+
+
+# algorithm_timing(sequence)

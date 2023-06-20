@@ -31,6 +31,7 @@ if __name__ == "__main__":
     splits = [1, 2, 3, 4, 5]
     iterations = 50
 
+    best_score = 0
     all_scores = []
     score_dict = {}
     for split in splits:
@@ -43,6 +44,11 @@ if __name__ == "__main__":
             all_scores.append(greedy_test.protein.score)
             score_dict[split].append(greedy_test.protein.score)
 
+            if greedy_test.protein.score < best_score:
+                best_score = greedy_test.protein.score
+                best_protein = greedy_test.protein
+
+
     for split in score_dict:
         sns.histplot(score_dict[split], kde=True, discrete=True, label=split)
 
@@ -52,3 +58,5 @@ if __name__ == "__main__":
     plt.ylabel("Frequency", loc='top')
 
     plt.show()
+
+    visualize_protein(best_protein, 3)
