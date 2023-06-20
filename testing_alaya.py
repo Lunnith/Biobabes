@@ -15,11 +15,23 @@ if __name__ == "__main__":
     #sequence = "HCPHPCPHPCHPPCHPPCHHCHHCPPCHCPCHCPCHCHPCHCPHCPPHCPCHCPCHHPCHCPPCHCPCHCPCHPPHCHCPCHCHCHH"
     #sequence = "PCHCPHCPPHCPCHCPCHHPCHCPPCHCPCHCPCHPPHCHCPCHCHCHH"
     #sequence = "PCPHPCHCH"
-    sequence = "HPCPHHPCCHPHCCHPHHHCCCPPHCPHCPHCCCPHHHCPPCCHPCCCHPHCCHHHHPCCCPPPCHP"
+    #sequence = "HPCPHHPCCHPHCCHPHHHCCCPPHCPHCPHCCCPHHHCPPCCHPCCCHPHCCHHHHPCCCPPPCHP"
     #sequence = "HPCPHHPCCHPHCCHPHHHCCCPPHCPHCPHCCCPHHHCPPCCHPCCCHPHCCHHHHPCCCPPPCH"
+
+    # protein = Protein(sequence)
+    # greedy_test = gr.Greedy(protein, 3, splits = 3)
+    # greedy_test.run_k()
+    # visualize_protein(protein, 3)
+
+    ##testing
+    sequence = ""
+    list_scores = []
     protein = Protein(sequence)
-    greedy_test = gr.Greedy(protein, 3, splits = 4)
-    #greedy_test.run()
-    greedy_test.run_k()
-    visualize_protein(protein, 3)
+    splits = [1, 2, 3, 4, 5]
+    for split in splits:
+        for i in range(50):
+            greedy_test = gr.Greedy(protein, 3, splits)
+            greedy_test.run_k()
+            list_scores.append([split, greedy_test.protein.score])
+    #visualize_protein(protein, 3)
 
