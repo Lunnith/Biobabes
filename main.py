@@ -45,7 +45,7 @@ if __name__ == "__main__":
     
     # ---------------------------- Depth First - Important Parts ----------------------------
     # important_parts_protein = ImportantParts(test_protein, 3)
-    # important_parts_protein.run_in_parts(n=1000, split_on_P=True, split_on_size=False)
+    # important_parts_protein.run_in_parts(iterations=1000, split_on_P=True, split_on_size=False)
 
     # print(f'Value of the folding after Greedy:'
     #       f'{important_parts_protein.protein.score}')
