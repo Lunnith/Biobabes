@@ -8,7 +8,7 @@ class ImportantParts(DepthFirst):
     """
     A class to separate a big protein into smaller parts, which applies the depth first algorithm to all separate parts.
     """
-    def recognize_important_parts(self, split_on_P=True, split_on_size=False, size=12):
+    def recognize_important_parts(self, split_on_P: bool, split_on_size: bool, size: int) -> list:
         """
         Method to recognize important parts in the sequence and separate the protein into smaller parts, based on the
         count of P's or the length.
@@ -28,8 +28,8 @@ class ImportantParts(DepthFirst):
                 if self.protein.sequence[i] == 'P':
                     P_count += 1
 
-                # cut protein if P count is 2
-                if P_count == 2:
+                # cut protein if P count is 2 of if part is bigger than 10 aminoacids
+                if P_count == 2 or len(sequence_part) > 10:
                     sequence_parts_list.append(sequence_part)
 
                     if i != len(self.protein.sequence) - 1:
@@ -46,7 +46,7 @@ class ImportantParts(DepthFirst):
         sequence_parts_list.append(sequence_part)
         return sequence_parts_list
     
-    def depth_first_in_parts(self, sequence_parts):
+    def depth_first_in_parts(self, sequence_parts: list) -> list:
         """
         Method to apply depth first algorithm to all separate parts.
         """
@@ -57,7 +57,6 @@ class ImportantParts(DepthFirst):
             protein_part = Protein(part)
             depth_first = DepthFirst(protein_part, 3)
             depth_first.run(directions_pruning=True, P_pruning=True)
-            print(f'Depth First for part {part} has been completed, score for this part is {depth_first.protein.score}')
 
             part_directions = []
 
@@ -71,7 +70,7 @@ class ImportantParts(DepthFirst):
 
         return best_directions
 
-    def connect_folded_parts(self, best_directions):
+    def connect_folded_parts(self, best_directions: list) -> Protein:
         """
         Method to connect the optimal folding of every part of the protein.
         """
@@ -103,7 +102,7 @@ class ImportantParts(DepthFirst):
             
         return new_protein
 
-    def run_in_parts(self, n=1000, split_on_P=True, split_on_size=False, size=12):
+    def run(self, n: int = 1000, split_on_P: bool = True, split_on_size: bool = False, size: int = 12) -> None:
         """
         Method to run the depth first algorithm for separate parts of the protein and connect these parts
         """

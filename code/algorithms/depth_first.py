@@ -1,11 +1,14 @@
 from ..classes.protein import Protein
+from ..classes.aminoacid import Aminoacid
 import copy
 
 class DepthFirst():
     """
     A Depth First algorithm that builds a stack of the same protein with a unique folding for each instance.
+
+    Checks all foldings and saves the folding with the lowest score.
     """
-    def __init__(self, protein, dimensions):
+    def __init__(self, protein: Protein, dimensions: int) -> None:
         """
         Method to initialize attributes and methods of class DepthFirst.
         """
@@ -29,13 +32,13 @@ class DepthFirst():
         self.number_of_states = 0
         self.best_scores_list = []
 
-    def get_next_state(self):
+    def get_next_state(self) -> Protein:
         """
         Method that gets the next state from the list of states.
         """
         return self.states.pop()
     
-    def create_child_states(self, temp_protein, last_added_aminoacid, P_pruning=False):
+    def create_child_states(self, temp_protein: Protein, last_added_aminoacid: Aminoacid, P_pruning: bool) -> None:
         """
         Creates all possible child-states with different folding directions and adds them to the list of states. 
         Ignores illegal states. Optional non-optimal pruning that ensures that several P's in a row don't fold in the same direction.
@@ -59,7 +62,7 @@ class DepthFirst():
                 self.states.append(new_fold)
                 self.number_of_states += 1
 
-    def check_folding(self, new_fold):
+    def check_folding(self, new_fold: Protein) -> None:
         """
         Checks and accepts foldings with higher stability and a lower score than the current best folding.
         """
@@ -73,7 +76,7 @@ class DepthFirst():
             self.best_scores_list.append(self.best_score)
             self.number_of_states_checked.append(self.number_of_states)
     
-    def number_of_used_directions(self, temp_protein):
+    def number_of_used_directions(self, temp_protein: Protein) -> int:
         """
         Method that counts the number of used directions during folding of the protein.
         """
@@ -84,7 +87,7 @@ class DepthFirst():
 
         return len(used_directions)
 
-    def run(self, P_pruning=False, directions_pruning=False):
+    def run(self, P_pruning: bool = False, directions_pruning: bool = False) -> None:
         """
         Runs the Depth First Algorithm until it has seen all possible states.
         """
@@ -107,4 +110,4 @@ class DepthFirst():
             else:
                 self.check_folding(new_fold)
             
-            self.protein = self.best_state   
+            self.protein = self.best_state
