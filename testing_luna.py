@@ -18,7 +18,7 @@ folded_protein = hill_climber.protein
 
 print("Starting score =", hill_climber.lowest_score)
 hill_climber.change_bond(protein)
-# # visualize_protein(folded_protein, 3)
+# visualize_protein(folded_protein, 3)
 
 
 
