@@ -10,6 +10,7 @@ import random
 import time
 
 sequence = "HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH"
+# sequence = "HCPHPCPHPCHCH"
 
 
 ######################## Hill_climber
@@ -133,11 +134,12 @@ def algorithm_timing(sequence):
         
         start = time.time()
         
-        important_parts = ImportantParts(protein, 3)
-        important_parts.run_in_parts(n=1000, split_on_P=True, split_on_size=False)
+        depth_first = DepthFirst(protein, 3)
+        depth_first.run(P_pruning=False, directions_pruning=False)
 
         end = time.time()
         times[seq_length] = (end-start)
+        print(seq_length, "Length done")
 
         #Make safety net for exponential algorithms
         if end-start > 1200: #That's 20 minutes
@@ -151,13 +153,15 @@ def algorithm_timing(sequence):
     plt.title("Depth First", fontweight='bold')
     plt.xlabel("Length protein-sequence", loc='right')
     plt.ylabel("Time per run\n(in seconds)", loc='top')
+
+    plt.savefig("DepthFirst_test")
     plt.show()
 
 
 algorithm_timing(sequence)
 
 ########################### Greedy
-def algorithm_timing(sequence, iterations=50):
+def algorithm_timing(sequence, iterations):
     """
 
     """
@@ -187,25 +191,32 @@ def algorithm_timing(sequence, iterations=50):
     total_end = time.time()
     print("Total runtime:", total_end-total_start)
     plt.plot(times.keys(), times.values())
+    plt.savefig(f"Greedy-test_run2_{iterations}")
 
 
-def timing_for_multiple_splits(sequence):
+def timing_for_multiple_splits(sequence, iterations=20):
     """
     
     """
     start = time.time()
     splits = [1, 2, 3, 4, 5]
     for split in splits:
-        algorithm_timing(sequence)
+        algorithm_timing(sequence, iterations)
     end = time.time()
     print("Runtime multiple n:", end-start)
 
     plt.title("Greedy", fontweight='bold')
     plt.xlim(left=0, right=len(sequence))
     plt.xlabel("Length protein-sequence", loc='right')
-    plt.ylabel("Time per run\n(in seconds)", loc='top')
+    plt.ylabel(f"Time per {iterations} iterations\n(in seconds)", loc='top')
     plt.legend(range(1, len(splits)+1), title="Splits", ncol=len(splits)//2)
-    plt.show()
+    # plt.show()
+    plt.savefig(f"Greedy-test_run2_{iterations}")
+    plt.clf()
 
+# timing_for_multiple_splits(sequence, iterations=10)
+# timing_for_multiple_splits(sequence)
+# timing_for_multiple_splits(sequence, iterations=30)
 
-timing_for_multiple_splits(sequence)
+# timing_for_multiple_splits(sequence, iterations=40)
+# timing_for_multiple_splits(sequence, iterations=50)
