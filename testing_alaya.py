@@ -12,27 +12,28 @@ from operator import add
 
 if __name__ == "__main__":
 
-    #sequence = "HCPHPCPHPCHPPCHPPCHHCHHCPPCHCPCHCPCHCHPCHCPHCPPHCPCHCPCHHPCHCPPCHCPCHCPCHPPHCHCPCHCHCHH"
+    #sequence = "HCPHPCPHPCHPPCHPPCHHCHHCPPCHCPCHCPCHCHPCHCPHCPPHCPCHCPCHHPCHCPPCHCPCHCPCHPPHCHCPCHCHCHHHCPCHCPCHCPPCHCCHCHCHHCPPPPCHCP"
     #sequence = "PCHCPHCPPHCPCHCPCHHPCHCPPCHCPCHCPCHPPHCHCPCHCHCHH"
-    #sequence = "PCPHPCHCH"
+    #sequence = "PCPHPCHC"
     #sequence = "HPCPHHPCCHPHCCHPHHHCCCPPHCPHCPHCCCPHHHCPPCCHPCCCHPHCCHHHHPCCCPPPCHP"
+    sequence = "HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH"
     #sequence = "HPCPHHPCCHPHCCHPHHHCCCPPHCPHCPHCCCPHHHCPPCCHPCCCHPHCCHHHHPCCCPPPCH"
 
-    # protein = Protein(sequence)
-    # greedy_test = gr.Greedy(protein, 3, splits = 3)
-    # greedy_test.run_k()
-    # visualize_protein(protein, 3)
+    protein = Protein(sequence)
+    greedy_test = gr.Greedy(protein, 3, splits = 5,  before = 3)
+    greedy_test.run()
+    visualize_protein(protein, 3)
 
     ##testing
-    sequence = "CHCCCH"
-    list_scores = []
-    splits = [1, 2, 3, 4, 5]
-    for split in splits:
-        print(split)
-        for i in range(50):
-            protein = Protein(sequence)
-            greedy_test = gr.Greedy(protein, 3, splits = split)
-            greedy_test.run_k()
-            list_scores.append([split, greedy_test.protein.score])
+    # sequence = "CHCCCH"
+    # list_scores = []
+    # splits = [1, 2, 3, 4, 5]
+    # for split in splits:
+    #     print(split)
+    #     for i in range(50):
+    #         protein = Protein(sequence)
+    #         greedy_test = gr.Greedy(protein, 3, splits = split)
+    #         greedy_test.run_k()
+    #         list_scores.append([split, greedy_test.protein.score])
     #visualize_protein(protein, 3)
 
