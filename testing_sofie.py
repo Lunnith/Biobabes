@@ -3,6 +3,7 @@ from code.visualization.visualize import *
 from code.algorithms.randomise import *
 from code.algorithms.depth_first import DepthFirst
 from code.algorithms.important_parts import ImportantParts
+from code.algorithms.simulated_annealing import SimulatedAnnealing
 
 import matplotlib.pyplot as plt
 import time
@@ -10,11 +11,12 @@ import time
 if __name__ == "__main__":
 
     # initialize protein object and directions
-    sequence = "HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH"
+    sequence = "HCPHP"
     test_protein = Protein(sequence)
-    # depth_first = DepthFirst(test_protein, 3)
-    # depth_first.run(P_pruning=False, directions_pruning=False)
-    # visualize_protein(depth_first.protein, 3)
+    depth_first = DepthFirst(test_protein, 3)
+    depth_first.run(P_pruning=False, directions_pruning=False)
+    depth_first.protein.create_output()
+    visualize_protein(depth_first.protein, 3)
 
     # experiment with and without pruning
     # scores_wo_pruning = []
@@ -69,11 +71,18 @@ if __name__ == "__main__":
 
     # start = time.time()
 
-    important_parts = ImportantParts(test_protein, 3)
-    important_parts.run_in_parts(n=1000, split_on_P=True, split_on_size=False)
-    important_parts.protein.create_output()
+    # important_parts = ImportantParts(test_protein, 3)
+    # important_parts.run()
+    # important_parts.protein.create_output()
 
-    # end = time.time()
-    # print(f'Time: {end - start}')
+    # # end = time.time()
+    # # print(f'Time: {end - start}')
     
-    visualize_protein(important_parts.protein, 3)
+    # visualize_protein(important_parts.protein, 3)
+
+    # simanneal_protein = SimulatedAnnealing(test_protein, 3, temperature=5)
+    # simanneal_protein.run_n_iterations(test_protein, iterations=5000, bonds=1)
+
+    # visualize_protein(simanneal_protein.protein, 3)
+    # print(f'Value of the folding after Simulated Annealing:'
+    #       f'{simanneal_protein.protein.score}')
