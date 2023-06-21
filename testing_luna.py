@@ -12,12 +12,16 @@ sequence = "HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH"
 
 
 
-protein = Protein("HPPCCHPPH")
+protein = Protein(sequence)
 hill_climber = Hill_climber(protein, 3)
 folded_protein = hill_climber.protein
 
 print("Starting score =", hill_climber.lowest_score)
-hill_climber.change_bond(protein)
+folded_protein, index = hill_climber.change_bond(protein)
+folded_protein = hill_climber.refold(protein, index)
+# visualize_protein(folded_protein, 3)
+folded_protein = hill_climber.refold_into_valid_state(protein)
+
 # visualize_protein(folded_protein, 3)
 
 

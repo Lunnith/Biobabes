@@ -24,7 +24,7 @@ class Hill_climber():
         end = time.time()
         print(f"Runtime __init__: {end-start} seconds.")
     
-    def change_bond(self, protein, given_index=None):
+    def change_bond(self, protein, given_index=None, skip_bonds=None):
         """
         This function takes a folded protein and optionally the index of the bond to change.
         If no index is given, a random bond of the protein is changed.
@@ -33,8 +33,11 @@ class Hill_climber():
         Note:
         This function only changes the direction of the bond and doesn't update any coördinates!
         """
-        if given_index == None:            
+        if given_index == None:
             index_changing_bond = random.randint(2, len(protein.sequence_list)-1)
+            if skip_bonds != None:
+                while index_changing_bond in skip_bonds:            
+                    index_changing_bond = random.randint(2, len(protein.sequence_list)-1)
         else:
             index_changing_bond = given_index
 
@@ -57,6 +60,8 @@ class Hill_climber():
             direction = tuple(self.directions[new_step])
 
             #Create new bond based on new direction
+            print(f"\n\nCreating new bond between {index_changing_bond} and {index_changing_bond-1}")
+            print(f"locations were {protein.sequence_list[index_changing_bond].location} and {protein.sequence_list[index_changing_bond - 1].location}")
             protein.create_bond(acid, protein.sequence_list[index_changing_bond - 1], direction)
 
             # if protein can't fold anymore, return shorter folded protein
@@ -66,6 +71,12 @@ class Hill_climber():
                 print('ended')
                 return protein, False     
             
+        print(f"Direction used={direction}")
+        print(f"New locations: {protein.sequence_list[index_changing_bond].location} and {protein.sequence_list[index_changing_bond - 1].location}")
+        if index_changing_bond < len(protein.sequence_list)-1:
+            print(f"Location of {index_changing_bond+1} is {protein.sequence_list[index_changing_bond + 1].location}")
+        else: 
+            print("No following acid")
         return protein, index_changing_bond
     
     def refold(self, protein, index):
@@ -76,6 +87,7 @@ class Hill_climber():
         Note:
         This function can make the protein fold over itself!
         """
+        print(f"Refolding from acid {index}")
         #reset the old hh/ch/cc bonds
         protein.hh_ch_bonds = []
         protein.cc_bonds = []
@@ -84,13 +96,14 @@ class Hill_climber():
         used_coords = set()
         for acid in range(0, index):
             used_coords.add(tuple(protein.sequence_list[acid].location))
+            protein.used_coordinates = used_coords
 
         #Refold from the changed bond
-        for acid in range(index-1, len(protein.sequence_list)):
+        for acid in range(index, len(protein.sequence_list)):
             direction = self.directions[protein.sequence_list[acid-1].step]
             protein.create_bond(protein.sequence_list[acid], protein.sequence_list[acid-1], direction)
-            used_coords.add(tuple(protein.sequence_list[acid].location))
-        protein.used_coordinates = used_coords
+        print(f"Location added {protein.sequence_list[acid].location}")
+        # protein.used_coordinates = used_coords
 
         return protein
          
@@ -125,18 +138,14 @@ class Hill_climber():
         return self.double_coords
     
 
-    def refold_into_valid_state(self, protein, changed_bonds):
+    def refold_into_valid_state(self, protein):
         """
         This function refolds the protein, 
         checks it it has folded over itself and fixes this if nessecary.
 
         If this was possible, it returns the new protein.
         If the protein could not fold into a valid state, it returns False
-        """
-
-        for bond in changed_bonds:
-            self.refold(protein, bond)
-        
+        """        
         #Fix the aminoacids that have been folded incorrectly
         while len(self.check_validity(protein)) > 0:
             print("Indexes of double acids =", self.double_coords)
@@ -156,26 +165,33 @@ class Hill_climber():
         Loop n times over the function change_bond,
         so that n bonds have been changed.
         Then, refold the protein into a valid state
-        
         """
         start = time.time()
 
         continued = 0
 
         for i in range(n):
+            print("Starting new loop of n")
             changed_bonds = []
 
-            protein, changed_bond = self.change_bond(protein)
+            protein, changed_bond = self.change_bond(protein, skip_bonds=changed_bonds) #you don't change the same bond multiple times
             if changed_bond == False: #If protein could not fold into a valid state, skip this try
                 continued += 1
                 continue
-            else: changed_bonds.append(changed_bond)
+            else: 
+                protein = self.refold(protein, changed_bond)
+                changed_bonds.append(changed_bond)
+
+        for acid in range(len(changed_bonds)):
+            print(f"\nAcid {changed_bonds[acid]}, has been changed, location= {protein.sequence_list[changed_bonds[acid]].location}\n\n\n\n\n")
 
         if continued == n: #If all n changes were invalid
             print(f"All {n} changes were invalid.")
             return False
         
-        self.refold_into_valid_state(protein, changed_bonds)
+        print("Start refold into valid state")
+        self.refold_into_valid_state(protein)
+        # print(f"Acid {acid}, now has location {protein.sequence_list[acid].location}")
             
         end = time.time()
         print(f"Runtime change_n_bonds: {end-start} seconds.")
@@ -217,6 +233,8 @@ class Hill_climber():
             self.check_score(new_protein)
             scores.append(new_protein.score)
 
+
+            ###### Make this its own function
             print("Score after n changed bonds", new_protein.score, "\n")
             if new_protein.score < self.lowest_score:
                 print("Score updated to", new_protein.score, "\n")
@@ -304,5 +322,9 @@ class Hill_climber():
         print(f"Best score has become", best_score)
         print(f"Runtime experiment: {end-start} seconds.")
 
+        print(protein.used_coordinates)
+        protein.create_output()
+
+        return protein_for_n
         return best_protein
     
