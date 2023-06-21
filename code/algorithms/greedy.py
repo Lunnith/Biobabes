@@ -10,7 +10,7 @@ import itertools
 
 class Greedy():
 
-    def __init__(self, protein, dimensions, splits = 3):
+    def __init__(self, protein, dimensions, splits = 3, before = 0):
 
         # define protein, splits and dimensions
         self.protein = protein
@@ -18,8 +18,9 @@ class Greedy():
         self.dimensions = dimensions
 
         # calculate how much aminoacids er over blijven als je het in stukjes hebt verdeeld
-        self.number_of_splits = (len(self.protein.sequence) - 1) // self.splits
-        self.amino_left = (len(self.protein.sequence) - 1) - (self.number_of_splits * self.splits)
+        self.amino_before = before
+        self.number_of_splits = (len(self.protein.sequence) - 1 - self.amino_before) // self.splits
+        self.amino_left = (len(self.protein.sequence) - 1) - (self.number_of_splits * self.splits) - self.amino_before
 
         # initiate een set voor de gebruikte coordinaten
         self.used_coordinates_G = set()
@@ -33,6 +34,7 @@ class Greedy():
         # initiate all directions for the parts and for the left over aminoacids
         self.list_directions = self.create_directions(self.splits)
         self.list_directions_left = self.create_directions(self.amino_left)
+        self.list_directions_before = self.create_directions(self.amino_before)
 
 
     def create_directions(self, size):
@@ -66,6 +68,7 @@ class Greedy():
         i = 1
         while i in range(len(self.protein.sequence)):
             print("ROUND", i)
+            best_states = []
             
             # initiate a valid random direction for the whole split in case non of the directions lead to a better score than 0
             best_state_directions = []
@@ -74,66 +77,95 @@ class Greedy():
             self.used_coordinates_random = set()
 
             # if it is the round of left aminoacids, set splits to the amount of left aminoacids and list_directions to directions of amino left
-            if i == 1 + (self.number_of_splits * self.splits):
+            if i == 1 + (self.number_of_splits * self.splits) + self.amino_before:
                 splits = self.amino_left
                 list_directions = self.list_directions_left
+            elif i == 1 and self.amino_before > 0:
+                splits = self.amino_before
+                list_directions = self.list_directions_before
             else:
                 splits = self.splits
                 list_directions = self.list_directions
+
             
             # for every aminoacid in a split, create a bond
-            j = 0 
-            while j in range(splits):
+            # j = 0 
+            # while j in range(splits):
+
     
-                # for every aminoacid, add to the protein and select the acid
-                self.protein.add_aminoacid(self.protein.sequence[i + j])
-                self.acid = self.protein.sequence_list[-1]
+            #     # for every aminoacid, add to the protein and select the acid
+            #     self.protein.add_aminoacid(self.protein.sequence[i + j])
+            #     self.acid = self.protein.sequence_list[-1]
 
-                # append valid direction to the best state directions and add to the used random coordinates
-                random_bond = self.random_bond(j)
+            #     # append valid direction to the best state directions and add to the used random coordinates
+            #     #random_bond = self.random_bond(j)
 
-                # if there is no bond possible within the first aminoacid of a sequence part, go back one sequence part and break this loop
-                if random_bond == '0':
-                    i -= self.splits
-                    break
+            #     for direction in self.directions:
+            #         if tuple(list(map(add, self.protein.sequence_list[-2].location, direction[0:3]))) not in self.used_coordinates_G:
+            #             random_bond = True
+            #             print(self.protein.sequence_list[-2].location)
+            #         else:
+            #             if j == 0:
+            #                 random_bond = '0'
+            #             else:
+            #                 random_bond = '1'
+            #             print(self.protein.sequence_list[-2].location)
+
+
+
+            #     # if there is no bond possible within the first aminoacid of a sequence part, go back one sequence part and break this loop
+            #     if random_bond == '0':
+            #         i -= splits
+            #         break
                 
-                # if there is no bond possible after the first aminoacid of a sequence, go back one iteration in the sequence
-                elif random_bond == '1':
-                    j -= 1
+            #     # if there is no bond possible after the first aminoacid of a sequence, go back one iteration in the sequence
+            #     elif random_bond == '1':
+            #         j -= 1
 
-                # add the random direction to the best state directions and add to the temporary used coordinates in random
-                else:
-                    best_state_directions.append(random_bond)
-                    self.used_coordinates_random.add((tuple(self.acid.location)))
+            #     # add the random direction to the best state directions and add to the temporary used coordinates in random
+            #     else:
+            #         #best_state_directions.append(random_bond)
+            #         #self.used_coordinates_random.add((tuple(self.acid.location)))
 
-                    # go to the next iteration in the loop
-                    j += 1
+            #         # go to the next iteration in the loop
+            #         j += 1
 
             # delete the added aminoacids from the protein sequence list
-            del self.protein.sequence_list[-(splits):]
+            #del self.protein.sequence_list[-(splits):]
 
             # if there is no possible direction, skip the rest of this iteration
-            if random_bond == False:
-                continue
+            # if random_bond == '0' or random_bond == '1':
+            #     continue
 
             # go through all states and compute the score
-            best_score = 0
+            best_score = 1
             for state_directions in list_directions:
                 
                 # compute the score using the parts function
                 score = self.parts(state_directions, i)
-
+                if score == best_score and score != None:
+                    best_states.append(state_directions)        
+                
                 # determine the best score and best direction
-                if score < best_score and score != False:
+                elif score != None and score < best_score:
+                    best_states = []
+                    best_states.append(state_directions)
                     best_score = score
-                    best_state_directions = state_directions
+            print(best_score)
+            if best_score == 1:
+                i -= self.splits
+                del self.protein.sequence_list[-(self.splits):]
+                continue
+
+            best_state_directions = random.choice(best_states)
 
             # add the aminoacids to self.protein with the directions of the best score
             for index, direction in enumerate(best_state_directions):
                 self.add_best_direction(direction, place = (i + index))
             
+            
             # go to the next sequence part
-            i += self.splits
+            i += splits
 
 
 
@@ -160,11 +192,11 @@ class Greedy():
                 # check the new interations and add the location to temporary list of coordinates
                 self.acid.check_interactions(self.protein)
                 temp_list_coordinates.add((tuple(self.acid.location)))
-            
+
             else:
                 # remove the amount of aminoacids that have been added and return False
                 del self.protein.sequence_list[-(index + 1):]
-                return False
+                return None
  
         # remove the amount of aminoacids that have been added
         del self.protein.sequence_list[-(index + 1):]
