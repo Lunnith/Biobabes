@@ -23,7 +23,7 @@ class SimulatedAnnealing(Hill_climber):
 
         self.start_n = start_n
     
-    def update_temperature(self, decrease_n: bool) -> None:
+    def update_temperature(self) -> None:
         """
         Method to implement a linear cooling scheme. Temperature becomes zero after all iterations
         passed to the run() method have passed.
@@ -31,11 +31,10 @@ class SimulatedAnnealing(Hill_climber):
         alpha = 0.99
         self.T = self.T * alpha
 
-        if decrease_n:
-            beta = self.start_n / self.iterations
-            self.n = int(self.n - beta)
+        beta = self.start_n / self.iterations
+        self.n = int(self.n - beta)
 
-    def check_solution(self, new_folding: Protein, decrease_n: bool = False) -> None:
+    def check_solution(self, new_folding: Protein) -> None:
         """
         Checks and accepts better solutions than the current solution.
         Sometimes accepts worse solutions, which depends on the current temperature.
@@ -53,4 +52,4 @@ class SimulatedAnnealing(Hill_climber):
             self.protein = new_folding
         
         # update temperature
-        self.update_temperature(decrease_n)
+        self.update_temperature()
