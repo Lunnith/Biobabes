@@ -14,39 +14,30 @@ from operator import add
 
 if __name__ == "__main__":
 
-    #sequence = "HCPHPCPHPCHPPCHPPCHHCHHCPPCHCPCHCPCHCHPCHCPHCPPHCPCHCPCHHPCHCPPCHCPCHCPCHPPHCHCPCHCHCHH"
+    #sequence = "HCPHPCPHPCHPPCHPPCHHCHHCPPCHCPCHCPCHCHPCHCPHCPPHCPCHCPCHHPCHCPPCHCPCHCPCHPPHCHCPCHCHCHHHCPCHCPCHCPPCHCCHCHCHHCPPPPCHCP"
     #sequence = "PCHCPHCPPHCPCHCPCHHPCHCPPCHCPCHCPCHPPHCHCPCHCHCHH"
-    #sequence = "PCPHPCHCH"
+    #sequence = "PCPHPCHC"
     #sequence = "HPCPHHPCCHPHCCHPHHHCCCPPHCPHCPHCCCPHHHCPPCCHPCCCHPHCCHHHHPCCCPPPCHP"
+    sequence = "HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH"
     #sequence = "HPCPHHPCCHPHCCHPHHHCCCPPHCPHCPHCCCPHHHCPPCCHPCCCHPHCCHHHHPCCCPPPCH"
 
-    # protein = Protein(sequence)
-    # greedy_test = gr.Greedy(protein, 3, splits = 3)
-    # greedy_test.run_k()
-    # visualize_protein(protein, 3)
+    protein = Protein(sequence)
+    greedy_test = gr.Greedy(protein, 3, splits = 5,  before = 3)
+    greedy_test.run()
+    visualize_protein(protein, 3)
 
     ##testing
-    sequence = "HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH"
+    sequence = "CHCCCH"
     list_scores = []
     splits = [1, 2, 3, 4, 5]
-    iterations = 50
-
-    best_score = 0
-    all_scores = []
-    score_dict = {}
     for split in splits:
         print(split)
-        score_dict[split] = []
-        for i in range(iterations):
+        for i in range(50):
             protein = Protein(sequence)
             greedy_test = gr.Greedy(protein, 3, splits = split)
             greedy_test.run_k()
-            all_scores.append(greedy_test.protein.score)
-            score_dict[split].append(greedy_test.protein.score)
-
-            if greedy_test.protein.score < best_score:
-                best_score = greedy_test.protein.score
-                best_protein = greedy_test.protein
+            list_scores.append([split, greedy_test.protein.score])
+    #visualize_protein(protein, 3)
 
 
     for split in score_dict:
