@@ -11,9 +11,16 @@ from code.visualization.visualize import *
 
 if __name__ == "__main__":
 
-    # create a protein with a given sequence
-    sequence = "HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH"
-    test_protein = Protein(sequence)
+    # all proteins given in the case
+    test_protein_A = Protein("HHPHHHPH")
+    test_protein_B = Protein("HHPHHHPHPHHHPH")
+    test_protein_C = Protein("HPHPPHHPHPPHPHHPPHPH")
+    test_protein_D = Protein("PPPHHPPHHPPPPPHHHHHHHPPHHPPPPHHPPHPP")
+    test_protein_E = Protein("HHPHPHPHPHHHHPHPPPHPPPHPPPPHPPPHPPPHPHHHHPHPHPHPHH")
+    test_protein_F = Protein("PPCHHPPCHPPPPCHHHHCHHPPHHPPPPHHPPHPP")
+    test_protein_G = Protein("CPPCHPPCHPPCPPHHHHHHCCPCHPPCPCHPPHPC")
+    test_protein_H = Protein("HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH")
+    test_protein_I = Protein("HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH")
 
     # ---------------------------- Random ----------------------------
     # random_protein, score_list = random_reassignment(test_protein, 3, k=100000)
@@ -59,7 +66,7 @@ if __name__ == "__main__":
     
     # ---------------------------- Simulate Annealing ----------------------------
     simanneal_protein = SimulatedAnnealing(test_protein, 3, temperature=5)
-    simanneal_protein.run_n_iterations(test_protein, iterations=1000, bonds=1)
+    simanneal_protein.run_i_iterations(test_protein, iterations=1000, bonds=1)
 
     print(f'Value of the folding after Simulated Annealing:'
           f'{simanneal_protein.protein.score}')

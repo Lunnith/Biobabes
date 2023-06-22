@@ -26,11 +26,11 @@ class SimulatedAnnealing(Hill_climber):
         Method to implement a linear cooling scheme. Temperature becomes zero after all iterations
         passed to the run() method have passed.
         """
-        self.T = self.T - (self.T0 / self.iterations)
+        #self.T = self.T - (self.T0 / self.iterations)
 
         # exponential?
-        # alpha = 0.99
-        # self.T = self.T * alpha
+        alpha = 0.99
+        self.T = self.T * alpha
 
         # where alpha can be any value below 1 but above 0
  
