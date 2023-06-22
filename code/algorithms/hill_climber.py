@@ -56,12 +56,21 @@ class Hill_climber():
     """
     def __init__(self, protein: Protein, dimensions=3, prints=False, folded=False) -> None:
         #Initiate first folding
-        if folded: self.protein = protein
-        else: 
+        self.protein = protein
+        if not folded: 
             if len(protein.sequence_list) > 1:
                 raise Exception("By default, Hill_climber assumes that you input an unfolded protein.\n\
                 If you want to input a protein that is already folded, use the keyword 'folded=True'")
-            self.protein = random_assignment(protein, dimensions)
+            
+            length_needed = len(protein.sequence)
+            actual_length = 0
+            while actual_length != length_needed:
+                protein_to_fold = copy.deepcopy(protein)
+                folded_protein = random_assignment(protein_to_fold, dimensions)
+                actual_length = len(folded_protein.sequence_list)
+            self.protein = folded_protein
+        
+        # self.protein = random_assignment(protein, dimensions)
         self.lowest_score = self.protein.score
 
         if prints == True:
@@ -114,6 +123,7 @@ class Hill_climber():
             if 0 in tried_directions: #Safety net for last aminoacid
                 tried_directions.remove(0)
             if tried_directions == self.directions.keys():
+                print("Returning shorter protein, len protein:", len(protein.sequence_list), "| len self.protein:", len(self.protein.sequence_list))
                 if self.prints: print('change_bond has gotten stuck:', end=" ")
                 return protein, False     
             
@@ -178,9 +188,10 @@ class Hill_climber():
             # Do this in chronological order
             protein, changed_bond = self.change_bond(protein, given_index=self.double_coords[0])
             if changed_bond == False: #If protein could not fold into a valid state
+                print("Refold_to_valid: changed bond that got rejected, len protein:", len(protein.sequence_list), "len self.protein:", len(self.protein.sequence_list))
                 if self.prints: print(f"The changes resulted in an unfixable folding version")
                 return False
-            
+            # print("Refold_to_valid: changed bond got accepted. len protein:", len(protein.sequence_list), "len self.protein:", len(self.protein.sequence_list))
             self.refold(protein, changed_bond)
         return protein
     
@@ -200,9 +211,11 @@ class Hill_climber():
             protein, changed_bond = self.change_bond(protein, skip_bonds=changed_bonds) #you don't want to change the same bond multiple times
             if changed_bond == False: #If protein could not fold into a valid state, skip this change
                 continued += 1
+                print("Change_n_bonds, changed bond got rejected, len protein:", len(protein.sequence_list), "len self.protein:", len(self.protein.sequence_list))
                 if self.prints: print(f"Changing {continued} less bonds")
                 continue
             else: 
+                # print("Change_n_bonds, changed bond got accepted, len protein:", len(protein.sequence_list), "len self.protein:", len(self.protein.sequence_list))
                 protein = self.refold(protein, changed_bond)
                 changed_bonds.append(changed_bond)
 
