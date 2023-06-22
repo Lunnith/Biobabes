@@ -13,7 +13,7 @@ sequence = "HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH"
 
 
 protein = Protein(sequence)
-hill_climber = Hill_climber(protein, 3)
+hill_climber = Hill_climber(protein, 3, prints=True)
 folded_protein = hill_climber.protein
 
 # print("Starting score =", hill_climber.lowest_score)

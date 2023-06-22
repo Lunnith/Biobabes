@@ -10,6 +10,7 @@ class Hill_climber():
     def __init__(self, protein, dimensions=3, prints=False):
         self.protein = protein
         self.double_coords = []
+        self.improvement = None
         if prints == True:
             self.prints = True
         else: self.prints = False
@@ -183,7 +184,7 @@ class Hill_climber():
         starting_score = protein.score
         self.lowest_score = starting_score
         scores = [starting_score]
-        improvement = ["Y"]
+        self.improvement = ["Y"]
 
         for n in range(iterations):
             protein = copy.deepcopy(self.protein)
@@ -191,27 +192,36 @@ class Hill_climber():
             if new_protein == False: #If change turned out invalid, skip this change
                 if self.prints: (f"Skipping iteration {n}, change turned out invalid")
                 scores.append(None)
-                improvement.append("NaN") #NaN
+                self.improvement.append("NaN") #NaN
                 continue
 
             self.check_score(new_protein)
             scores.append(new_protein.score)
 
+            printed = self.check_solution(new_protein)
+            if printed == True: print(f"in iteration {n}")
 
-            ###### Make this its own function
-            if new_protein.score < self.lowest_score:
-                if self.prints: print(f"Iteration {n}: Score updated to", new_protein.score)
-                improvement.append("Y") #Yes
-                self.lowest_score = new_protein.score
-                self.protein = new_protein
-
-            elif new_protein.score == self.lowest_score:
-                improvement.append("S") #Same
-            else:
-                improvement.append("N") #No
-
-        return self.protein, self.lowest_score, scores, improvement
+        return self.protein, self.lowest_score, scores, self.improvement
     
+    def check_solution(self, new_protein):
+        """
+        
+        """
+        printed = None
+        if new_protein.score < self.lowest_score:
+            if self.prints:
+                print(f"Score updated to", new_protein.score, end=" ")
+                printed = True
+            self.improvement.append("Y") #Yes
+            self.lowest_score = new_protein.score
+            self.protein = new_protein
+
+        elif new_protein.score == self.lowest_score:
+            self.improvement.append("S") #Same
+        else:
+            self.improvement.append("N") #No
+        return printed
+        
 
     def plot_hillclimb(self, iterations, scores, n):
         """
