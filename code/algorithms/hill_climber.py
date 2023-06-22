@@ -5,9 +5,58 @@ import copy
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
+from ..classes.protein import Protein
+from ..classes.aminoacid import Aminoacid
 
 class Hill_climber():
-    def __init__(self, protein, dimensions=3, prints=False, folded=False):
+    """
+    The Hill_climber algorithm is meant to take a protein and make small changes to hopefully improve 
+    the score of this protein. If the score of the protein did improve, it keeps the adjustment.
+
+    By repeating this process over and over again, the Hill-climber finds an optimum score.
+    However, by keeping each change that improved the score, it could be possible that an even better 
+    improvement is looked over. This results in the Hill climber getting stuck in a local optimum.
+    ...
+    Attributes:
+    ----------
+    protein: Protein
+        The protein to improve.
+    dimensions: int
+        Number of dimensions in which the protein can fold.
+    prints: bool
+        Wether or not to print small updates.
+    folded: bool
+        Wether or not the given protein has already been folded.
+    lowest_score: int
+        Best score found yet.
+    directions: dict
+        Possible directions, depending on the amount of dimensions used
+
+    Methods:
+    change_bond(protein, given_index=None, skip_bonds=None):
+        Change one single bond
+    refold(protein, index):
+        Refold protein from updated bond
+    check_validity(protein):
+        Check wether the protein has folded over itself
+    refold_into_valid_state(protein):
+        Refold protein into a valid state
+    change_n_bonds(protein, n):
+        Change n different bonds
+    check_score(protein):
+        Check the score of a given protein
+    check_solution(new_protein):
+        Check if the new protein has a better score
+    run_i_iterations(protein, iterations, bonds):
+        Run an amount of iterations of changes
+    plot_hillclimb(iterations, scores, n):
+        Plot the climb made
+    optimize_graph(n, iterations):
+        Give plot a nice appearance and show the plot
+    experiment(protein, iterations, sample_size=1, max_n=10):
+        Run an experiment with multiple runs per different amount of bonds to change
+    """
+    def __init__(self, protein: Protein, dimensions=3, prints=False, folded=False) -> None:
         #Initiate first folding
         if folded: self.protein = protein
         else: 
@@ -138,13 +187,15 @@ class Hill_climber():
         return protein
     
 
-    def change_n_bonds(self, protein, n):
+    def change_n_bonds(self, protein, n="self_n"):
         """
         Loop n times over the function change_bond,
         so that n bonds have been changed.
         Then, refold the protein into a valid state
         """
-        for i in range(n):
+        if n != "self_n":
+            self.n = n
+        for i in range(self.n):
             changed_bonds = []
             continued = 0
 
@@ -157,8 +208,8 @@ class Hill_climber():
                 protein = self.refold(protein, changed_bond)
                 changed_bonds.append(changed_bond)
 
-        if continued == n: #If all n changes were invalid
-            if self.prints: print(f"All {n} initiated changes in bonds were invalid.")
+        if continued == self.n: #If all n changes were invalid
+            if self.prints: print(f"All {self.n} initiated changes in bonds were invalid.")
             return False
 
         protein = self.refold_into_valid_state(protein)
@@ -206,11 +257,12 @@ class Hill_climber():
         starting_score = protein.score
         scores = [starting_score]
         self.improvement = ["Y"]
+        self.n = bonds
 
         self.lowest_score = starting_score
         for i in range(iterations):
             protein = copy.deepcopy(self.protein)
-            new_protein = self.change_n_bonds(protein, bonds)
+            new_protein = self.change_n_bonds(protein)
             if new_protein == False: #If change turned out invalid, skip this change
                 if self.prints: (f"Skipping iteration {i}, change turned out invalid")
                 scores.append(None)
