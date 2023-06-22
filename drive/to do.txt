@@ -1,2 +1,0 @@
-- type prints
-- idee voor algoritme: C-C heeft grootste score dus check in eiwit of er tussen twee CCs twee aminozuren zitten en vouw dan om twee hoeken

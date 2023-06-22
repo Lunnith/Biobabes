@@ -11,7 +11,7 @@ import time
 if __name__ == "__main__":
 
     # initialize protein object and directions
-    sequence = "HCPHP"
+    sequence = "HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH"
     test_protein = Protein(sequence)
     # depth_first = DepthFirst(test_protein, 3)
     # depth_first.run(P_pruning=False, directions_pruning=False)
@@ -80,8 +80,8 @@ if __name__ == "__main__":
     
     # visualize_protein(important_parts.protein, 3)
 
-    simanneal_protein = SimulatedAnnealing(test_protein, 3, temperature=5)
-    simanneal_protein.run_n_iterations(test_protein, iterations=5000, bonds=1)
+    simanneal_protein = SimulatedAnnealing(test_protein, 3, temperature=20)
+    simanneal_protein.run_i_iterations(test_protein, iterations=10000, bonds=1)
 
     visualize_protein(simanneal_protein.protein, 3)
     print(f'Value of the folding after Simulated Annealing:'
