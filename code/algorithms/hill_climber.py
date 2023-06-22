@@ -124,9 +124,7 @@ class Hill_climber():
             if 0 in tried_directions: #Safety net for last aminoacid
                 tried_directions.remove(0)
             if tried_directions == self.directions.keys():
-                if self.prints: print('change_bond has gotten stuck:', end=" ")
                 return protein, False     
-            
         return test_protein, index_changing_bond
     
 
@@ -188,9 +186,7 @@ class Hill_climber():
             # Do this in chronological order
             protein, changed_bond = self.change_bond(protein, given_index=self.double_coords[0])
             if changed_bond == False: #If protein could not fold into a valid state
-                if self.prints: print(f"The changes resulted in an unfixable folding version")
                 return False
-            # print("Refold_to_valid: changed bond got accepted. len protein:", len(protein.sequence_list), "len self.protein:", len(self.protein.sequence_list))
             self.refold(protein, changed_bond)
         return protein
     
@@ -210,10 +206,8 @@ class Hill_climber():
             protein, changed_bond = self.change_bond(protein, skip_bonds=changed_bonds) #you don't want to change the same bond multiple times
             if changed_bond == False: #If protein could not fold into a valid state, skip this change
                 continued += 1
-                if self.prints: print(f"Changing {continued} less bonds")
                 continue
             else: 
-                # print("Change_n_bonds, changed bond got accepted, len protein:", len(protein.sequence_list), "len self.protein:", len(self.protein.sequence_list))
                 protein = self.refold(protein, changed_bond)
                 changed_bonds.append(changed_bond)
 
@@ -281,7 +275,7 @@ class Hill_climber():
             self.check_score(new_protein)
             scores.append(new_protein.score)
             updated = self.check_solution(new_protein)
-            if updated == True: print(f"in iteration {i}.")
+            if updated == True: print(f"in iteration {i}. (n={self.n})")
 
         return self.protein, self.lowest_score, scores, self.improvement
     

@@ -14,41 +14,42 @@ from operator import add
 
 if __name__ == "__main__":
 
-    sequence = "HCPHPCPHPCHPPCHPPCHHCHHCPPCHCPCHCPCHCHPCHCPHCPPHCPCHCPCHHPCHCPPCHCPCHCPCHPPHCHCPCHCHCHHHCPCHCPCHCPPCHCCHCHCHHCPPPPCHCP"
+    #sequence = "HCPHPCPHPCHPPCHPPCHHCHHCPPCHCPCHCPCHCHPCHCPHCPPHCPCHCPCHHPCHCPPCHCPCHCPCHPPHCHCPCHCHCHHHCPCHCPCHCPPCHCCHCHCHHCPPPPCHCP"
     #sequence = "PCHCPHCPPHCPCHCPCHHPCHCPPCHCPCHCPCHPPHCHCPCHCHCHH"
     #sequence = "PCPHPCHC"
     #sequence = "HPCPHHPCCHPHCCHPHHHCCCPPHCPHCPHCCCPHHHCPPCCHPCCCHPHCCHHHHPCCCPPPCHP"
     #sequence = "HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH"
     #sequence = "HPCPHHPCCHPHCCHPHHHCCCPPHCPHCPHCCCPHHHCPPCCHPCCCHPHCCHHHHPCCCPPPCH"
-
+    #sequence = "HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH"
     # protein = Protein(sequence)
-    # greedy_test = gr.Greedy(protein, 2, splits = 2,  before = 0)
+    # greedy_test = gr.Greedy(protein, 3, splits = 4,  before = 0)
     # greedy_test.run()
-    # visualize_protein(protein, 2)
+    # visualize_protein(protein, 3)
 
-    ##testing
+    #testing
     #sequence = "HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH"
     #sequence = "HHPHPHPHPHHHHPHPPPHPPPHPPPPHPPPHPPPHPHHHHPHPHPHPHH"
+    sequence = "HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH"
     best_score = 1
+    list_best_scores = []
     list_scores = []
-    splits = [1, 2, 3, 4, 5]
-    for split in splits:
-        for before in range(split):
-            if split == 1 or split == 2 or split == 3:
-                extra_iterations = 100
-            else:
-                extra_iterations = 0
-                for i in range(50//split + extra_iterations):
-                    protein = Protein(sequence)
-                    greedy_test = gr.Greedy(protein, 3, splits = split, before = before)
-                    greedy_test.run()
-                    list_scores.append([split, greedy_test.amino_before, greedy_test.protein.score])
-                    if greedy_test.protein.score < best_score:
-                        best_protein = copy.deepcopy(greedy_test.protein)
-                        best_score = best_protein.score
+    dict_splits = {1: 10000}
+                   #, 2: 1000, 3: 300, 4: 20, 5: 10}
+    for key, value in dict_splits.items():
+        for before in range(key):
+            for i in range(value):
+                protein = Protein(sequence)
+                greedy_test = gr.Greedy(protein, 3, splits = key, before = before)
+                greedy_test.run()
+                list_scores.append([key, greedy_test.protein.score])
+                if greedy_test.protein.score < best_score:
+                    best_protein = copy.deepcopy(greedy_test.protein)
+                    best_score = best_protein.score
+        list_best_scores.append([key, best_protein.score])
     print(best_protein)
     print(best_score)
     print(list_scores)
+    print(list_best_scores)
 
     visualize_protein(best_protein, 3)
 
