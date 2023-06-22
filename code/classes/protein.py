@@ -31,7 +31,7 @@ class Protein():
     create_output():
         create asked output
     """
-    def __init__(self, sequence):
+    def __init__(self, sequence: str) -> None:
         allowed_types = set(('H', 'P', 'C'))
         sequence_set = set(sequence)
 
@@ -50,7 +50,7 @@ class Protein():
 
         self.valid = True
         
-    def add_aminoacid(self, acid):
+    def add_aminoacid(self, acid: str) -> None:
         """
         Add an aminoacid to the protein.
         """
@@ -60,7 +60,7 @@ class Protein():
         if len(self.sequence_list) > 1:
             self.sequence_list[-1].neighbour1 = self.sequence_list[-2]
 
-    def create_bond(self, acid, previous_acid, direction):
+    def create_bond(self, acid: Aminoacid, previous_acid: Aminoacid, direction: tuple) -> None:
         """
         For one aminoacid, determine the direction of the bond..
         """
@@ -78,7 +78,7 @@ class Protein():
             
             self.used_coordinates.add(coordinates)
 
-    def get_temp_sequence(self):
+    def get_temp_sequence(self) -> str:
         """
         Method to get the temporary sequence of a protein that is being build.
         """
@@ -89,7 +89,7 @@ class Protein():
         
         return temp_sequence
     
-    def is_valid(self):
+    def is_valid(self) -> bool:
         """
         Method to check if protein didn't fold over it self.
         """
@@ -100,7 +100,7 @@ class Protein():
         
         return self.valid
     
-    def create_output(self):
+    def create_output(self) -> None:
         """
         Method to create output in the asked format.
         """

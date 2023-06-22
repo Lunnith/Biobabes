@@ -1,3 +1,4 @@
+from __future__ import annotations
 import math
 
 class Aminoacid():
@@ -24,7 +25,7 @@ class Aminoacid():
     check_interactions(protein):
         check for possible other interacting aminoacids
     """
-    def __init__(self, type):
+    def __init__(self, type: str) -> None:
      
         self.location = [None, None, None]
         self.neighbour1 = None
@@ -44,14 +45,14 @@ class Aminoacid():
         elif self.type == 'C':
             self.color = 'g'
     
-    def distance(self, other):
+    def distance(self, other: Aminoacid) -> float:
         """
         Calculate euclidian distance between this aminoacid and another aminoacid.
         """
         return math.sqrt((self.location[0] - other.location[0])**2 + (self.location[1] - other.location[1])**2 + (self.location[2] - other.location[2])**2)
    
 
-    def check_interactions(self, protein, index = -1):
+    def check_interactions(self, protein: Protein, index: int = -1) -> None:
         """
         Check surrounding of aminoacid for other aminoacids, if they are present, check type
         and change score according to the interaction type.
