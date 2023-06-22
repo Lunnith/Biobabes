@@ -23,10 +23,10 @@ if __name__ == "__main__":
     test_protein_I = Protein("HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH")
 
     # ---------------------------- Random ----------------------------
-    random_protein, score_list = random_reassignment(test_protein_A, 3, k=100000)
+    # random_protein, score_list = random_reassignment(test_protein_A, 3, k=100000)
     
-    print(f'Value of the folding after Randomized Assignment:'
-          f'{random_protein.score}')
+    # print(f'Value of the folding after Randomized Assignment:'
+    #       f'{random_protein.score}')
 
     # ---------------------------- Greedy ----------------------------
 #     greedy_protein = Greedy(test_protein_A, 3, splits=1)
@@ -66,12 +66,12 @@ if __name__ == "__main__":
 #           f'{hill_climber_protein.protein.score}')
     
     # ---------------------------- Simulate Annealing ----------------------------
-#     simanneal_protein = SimulatedAnnealing(test_protein_A, 3, temperature=5)
-#     simanneal_protein.run_i_iterations(test_protein_A, iterations=1000, bonds=1)
+    simanneal_protein = SimulatedAnnealing(test_protein_A, 3, temperature=5, start_bonds=10)
+    simanneal_protein.run_i_iterations(test_protein_A, iterations=1000, bonds=10)
 
-#     print(f'Value of the folding after Simulated Annealing:'
-#           f'{simanneal_protein.protein.score}')
+    print(f'Value of the folding after Simulated Annealing:'
+          f'{simanneal_protein.protein.score}')
     
     # ---------------------------- Visualization ----------------------------
-    visualize_protein(random_protein.protein, 3)
+    visualize_protein(simanneal_protein.protein, 3)
 
