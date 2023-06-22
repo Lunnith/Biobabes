@@ -15,7 +15,7 @@ conda install --file requirements.txt
 ```
 
 ### Use
-The main.py document contains an example for all different algorithms on how to run these algorithms. If you run the following command without changing anything in the document, only the random algorithm will be executed. You can change which algorithm you want to be executed by commenting or decommenting certain parts.
+The main.py document contains an example for all different algorithms on how to run these algorithms. If you run the following command without changing anything in the document, only the random algorithm will be executed for the first protein. You can change which protein you want to explore and which algorithm you want to be executed by commenting or decommenting certain parts.
 
 ```
 python main.py
