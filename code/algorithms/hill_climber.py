@@ -208,7 +208,6 @@ class Hill_climber():
                 continued += 1
                 continue
             else: 
-                # print("Change_n_bonds, changed bond got accepted, len protein:", len(protein.sequence_list), "len self.protein:", len(self.protein.sequence_list))
                 protein = self.refold(protein, changed_bond)
                 changed_bonds.append(changed_bond)
 
