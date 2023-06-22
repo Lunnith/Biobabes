@@ -1,13 +1,7 @@
-from ..classes.protein import Protein
-
-from ..algorithms.randomise import *
 from ..algorithms.greedy import Greedy
-from ..algorithms.depth_first import DepthFirst
-from ..algorithms.important_parts import ImportantParts
 from ..algorithms.hill_climber import Hill_climber
-from ..algorithms.simulated_annealing import SimulatedAnnealing
 
-from ..visualization.visualize import *
+from ..visualization import *
 
 if __name__ == "__main__":   
 
