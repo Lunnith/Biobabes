@@ -185,6 +185,7 @@ class Hill_climber():
         self.lowest_score = starting_score
         scores = [starting_score]
         self.improvement = ["Y"]
+        self.iterations = iterations
 
         for n in range(iterations):
             protein = copy.deepcopy(self.protein)

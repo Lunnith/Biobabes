@@ -39,14 +39,13 @@ class SimulatedAnnealing(Hill_climber):
         Checks and accepts better solutions than the current solution.
         Sometimes accepts worse solutions, which depends on the current temperature.
         """
-        new_score = new_folding.score()
+        new_score = new_folding.score
         old_score = self.protein.score
 
         # calculate probability of accepting new folding
         delta = old_score - new_score
         probability = math.exp(delta / self.T)
-        print(self.T)
-
+        
         # pull a random number between 0 and 1 and see if we accept the graph
         if random.random() < probability:
             self.protein = new_folding
