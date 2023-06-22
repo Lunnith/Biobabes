@@ -14,7 +14,7 @@ sequence = "HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH"
 
 protein = Protein(sequence)
 # folded_protein = random_assignment(protein, 3)
-hill_climber = Hill_climber(protein, prints=False, folded=False, dimensions=2)
+hill_climber = Hill_climber(protein, prints=True, folded=False, dimensions=3)
 folded_protein = hill_climber.protein
 
 # print("Starting score =", hill_climber.lowest_score)
@@ -31,8 +31,6 @@ folded_protein, best_score, scores, improvement = hill_climber.run_i_iterations(
 # visualize_protein(folded_protein, 3)
 protein = Protein(sequence)
 if folded_protein.score > -20:
-    best_protein = hill_climber.experiment(protein, 10, 2, max_n=10)
+    best_protein = hill_climber.experiment(protein, 10, 3, max_n=10)
     visualize_protein(best_protein, 3)
 else: print("Score too good:", protein.score)
-print(len(best_protein.sequence_list))
-print(len(sequence))
