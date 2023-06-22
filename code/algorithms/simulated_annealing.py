@@ -13,28 +13,29 @@ class SimulatedAnnealing(Hill_climber):
     Most of the functions are similar to those of the HillClimber class, which is why
     we use that as a parent class.
     """
-    def __init__(self, protein: Protein, dimensions: int = 3, temperature: int = 1) -> None:
+    def __init__(self, protein: Protein, dimensions: int = 3, temperature: int = 1, start_n: int) -> None:
         # use init of Hillclimber class
         super().__init__(protein, dimensions=3)
 
         # starting temperature and current temperature
         self.T0 = temperature
         self.T = temperature
+
+        self.start_n = start_n
     
-    def update_temperature(self) -> None:
+    def update_temperature(self, decrease_n: bool) -> None:
         """
         Method to implement a linear cooling scheme. Temperature becomes zero after all iterations
         passed to the run() method have passed.
         """
-        #self.T = self.T - (self.T0 / self.iterations)
-
-        # exponential?
         alpha = 0.99
         self.T = self.T * alpha
 
-        # where alpha can be any value below 1 but above 0
- 
-    def check_solution(self, new_folding: Protein) -> None:
+        if decrease_n:
+            beta = self.start_n / self.iterations
+            self.n = int(self.n - beta)
+
+    def check_solution(self, new_folding: Protein, decrease_n: bool = False) -> None:
         """
         Checks and accepts better solutions than the current solution.
         Sometimes accepts worse solutions, which depends on the current temperature.
@@ -45,10 +46,11 @@ class SimulatedAnnealing(Hill_climber):
         # calculate probability of accepting new folding
         delta = old_score - new_score
         probability = math.exp(delta / self.T)
+        print(self.n)
         
         # pull a random number between 0 and 1 and see if we accept the graph
         if random.random() < probability:
             self.protein = new_folding
         
         # update temperature
-        self.update_temperature()
+        self.update_temperature(decrease_n)
