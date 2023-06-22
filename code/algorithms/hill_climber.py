@@ -1,12 +1,10 @@
+from ..classes.protein import Protein
 from .randomise import random_assignment
+import matplotlib.pyplot as plt
+import pandas as pd
 import random
 import time
 import copy
-import matplotlib.pyplot as plt
-import pandas as pd
-import numpy as np
-from ..classes.protein import Protein
-from ..classes.aminoacid import Aminoacid
 
 class Hill_climber():
     """
@@ -58,12 +56,21 @@ class Hill_climber():
     """
     def __init__(self, protein: Protein, dimensions=3, prints=False, folded=False) -> None:
         #Initiate first folding
-        if folded: self.protein = protein
-        else: 
+        self.protein = protein
+        if not folded: 
             if len(protein.sequence_list) > 1:
                 raise Exception("By default, Hill_climber assumes that you input an unfolded protein.\n\
                 If you want to input a protein that is already folded, use the keyword 'folded=True'")
-            self.protein = random_assignment(protein, dimensions)
+            
+            length_needed = len(protein.sequence)
+            actual_length = 0
+            while actual_length != length_needed:
+                protein_to_fold = copy.deepcopy(protein)
+                folded_protein = random_assignment(protein_to_fold, dimensions)
+                actual_length = len(folded_protein.sequence_list)
+            self.protein = folded_protein
+        
+        # self.protein = random_assignment(protein, dimensions)
         self.lowest_score = self.protein.score
 
         if prints == True:
@@ -77,7 +84,7 @@ class Hill_climber():
             self.directions = {1: [1, 0, 0, 1], -1: [-1, 0, 0, -1], 2: [0, 1, 0, 2], -2: [0, -1, 0, -2], 3: [0, 0, 1, 3], -3: [0, 0, -1, -3]}
 
 
-    def change_bond(self, protein, given_index=None, skip_bonds=None):
+    def change_bond(self, protein: Protein, given_index=None, skip_bonds=None) -> tuple[Protein, int]:
         """
         This function takes a folded protein and optionally the index of the bond to change.
         If no index is given, a random bond of the protein is changed.
@@ -116,13 +123,14 @@ class Hill_climber():
             if 0 in tried_directions: #Safety net for last aminoacid
                 tried_directions.remove(0)
             if tried_directions == self.directions.keys():
+                print("Returning shorter protein, len protein:", len(protein.sequence_list), "| len self.protein:", len(self.protein.sequence_list))
                 if self.prints: print('change_bond has gotten stuck:', end=" ")
                 return protein, False     
             
         return protein, index_changing_bond
     
 
-    def refold(self, protein, index):
+    def refold(self, protein: Protein, index: int) -> Protein:
         """
         This function takes a protein where a bond has been redirectioned 
         and also takes the index of this bond. Then, it updates the coördinates of the aminoacids.
@@ -148,7 +156,7 @@ class Hill_climber():
         return protein
          
 
-    def check_validity(self, protein):
+    def check_validity(self, protein: Protein) -> list:
         """
         This function takes a (re)folded protein and checks wether or not it has folded over itself.
         Then, it returns a list of coördinates where multiple aminoacids appear
@@ -166,7 +174,7 @@ class Hill_climber():
         return self.double_coords
     
 
-    def refold_into_valid_state(self, protein):
+    def refold_into_valid_state(self, protein: Protein) -> Protein:
         """
         This function refolds the protein, 
         checks it it has folded over itself and fixes this if nessecary.
@@ -180,14 +188,15 @@ class Hill_climber():
             # Do this in chronological order
             protein, changed_bond = self.change_bond(protein, given_index=self.double_coords[0])
             if changed_bond == False: #If protein could not fold into a valid state
+                print("Refold_to_valid: changed bond that got rejected, len protein:", len(protein.sequence_list), "len self.protein:", len(self.protein.sequence_list))
                 if self.prints: print(f"The changes resulted in an unfixable folding version")
                 return False
-            
+            # print("Refold_to_valid: changed bond got accepted. len protein:", len(protein.sequence_list), "len self.protein:", len(self.protein.sequence_list))
             self.refold(protein, changed_bond)
         return protein
     
 
-    def change_n_bonds(self, protein, n="self_n"):
+    def change_n_bonds(self, protein: Protein, n: int="self_n") -> Protein:
         """
         Loop n times over the function change_bond,
         so that n bonds have been changed.
@@ -202,9 +211,11 @@ class Hill_climber():
             protein, changed_bond = self.change_bond(protein, skip_bonds=changed_bonds) #you don't want to change the same bond multiple times
             if changed_bond == False: #If protein could not fold into a valid state, skip this change
                 continued += 1
+                print("Change_n_bonds, changed bond got rejected, len protein:", len(protein.sequence_list), "len self.protein:", len(self.protein.sequence_list))
                 if self.prints: print(f"Changing {continued} less bonds")
                 continue
             else: 
+                # print("Change_n_bonds, changed bond got accepted, len protein:", len(protein.sequence_list), "len self.protein:", len(self.protein.sequence_list))
                 protein = self.refold(protein, changed_bond)
                 changed_bonds.append(changed_bond)
 
@@ -219,7 +230,7 @@ class Hill_climber():
         return protein
 
 
-    def check_score(self, protein):
+    def check_score(self, protein: Protein) -> None:
         """
         This function checks the score of a given protein.
         """
@@ -228,7 +239,7 @@ class Hill_climber():
             protein.sequence_list[acid].check_interactions(protein, index=acid+1)
     
 
-    def check_solution(self, new_protein):
+    def check_solution(self, new_protein: Protein) -> None:
         """
         Checks if the input protein has a better score than the best protein yet.
         """
@@ -247,7 +258,7 @@ class Hill_climber():
             self.improvement.append("N") #No
 
 
-    def run_i_iterations(self, protein, iterations, bonds):
+    def run_i_iterations(self, protein: Protein, iterations: int, bonds: int) -> tuple[Protein, int, list, list]:
         """
         runs the change_n_bonds for a given amount of iterations.
         Then, returns the protein with the best score, the actual score, the list of scores that 
@@ -277,7 +288,7 @@ class Hill_climber():
         return self.protein, self.lowest_score, scores, self.improvement
     
 
-    def plot_hillclimb(self, iterations, scores, n):
+    def plot_hillclimb(self, iterations: int, scores: list, n: int) -> None:
         """
         Plots only the improvement graph for this specific n.
         If a plt object is already existing, this function plots over it.
@@ -287,7 +298,7 @@ class Hill_climber():
         plt.plot(iterations, scores, "-", linewidth=2, c=colors[n-1], label=n)
 
 
-    def optimize_graph(self, n, iterations):
+    def optimize_graph(self, n: int, iterations: int) -> None:
         """
         Uses the existing plt object where all hill-climbs have been plotted,
         Makes it aesthetically pleasing and then shows it.
@@ -301,7 +312,7 @@ class Hill_climber():
         plt.show()
 
 
-    def experiment(self, protein, iterations, sample_size=1, max_n=10):
+    def experiment(self, protein: Protein, iterations: int, sample_size=1, max_n=10) -> Protein:
         """
         Runs an experiment with a given protein. The sample size is the amount of times to run the algorithm.
         It then runs the algorithm for each n amount of bonds to change, with the given amount of iterations.
