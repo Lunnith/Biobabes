@@ -32,7 +32,7 @@ folded_protein, best_score, scores, improvement = hill_climber.run_i_iterations(
 # visualize_protein(folded_protein, 3)
 protein = Protein(sequence)
 if folded_protein.score > -20:
-    best_protein = hill_climber.experiment(protein, 5, 3, max_n=5)
+    best_protein = hill_climber.experiment(protein, 100, 5, max_n=10)
     visualize_protein(best_protein, 3)
 else: print("Score too good:", protein.score)
 
