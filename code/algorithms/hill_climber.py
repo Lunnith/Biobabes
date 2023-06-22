@@ -217,9 +217,9 @@ class Hill_climber():
                 protein = self.refold(protein, changed_bond)
                 changed_bonds.append(changed_bond)
 
-        if continued == self.n: #If all n changes were invalid
-            if self.prints: print(f"All {self.n} initiated changes in bonds were invalid.")
-            return False
+            if continued == self.n: #If all n changes were invalid
+                if self.prints: print(f"All {self.n} initiated changes in bonds were invalid.")
+                return False
 
         protein = self.refold_into_valid_state(protein)
         if protein == False: #If protein could not refold into a valid state

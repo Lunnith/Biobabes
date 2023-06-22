@@ -13,9 +13,9 @@ class SimulatedAnnealing(Hill_climber):
     Most of the functions are similar to those of the HillClimber class, which is why
     we use that as a parent class.
     """
-    def __init__(self, protein: Protein, dimensions: int = 3, temperature: int = 1, start_n: int) -> None:
+    def __init__(self, protein: Protein, start_n: int, folded: bool, dimensions: int = 3, temperature: int = 1) -> None:
         # use init of Hillclimber class
-        super().__init__(protein, dimensions=3)
+        super().__init__(protein, dimensions, folded=folded)
 
         # starting temperature and current temperature
         self.T0 = temperature
@@ -28,11 +28,20 @@ class SimulatedAnnealing(Hill_climber):
         Method to implement a linear cooling scheme. Temperature becomes zero after all iterations
         passed to the run() method have passed.
         """
-        alpha = 0.99
-        self.T = self.T * alpha
+        if self.T0 == self.T:
+            self.n_float = self.start_n
 
-        beta = self.start_n / self.iterations
-        self.n = int(self.n - beta)
+        if self.n > 1:
+            beta = self.start_n / self.iterations
+
+            self.n_float = self.n_float - beta
+            self.n = round(self.n_float)
+            
+        alpha = 0.99
+        if self.T > 0.01:
+            self.T = self.T * alpha
+        else:
+            self.T = 0.01
 
     def check_solution(self, new_folding: Protein) -> None:
         """
@@ -43,10 +52,9 @@ class SimulatedAnnealing(Hill_climber):
         old_score = self.protein.score
 
         # calculate probability of accepting new folding
-        delta = old_score - new_score
-        probability = math.exp(delta / self.T)
-        print(self.n)
-        
+        delta = -old_score + new_score
+        probability = math.exp(-delta / self.T)
+ 
         # pull a random number between 0 and 1 and see if we accept the graph
         if random.random() < probability:
             self.protein = new_folding

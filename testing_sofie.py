@@ -12,7 +12,7 @@ if __name__ == "__main__":
 
     # initialize protein object and directions
     sequence = "HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH"
-    test_protein = Protein(sequence)
+    test_protein_I = Protein(sequence)
     # depth_first = DepthFirst(test_protein, 3)
     # depth_first.run(P_pruning=False, directions_pruning=False)
     # depth_first.protein.create_output()
@@ -80,9 +80,71 @@ if __name__ == "__main__":
     
     # visualize_protein(important_parts.protein, 3)
 
-    simanneal_protein = SimulatedAnnealing(test_protein, 3, temperature=20)
-    simanneal_protein.run_i_iterations(test_protein, iterations=10000, bonds=1)
+    # simanneal_protein = SimulatedAnnealing(test_protein, 3, temperature=20)
+    # simanneal_protein.run_i_iterations(test_protein, iterations=10000, bonds=1)
 
-    visualize_protein(simanneal_protein.protein, 3)
-    print(f'Value of the folding after Simulated Annealing:'
-          f'{simanneal_protein.protein.score}')
+    # visualize_protein(simanneal_protein.protein, 3)
+    # print(f'Value of the folding after Simulated Annealing:'
+    #       f'{simanneal_protein.protein.score}')
+
+
+# experiment greedy x simulated annealing
+from code.algorithms.greedy import Greedy
+from code.algorithms.hill_climber import Hill_climber
+import pandas as pd
+import numpy as np
+
+# df_scores = pd.DataFrame()
+# split_numbers = []
+# score_after_greedy = []
+# score_after_simanneal = []
+# befores = []
+
+# for i in range(1, 5):
+#     for j in range(10):
+#         test_protein_I = Protein("HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH")
+
+#         before_list = []
+
+#         for number in range(i):
+#             if number < i:
+#                 before_list.append(number)
+        
+#         print(before_list)
+
+#         for before in before_list:
+#             greedy_protein = Greedy(test_protein_I, 3, splits=i, before)
+#             greedy_protein.run()
+
+#             print(f'Value of the folding after Greedy:'
+#                 f'{greedy_protein.protein.score}')
+
+#             split_numbers.append(i)
+#             score_after_greedy.append(greedy_protein.protein.score)
+#             befores.append(before)
+
+#             simanneal_protein = SimulatedAnnealing(greedy_protein.protein, 10, folded=True, dimensions=3, temperature=20)
+#             simanneal_protein.run_i_iterations(greedy_protein.protein, iterations=10000, bonds=10)
+
+#             print(f'Value of the folding after Simulated Annealing x Greedy:'
+#                     f'{simanneal_protein.protein.score}')
+            
+#             score_after_simanneal.append(simanneal_protein.protein.score)
+
+# df_scores['split_numbers'] = split_numbers
+# df_scores['score_after_greedy'] = score_after_greedy
+# df_scores['befores'] = before
+# df_scores['score_after_simulated_annealing'] = score_after_simanneal
+
+# print(df_scores.head())
+# df_scores.to_csv(path_or_buf=r'C:\Users\sofie\minorAI\Algoritmen en Heuristieken\data\df_scores_complete')
+
+
+
+greedy_protein = Greedy(test_protein_I, 3, splits=3)
+greedy_protein.run()
+
+simanneal_protein = SimulatedAnnealing(greedy_protein.protein, 10, folded=True, dimensions=3, temperature=20)
+simanneal_protein.run_i_iterations(greedy_protein.protein, iterations=10000, bonds=10)
+
+visualize_protein(simanneal_protein.protein, 3)

@@ -65,9 +65,9 @@ if __name__ == "__main__":
 #     print(f'Value of the folding after Hill Climber:'
 #           f'{hill_climber_protein.protein.score}')
     
-    # ---------------------------- Simulate Annealing ----------------------------
-    simanneal_protein = SimulatedAnnealing(test_protein_A, 3, temperature=5, start_bonds=10)
-    simanneal_protein.run_i_iterations(test_protein_A, iterations=1000, bonds=10)
+    # ---------------------------- Simulated Annealing ----------------------------
+    simanneal_protein = SimulatedAnnealing(test_protein_I, 10, 3,  temperature=20)
+    simanneal_protein.run_i_iterations(test_protein_I, iterations=1000, bonds=10)
 
     print(f'Value of the folding after Simulated Annealing:'
           f'{simanneal_protein.protein.score}')
