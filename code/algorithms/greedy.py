@@ -1,24 +1,56 @@
-# from code.classes.protein import Protein
-from code.visualization.visualize import *
 from code.classes.protein import Protein
 import random
 import copy
 from code.algorithms.depth_first import DepthFirst
-import matplotlib.pyplot as plt
 from operator import add
 import itertools
 
 class Greedy():
+    """
+    A class to do a greedy algorithm and beam search depending on the input. 
 
-    def __init__(self, protein, dimensions, splits = 3, before = 0):
+    Attributes:
+    -----------
+    Protein: class object
+        The protein with a sequence to initiate the acids and to determine/make the best folding protein
+    
+    Splits: integer
+        Splits determine the width of the beam in a beam search. When set to 1, it will act as a normal greedy algorithm
+    
+    Dimensions: integer
+        Dimensions can be set to 2 or 3 for 2D and 3D folding respectively. Dimensions determine the initiation of the set of directions
+    
+    Directions: set
+        Dependend on the dimensions, the set of directions contains 4 or 6 possible directions with the change in x, y or z and the step for the output
+    
+    Amino before: integer
+        Determines after how many aminoacids the beam search starts, this is to shift the beam search so it is not the same every time
+    
+    Number of splits: integer
+        This is the number of times a beam fits in the sequence dependend on the amount of aminoacids before and the sequence lenght
+    
+    Amino left: integer
+        This is the amount of aminoacids left after the beam search, determined by the number of splits and aminoacids before
+
+    Used coordinates G: set
+        This is a list of coordinates that are occupied or lead to a location that is stuck
+
+    list directions: list of lists
+        There are 3 directions lists, one for the amount of aminoacids of  
+    
+
+    """
+    def __init__(self, protein, dimensions, splits = 1, before = 0):
 
         # define protein, splits and dimensions
         self.protein = protein
         self.splits = splits
         self.dimensions = dimensions
 
-        # calculate how much aminoacids er over blijven als je het in stukjes hebt verdeeld
+        # set the amount of aminoacids before the sequence parts start (0 means it start immediatly)
         self.amino_before = before
+
+        # calculate how much aminoacids er are left after deviding the sequence parts
         self.number_of_splits = (len(self.protein.sequence) - 1 - self.amino_before) // self.splits
         self.amino_left = (len(self.protein.sequence) - 1) - (self.number_of_splits * self.splits) - self.amino_before
 
@@ -31,7 +63,7 @@ class Greedy():
         elif self.dimensions == 3:
             self.directions = set(((1, 0, 0, 1), (-1, 0, 0, -1), (0, 1, 0, 2), (0, -1, 0, -2), (0, 0, 1, 3), (0, 0, -1, -3)))
 
-        # initiate all directions for the parts and for the left over aminoacids
+        # initiate all directions for the splits,the aminoacids before and for the left over aminoacids at the end
         self.list_directions = self.create_directions(self.splits)
         self.list_directions_left = self.create_directions(self.amino_left)
         self.list_directions_before = self.create_directions(self.amino_before)
@@ -57,7 +89,9 @@ class Greedy():
         
     
     def all_bonds(self):
-
+        """
+        This function goes trough all the states and selects one of the states with the lowest score
+        """
         # set the first aminoacid at coordinate 0,0,0 and add to used coordinates
         self.protein.add_aminoacid(self.protein.sequence[0])
         self.acid = self.protein.sequence_list[0]
@@ -68,15 +102,17 @@ class Greedy():
         i = 1
         while i in range(len(self.protein.sequence)):
             print("ROUND", i)
-            best_states = []
             
             # initiate a valid random direction for the whole split in case non of the directions lead to a better score than 0
             best_state_directions = []
 
+            # initiate an empty list for states with the same (best) score
+            best_states = []
+
             # make a set for the coordinates used within this split to make sure this part of the protein does not go over itself
             self.used_coordinates_random = set()
 
-            # if it is the round of left aminoacids, set splits to the amount of left aminoacids and list_directions to directions of amino left
+            # Depending on where in the sequence we are, set splits and directions list to the accompanying the right amount of aminoacids
             if i == 1 + (self.number_of_splits * self.splits) + self.amino_before:
                 splits = self.amino_left
                 list_directions = self.list_directions_left
@@ -86,56 +122,6 @@ class Greedy():
             else:
                 splits = self.splits
                 list_directions = self.list_directions
-
-            
-            # for every aminoacid in a split, create a bond
-            # j = 0 
-            # while j in range(splits):
-
-    
-            #     # for every aminoacid, add to the protein and select the acid
-            #     self.protein.add_aminoacid(self.protein.sequence[i + j])
-            #     self.acid = self.protein.sequence_list[-1]
-
-            #     # append valid direction to the best state directions and add to the used random coordinates
-            #     #random_bond = self.random_bond(j)
-
-            #     for direction in self.directions:
-            #         if tuple(list(map(add, self.protein.sequence_list[-2].location, direction[0:3]))) not in self.used_coordinates_G:
-            #             random_bond = True
-            #             print(self.protein.sequence_list[-2].location)
-            #         else:
-            #             if j == 0:
-            #                 random_bond = '0'
-            #             else:
-            #                 random_bond = '1'
-            #             print(self.protein.sequence_list[-2].location)
-
-
-
-            #     # if there is no bond possible within the first aminoacid of a sequence part, go back one sequence part and break this loop
-            #     if random_bond == '0':
-            #         i -= splits
-            #         break
-                
-            #     # if there is no bond possible after the first aminoacid of a sequence, go back one iteration in the sequence
-            #     elif random_bond == '1':
-            #         j -= 1
-
-            #     # add the random direction to the best state directions and add to the temporary used coordinates in random
-            #     else:
-            #         #best_state_directions.append(random_bond)
-            #         #self.used_coordinates_random.add((tuple(self.acid.location)))
-
-            #         # go to the next iteration in the loop
-            #         j += 1
-
-            # delete the added aminoacids from the protein sequence list
-            #del self.protein.sequence_list[-(splits):]
-
-            # if there is no possible direction, skip the rest of this iteration
-            # if random_bond == '0' or random_bond == '1':
-            #     continue
 
             # go through all states and compute the score
             best_score = 1
@@ -151,18 +137,21 @@ class Greedy():
                     best_states = []
                     best_states.append(state_directions)
                     best_score = score
-            print(best_score)
+
+            # when the best score did not change, this means every score was false and the protein is stuck
             if best_score == 1:
+
+                # go back one split and skip the rest of this iteration
                 i -= self.splits
                 del self.protein.sequence_list[-(self.splits):]
                 continue
-
+            
+            # take one of the states with the lowest score
             best_state_directions = random.choice(best_states)
 
             # add the aminoacids to self.protein with the directions of the best score
             for index, direction in enumerate(best_state_directions):
                 self.add_best_direction(direction, place = (i + index))
-            
             
             # go to the next sequence part
             i += splits
@@ -207,8 +196,9 @@ class Greedy():
 
 
     def add_best_direction(self, best_direction, place):
-
-        # create a bond for the best direction for this acid and add the location to used coordinates
+        """"
+        This function creates a bond for the best direction for an acid and adds the location to used coordinates 
+        """
         self.protein.add_aminoacid(self.protein.sequence[place])
         self.acid = self.protein.sequence_list[-1]
         self.protein.create_bond(self.acid, self.protein.sequence_list[-2], best_direction)
@@ -220,7 +210,7 @@ class Greedy():
         """
         Check all the interactions and adjust the score when an interaciton is found
         """
-        # set the lists of bonds to empty again (because they were filled during directions)
+        # set the lists of bonds to empty again and score to zero (because they were filled during directions)
         self.protein.hh_ch_bonds = []
         self.protein.cc_bonds = []
         self.protein.score = 0
@@ -246,55 +236,14 @@ class Greedy():
     
         # return True because is_stuck is true
         return True
-              
-
-    def random_bond(self, j):
-        """
-        This function creates a random valid, random direction. If there is no valid direction, it will return False
-        """
-        #set best direction to a random direction and create the bond with this direction
-        best_direction = random.choice(tuple(self.directions))
-        self.protein.create_bond(self.acid, self.protein.sequence_list[-2], best_direction)
-
-        # Until the acid location that is created is a valid location (not occupied or stuck) keep trying different directions
-        tried_directions = set()
-        while tuple(self.acid.location) in self.used_coordinates_G or self.is_stuck(self.acid) == True or tuple(self.acid.location) in self.used_coordinates_random:
-
-            # repeat trying new directions to find a valid one
-            best_direction = random.choice(tuple(self.directions))
-            self.protein.create_bond(self.acid, self.protein.sequence_list[-2], best_direction)
-            tried_directions.add(best_direction)
-
-            # if there all directions are checked and invalid, return False
-            if tried_directions == self.directions:
-                print('ERROR STUCK')
-                if j == 0:
-
-                    # add the coordinate of the stuck location to the used coordinates and remove last added amioacid
-                    self.used_coordinates_G.add(tuple(self.protein.sequence_list[-2].location))
-                    del self.protein.sequence_list[-1]
-
-                    # return '0'
-                    return '0'
-                
-                # if there is no bond possible after the first aminoacid of a sequence, go back one iteration in the sequence
-                elif j != 0:
-
-                    # add the coordinate of the stuck location to the used coordinates and remove last and previous added amioacid
-                    self.used_coordinates_G.add(tuple(self.protein.sequence_list[-2].location))
-                    del self.protein.sequence_list[-2:]
-
-                    # return '1'
-                    return '1'
-            
-        # return a valid random direction 
-        return best_direction
     
     def run(self):
+        """
+        This function runs the script by first setting all the (best) bonds, then checking the interactions and creating the output
+        """
         self.all_bonds()
         self.check_all_interactions()
         self.protein.create_output()
-        
 
 
 
