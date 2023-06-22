@@ -161,7 +161,7 @@ def algorithm_timing(sequence):
 algorithm_timing(sequence)
 
 ########################### Greedy
-def algorithm_timing(sequence, iterations):
+def algorithm_timing(sequence, iterations, split):
     """
 
     """
@@ -178,7 +178,7 @@ def algorithm_timing(sequence, iterations):
         start = time.time()
         for i in range(iterations):
             protein = Protein(sequence[:seq_length+1])
-            greedy_test = gr.Greedy(protein, 3, 2)
+            greedy_test = gr.Greedy(protein, 3, split)
             greedy_test.run_k()
 
         end = time.time()
@@ -201,7 +201,7 @@ def timing_for_multiple_splits(sequence, iterations=20):
     start = time.time()
     splits = [1, 2, 3, 4, 5]
     for split in splits:
-        algorithm_timing(sequence, iterations)
+        algorithm_timing(sequence, iterations, split)
     end = time.time()
     print("Runtime multiple n:", end-start)
 
