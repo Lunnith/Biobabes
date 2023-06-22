@@ -45,6 +45,7 @@ class SimulatedAnnealing(Hill_climber):
         # calculate probability of accepting new folding
         delta = old_score - new_score
         probability = math.exp(delta / self.T)
+        print(self.T)
 
         # pull a random number between 0 and 1 and see if we accept the graph
         if random.random() < probability:
