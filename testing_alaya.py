@@ -14,40 +14,53 @@ from operator import add
 
 if __name__ == "__main__":
 
-    #sequence = "HCPHPCPHPCHPPCHPPCHHCHHCPPCHCPCHCPCHCHPCHCPHCPPHCPCHCPCHHPCHCPPCHCPCHCPCHPPHCHCPCHCHCHHHCPCHCPCHCPPCHCCHCHCHHCPPPPCHCP"
+    sequence = "HCPHPCPHPCHPPCHPPCHHCHHCPPCHCPCHCPCHCHPCHCPHCPPHCPCHCPCHHPCHCPPCHCPCHCPCHPPHCHCPCHCHCHHHCPCHCPCHCPPCHCCHCHCHHCPPPPCHCP"
     #sequence = "PCHCPHCPPHCPCHCPCHHPCHCPPCHCPCHCPCHPPHCHCPCHCHCHH"
     #sequence = "PCPHPCHC"
     #sequence = "HPCPHHPCCHPHCCHPHHHCCCPPHCPHCPHCCCPHHHCPPCCHPCCCHPHCCHHHHPCCCPPPCHP"
-    sequence = "HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH"
+    #sequence = "HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH"
     #sequence = "HPCPHHPCCHPHCCHPHHHCCCPPHCPHCPHCCCPHHHCPPCCHPCCCHPHCCHHHHPCCCPPPCH"
 
-    protein = Protein(sequence)
-    greedy_test = gr.Greedy(protein, 3, splits = 5,  before = 3)
-    greedy_test.run()
-    visualize_protein(protein, 3)
+    # protein = Protein(sequence)
+    # greedy_test = gr.Greedy(protein, 2, splits = 2,  before = 0)
+    # greedy_test.run()
+    # visualize_protein(protein, 2)
 
     ##testing
-    sequence = "CHCCCH"
+    #sequence = "HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH"
+    #sequence = "HHPHPHPHPHHHHPHPPPHPPPHPPPPHPPPHPPPHPHHHHPHPHPHPHH"
+    best_score = 1
     list_scores = []
     splits = [1, 2, 3, 4, 5]
     for split in splits:
-        print(split)
-        for i in range(50):
-            protein = Protein(sequence)
-            greedy_test = gr.Greedy(protein, 3, splits = split)
-            greedy_test.run_k()
-            list_scores.append([split, greedy_test.protein.score])
-    #visualize_protein(protein, 3)
-
-
-    for split in score_dict:
-        sns.histplot(score_dict[split], kde=True, discrete=True, label=split)
-
-    plt.legend(title="Splits")
-    plt.title("Greedy", fontweight='bold')
-    plt.xlabel("Score", loc='right')
-    plt.ylabel("Frequency", loc='top')
-
-    plt.show()
+        for before in range(split):
+            if split == 1 or split == 2 or split == 3:
+                extra_iterations = 100
+            else:
+                extra_iterations = 0
+                for i in range(50//split + extra_iterations):
+                    protein = Protein(sequence)
+                    greedy_test = gr.Greedy(protein, 3, splits = split, before = before)
+                    greedy_test.run()
+                    list_scores.append([split, greedy_test.amino_before, greedy_test.protein.score])
+                    if greedy_test.protein.score < best_score:
+                        best_protein = copy.deepcopy(greedy_test.protein)
+                        best_score = best_protein.score
+    print(best_protein)
+    print(best_score)
+    print(list_scores)
 
     visualize_protein(best_protein, 3)
+
+
+    # for split in score_dict:
+    #     sns.histplot(score_dict[split], kde=True, discrete=True, label=split)
+
+    # plt.legend(title="Splits")
+    # plt.title("Greedy", fontweight='bold')
+    # plt.xlabel("Score", loc='right')
+    # plt.ylabel("Frequency", loc='top')
+
+    # plt.show()
+
+    # visualize_protein(best_protein, 3)
