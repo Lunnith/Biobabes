@@ -1,7 +1,7 @@
 from code.classes.protein import Protein
+from code.classes.aminoacid import Aminoacid
 import random
 import copy
-from code.algorithms.depth_first import DepthFirst
 from operator import add
 import itertools
 
@@ -13,6 +13,9 @@ class Greedy():
     -----------
     Protein: class object
         The protein with a sequence to initiate the acids and to determine/make the best folding protein
+    
+    Acid: class object
+        Aminoacid that is added to the protein
     
     Splits: integer
         Splits determine the width of the beam in a beam search. When set to 1, it will act as a normal greedy algorithm
@@ -36,11 +39,32 @@ class Greedy():
         This is a list of coordinates that are occupied or lead to a location that is stuck
 
     list directions: list of lists
-        There are 3 directions lists, one for the amount of aminoacids of  
-    
+        There are 3 directions lists with all possible states of a sequence part, one for the amount of aminoacids of before beam search, 
+        one for the splits and one after
 
+    Methods:
+    -----------
+    Create directions(size):
+        
+    All bonds(): 
+        Determine the best directions for a sequence part leading to lowest score
+
+    Parts(state_directions, i):
+        Determine the score of adding directions for one state
+
+    Add best direction(best_direction, place):
+        Adds the best direction for a sequence part to the protein
+
+    check all interactions():
+        Checks interactions and add the scores of every aminoacid with the previous acids
+
+    is stuck(acid):
+        Checks if an acid is stuck (surrounded by occupied coordinates)
+
+    run:
+        Runs the algorithm after initiation
     """
-    def __init__(self, protein, dimensions, splits = 1, before = 0):
+    def __init__(self, protein: Protein, dimensions: int, splits: int = 1, before: int = 0) -> None:
 
         # define protein, splits and dimensions
         self.protein = protein
@@ -69,7 +93,7 @@ class Greedy():
         self.list_directions_before = self.create_directions(self.amino_before)
 
 
-    def create_directions(self, size):
+    def create_directions(self, size: int) -> list(tuple):
         """
         This function creates all direction combinations for every state of a sequence part
         """
@@ -88,7 +112,7 @@ class Greedy():
         return list_directions
         
     
-    def all_bonds(self):
+    def all_bonds(self) -> None:
         """
         This function goes trough all the states and selects one of the states with the lowest score
         """
@@ -103,7 +127,7 @@ class Greedy():
         while i in range(len(self.protein.sequence)):
             print("ROUND", i)
             
-            # initiate a valid random direction for the whole split in case non of the directions lead to a better score than 0
+            # initiate an empty list for best state directions with the same (best) score
             best_state_directions = []
 
             # initiate an empty list for states with the same (best) score
@@ -158,8 +182,10 @@ class Greedy():
 
 
 
-    def parts(self, state_directions, i):
-        
+    def parts(self, state_directions: tuple(tuple), i: int) -> int:
+        """
+        This function makes the bonds for a state of a sequence part and returns the score
+        """
         # initiate a set of coordinates that have been used within this direction state
         temp_list_coordinates = set()
 
@@ -195,7 +221,7 @@ class Greedy():
     
 
 
-    def add_best_direction(self, best_direction, place):
+    def add_best_direction(self, best_direction, place: int) -> None:
         """"
         This function creates a bond for the best direction for an acid and adds the location to used coordinates 
         """
@@ -206,7 +232,7 @@ class Greedy():
 
 
 
-    def check_all_interactions(self):
+    def check_all_interactions(self) -> Protein:
         """
         Check all the interactions and adjust the score when an interaciton is found
         """
@@ -223,7 +249,7 @@ class Greedy():
         return self.protein
 
 
-    def is_stuck(self, acid):
+    def is_stuck(self, acid: Aminoacid) -> bool:
         """
         Check if an acid placement is stuck, does not have any direction to go in
         """
@@ -237,7 +263,7 @@ class Greedy():
         # return True because is_stuck is true
         return True
     
-    def run(self):
+    def run(self) -> None:
         """
         This function runs the script by first setting all the (best) bonds, then checking the interactions and creating the output
         """
