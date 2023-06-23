@@ -93,7 +93,7 @@ class Greedy():
         self.list_directions_before = self.create_directions(self.amino_before)
 
 
-    def create_directions(self, size: int) -> list(tuple):
+    def create_directions(self, size: int) -> list[tuple]:
         """
         This function creates all direction combinations for every state of a sequence part
         """
@@ -182,7 +182,7 @@ class Greedy():
 
 
 
-    def parts(self, state_directions: tuple(tuple), i: int) -> int:
+    def parts(self, state_directions: tuple[tuple], i: int) -> int:
         """
         This function makes the bonds for a state of a sequence part and returns the score
         """

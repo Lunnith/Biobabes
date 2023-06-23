@@ -6,11 +6,14 @@ from code.algorithms.important_parts import ImportantParts
 from code.algorithms.simulated_annealing import SimulatedAnnealing
 from code.algorithms.greedy import Greedy
 from code.algorithms.hill_climber import Hill_climber
+from code.experiments.depth_greedy_hill_climber import *
 
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import time
+
+print('hi')
 
 # ------------------------------------- EXPERIMENT 1 ----------------------------------------------
 # EXPERIMENT depth first score distribution with and without pruning
