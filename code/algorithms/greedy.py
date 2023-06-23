@@ -93,7 +93,8 @@ class Greedy():
         self.list_directions_before = self.create_directions(self.amino_before)
 
 
-    def create_directions(self, size: int) -> list(tuple):
+
+    def create_directions(self, size: int) -> list(tuple()):
         """
         This function creates all direction combinations for every state of a sequence part
         """
@@ -125,7 +126,6 @@ class Greedy():
         # iterate the lenght of the protein sequence (skipping the first) in steps of the split
         i = 1
         while i in range(len(self.protein.sequence)):
-            print("ROUND", i)
             
             # initiate an empty list for best state directions with the same (best) score
             best_state_directions = []
@@ -182,7 +182,7 @@ class Greedy():
 
 
 
-    def parts(self, state_directions: tuple(tuple), i: int) -> int:
+    def parts(self, state_directions: tuple(tuple()), i: int) -> int:
         """
         This function makes the bonds for a state of a sequence part and returns the score
         """
@@ -221,7 +221,7 @@ class Greedy():
     
 
 
-    def add_best_direction(self, best_direction, place: int) -> None:
+    def add_best_direction(self, best_direction: tuple(), place: int) -> None:
         """"
         This function creates a bond for the best direction for an acid and adds the location to used coordinates 
         """
