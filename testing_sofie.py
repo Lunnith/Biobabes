@@ -12,7 +12,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import time
 
-# ------------------------------------- EXPERIMENT 1 ----------------------------------------------
+# ------------------------------------- EXPERIMENT 0 ----------------------------------------------
 # EXPERIMENT depth first score distribution with and without pruning
 # scores_wo_pruning = []
 # scores_p_pruning = []
@@ -23,10 +23,8 @@ import time
 #     depth_first = DepthFirst(test_protein, 3)
 #     depth_first.run(P_pruning=False, directions_pruning=False)
 #     scores_wo_pruning.append(depth_first.protein.score)
-
 #     print('Depth First run completed')
 
-# print('Without pruning completed')
 
 # for i in range(5):
 #     test_protein = Protein(sequence)
@@ -35,7 +33,6 @@ import time
 #     scores_p_pruning.append(depth_first.protein.score)
 #     print('Depth First run completed')
 
-# print('With p-pruning completed')
 
 # for i in range(5):
 #     test_protein = Protein(sequence)
@@ -44,7 +41,6 @@ import time
 #     scores_direction_pruning.append(depth_first.protein.score)
 #     print('Depth First run completed')
 
-# print('With directions pruning completed')
 
 # color_list = ['r', 'b', 'g']
 
@@ -57,7 +53,7 @@ import time
 # plt.show()
 
 
-# ------------------------------------- EXPERIMENT 2 ----------------------------------------------
+# ------------------------------------- EXPERIMENT 1 ----------------------------------------------
 # EXPERIMENT greedy x simulated annealing
 
 # df_exp_greedy_simanneal = pd.DataFrame()
@@ -107,7 +103,7 @@ import time
 
 
 
-# ------------------------------------- EXPERIMENT 3 ----------------------------------------------
+# ------------------------------------- EXPERIMENT 2 ----------------------------------------------
 # EXPERIMENT: depth first vs greedy/hill climb in 2d
 # df_exp_depth_greedy_hill = pd.DataFrame()
 
@@ -175,19 +171,84 @@ import time
 # df_exp_depth_greedy_hill['sim_anneal_scores'] = max(sim_anneal_scores)
 # df_exp_depth_greedy_hill['sim_anneal_iterations'] = sim_anneal_iterations
 
-# df_exp_greedy_simanneal.to_csv(path_or_buf=r'C:\Users\sofie\minorAI\Algoritmen en Heuristieken\data\df_exp_greedy_simanneal_complete')
+# df_exp_depth_greedy_hill.to_csv(path_or_buf=r'C:\Users\sofie\minorAI\Algoritmen en Heuristieken\data\df_exp_depth_greedy_hill_complete')
 
 
-# ------------------------------------- EXPERIMENT 4 ----------------------------------------------
-# EXPERIMENT greedy vs important parts
+# ------------------------------------- EXPERIMENT 3 ----------------------------------------------
+# EXPERIMENT greedy vs important parts split on size 5
+# df_exp_greedy_important_parts = pd.DataFrame()
 
+# greedy_scores = []
+# important_parts_scores = []
 
-    # greedy_protein = Greedy(test_protein_I, 3, splits=3)
-    # greedy_protein.run()
+# n = 50
 
-    # important_parts = ImportantParts(test_protein, 3)
-    # important_parts.run()
-    # important_parts.protein.create_output()
+# for i in range(n):
+#     greedy_protein = Greedy(test_protein_I, 3, splits=5)
+#     greedy_protein.run()
+#     greedy_scores.append(greedy_protein.protein.score)
+
+# for i in range(n):
+#     important_parts_protein = ImportantParts(test_protein, 3)
+#     important_parts_protein.run(split_on_P=False, split_on_size=True, size=5)
+#     important_parts_scores.append(important_parts_protein.score)
+
+# df_exp_greedy_important_parts['greedy_scores'] = greedy_scores
+# df_exp_greedy_important_parts['important_part_scores'] = important_parts_scores
+
+# df_exp_greedy_important_parts.to_csv(path_or_buf=r'C:\Users\sofie\minorAI\Algoritmen en Heuristieken\data\df_exp_greedy_important_parts_complete')
+
 
 
 # ------------------------------------- VISUALIZE ----------------------------------------------
+# Experiment 1
+# df_exp_greedy_simanneal = pd.read_csv('C:\Users\sofie\minorAI\Algoritmen en Heuristieken\data\df_exp_greedy_simanneal_complete')
+
+# befores = df_exp_greedy_simanneal['scores_after_greedy']
+# afters = df_exp_greedy_simanneal['scores_after_simanneal']
+
+# plt.scatter(np.zeros(len(befores)), befores)
+# plt.scatter(np.ones(len(afters)), afters)
+
+# for i in range(len(befores)):
+#     plt.plot( [0,1], [befores[i], afters[i]])
+#     plt.legend(f'Split: {df_exp_greedy_simanneal['split_numbers'][i]} and before: {df_exp_greedy_simanneal['befores'][i]}')
+
+# plt.xticks([0,1], ['Score after greedy', 'Score after simulated annealing'])
+# plt.savefig('Greedy_combined_with_Simulated_Annealing.pdf')
+# plt.show()
+
+# Experiment 2
+# df_exp_depth_greedy_hill = pd.read_csv('C:\Users\sofie\minorAI\Algoritmen en Heuristieken\data\df_exp_depth_greedy_hill_complete')
+
+# iterations = [df_exp_depth_greedy_hill['depth_first_iterations'], df_exp_depth_greedy_hill['greedy_iterations'], df_exp_depth_greedy_hill['hill_climber_iterations'], df_exp_depth_greedy_hill['sim_anneal_iterations']]
+# scores = [df_exp_depth_greedy_hill['depth_first_score'], df_exp_depth_greedy_hill['greedy_score'], df_exp_depth_greedy_hill['hill_climber_scores'], df_exp_depth_greedy_hill['sim_anneal_scores']]
+
+# fig, ax1 = plt.subplots()
+
+# x = np.arange(5)
+# width = 0.40
+
+# ax1.bar(x-0.2, iterations, width)
+# ax1.xticks(x, ['Depth First', 'Greedy', 'Hill Climber', 'Simulated Annealing'])
+# ax1.xlabel("Algorithms")
+# ax1.ylabel("Iterations")
+
+# ax2 = ax1.twinx()
+# ax2.bar(x+0.2, scores, width)
+# ax2.ylabel("Scores")
+
+# plt.legend(["Iterations", "Scores"])
+# plt.savefig('Depth_First_vs_Greedy_vs_Hill_Climber_vs_Simulated_Annealing.pdf')
+# plt.show()
+
+# Experiment 3
+# df_exp_greedy_important_parts = pd.read_csv('C:\Users\sofie\minorAI\Algoritmen en Heuristieken\data\df_exp_greedy_important_parts_complete')
+# data = [df_exp_greedy_important_parts['greedy_scores'], df_exp_greedy_important_parts['important_part_scores']]
+
+# plt.boxplot(data)
+# plt.xlabel("Algorithm")
+# plt.ylabel("Score distribution")
+# plt.xticks(['Greedy', 'Important Parts'])
+# plt.savefig('Greedy_vs_Important Parts.pdf')
+# plt.show()

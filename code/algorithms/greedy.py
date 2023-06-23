@@ -93,8 +93,7 @@ class Greedy():
         self.list_directions_before = self.create_directions(self.amino_before)
 
 
-
-    def create_directions(self, size: int) -> list(tuple()):
+    def create_directions(self, size: int) -> list[tuple]:
         """
         This function creates all direction combinations for every state of a sequence part
         """
@@ -221,7 +220,7 @@ class Greedy():
     
 
 
-    def add_best_direction(self, best_direction: tuple(), place: int) -> None:
+    def add_best_direction(self, best_direction: tuple, place: int) -> None:
         """"
         This function creates a bond for the best direction for an acid and adds the location to used coordinates 
         """

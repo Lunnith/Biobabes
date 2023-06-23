@@ -13,7 +13,7 @@ class SimulatedAnnealing(Hill_climber):
     Most of the functions are similar to those of the HillClimber class, which is why
     we use that as a parent class.
     """
-    def __init__(self, protein: Protein, start_n: int, folded: bool, dimensions: int = 3, temperature: int = 1) -> None:
+    def __init__(self, protein: Protein, start_n: int, folded: bool = False, dimensions: int = 3, temperature: int = 1) -> None:
         # use init of Hillclimber class
         super().__init__(protein, dimensions, folded=folded)
 

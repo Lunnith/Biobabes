@@ -59,19 +59,19 @@ if __name__ == "__main__":
 #           f'{important_parts_protein.protein.score}')
     
     # ---------------------------- Hill Climber ----------------------------
-#     hill_climber_protein = Hill_climber(test_protein_A, 3)
-#     hill_climber_protein.run_i_iterations(test_protein_A, iterations=1000, bonds=1)
+    # hill_climber_protein = Hill_climber(test_protein_A, 3)
+    # hill_climber_protein.run_i_iterations(test_protein_A, iterations=1000, bonds=1)
 
-#     print(f'Value of the folding after Hill Climber:'
-#           f'{hill_climber_protein.protein.score}')
+    # print(f'Value of the folding after Hill Climber:'
+    #       f'{hill_climber_protein.protein.score}')
     
     # ---------------------------- Simulated Annealing ----------------------------
-    simanneal_protein = SimulatedAnnealing(test_protein_I, 10, 3,  temperature=20)
+    simanneal_protein = SimulatedAnnealing(test_protein_I, 10, False, 3,  temperature=20)
     simanneal_protein.run_i_iterations(test_protein_I, iterations=1000, bonds=10)
 
     print(f'Value of the folding after Simulated Annealing:'
           f'{simanneal_protein.protein.score}')
     
     # ---------------------------- Visualization ----------------------------
-    visualize_protein(simanneal_protein.protein, 3)
+    #visualize_protein(simanneal_protein.protein, 3)
 
