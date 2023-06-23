@@ -1,6 +1,5 @@
 from .aminoacid import Aminoacid
 from operator import add
-from ..experiments.depth_greedy_hill_climber import *
 
 class Protein():
     """
