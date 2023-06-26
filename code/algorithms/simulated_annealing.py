@@ -60,6 +60,7 @@ class SimulatedAnnealing(Hill_climber):
             self.protein = new_folding
             self.lowest_score = new_folding.score
             self.improvement.append("Y") #Change got accepted
+            
             if self.prints: print(f"Score updated to", new_score, end=" ")
             updated = True
         else: 
