@@ -6,7 +6,7 @@ from ..visualization.visualize import *
 from ..algorithms.randomise import random_assignment
 import copy
 
-sequence = "HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH"
+sequence = "HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH"
 # note: You can now run hill_climber.experiment() and simulated_annealing.experiment()
 #       And it will return a dataframe with the lines that would be plotted
 #   Now, create a function to compare these.

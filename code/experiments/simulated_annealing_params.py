@@ -20,7 +20,7 @@ def unpack_scores(scores, improvement):
     return all_scores
 
 for test in range(0,5):
-    sequence = "HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH"
+    sequence = "HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH" 
     protein = random_assignment(Protein(sequence), 3)
     while len(sequence) != len(protein.sequence_list) or protein.score < -10:
         protein = random_assignment(Protein(sequence), 3)
