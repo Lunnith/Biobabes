@@ -329,6 +329,7 @@ class Hill_climber():
 
         best_protein = first_random_fold
         best_score = first_random_fold.score
+        results = None
 
         if not plot: 
             results_dict = {}
@@ -368,6 +369,8 @@ class Hill_climber():
             self.prints: print(f"Runtime experiment: {end-start} seconds.\n")
         if plot: 
             self.optimize_graph(max_n, iterations)
-            return best_protein
+
         elif not plot:
-            return best_protein, results_dict
+            results = pd.DataFrame.from_dict(results_dict, orient='index')
+
+        return best_protein, results
