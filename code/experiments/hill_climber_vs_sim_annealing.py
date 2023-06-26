@@ -5,6 +5,9 @@ from ..algorithms.simulated_annealing import SimulatedAnnealing
 from ..visualization.visualize import *
 
 sequence = "HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH"
+# note: You can now run hill_climber.experiment() and simulated_annealing.experiment()
+#       And it will return a dataframe with the lines that would be plotted
+#   Now, create a function to compare these.
 
 # protein = Protein(sequence)
 # hill_climber = Hill_climber(protein, prints=True, dimensions=3)
