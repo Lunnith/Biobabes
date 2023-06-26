@@ -65,4 +65,4 @@ def random_reassignment(protein, dimensions, k=20, func = random_assignment):
                 best_score = current_score
                 best_fold = copy.deepcopy(folded_protein)
     
-    return best_fold, scores
+    return best_fold, scores, best_score

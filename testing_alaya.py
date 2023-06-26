@@ -1,8 +1,6 @@
 from code.classes.protein import Protein
 from code.visualization.visualize import *
 from code.algorithms.depth_first import DepthFirst
-from code.algorithms.randomise import random_reassignment
-#from code.algorithms.greedy import greedy
 from code.algorithms import greedy as gr
 import random
 import copy
@@ -106,5 +104,24 @@ import time
 #     #df_exp_greedy_big_parts_total.to_csv(path_or_buf=r'C:\Users\alaya\Documents\Data_Greedy\df_exp_greedy_big_parts_total')
 
 
-data = pd.read_csv(r'C:\Users\alaya\Documents\Data_Greedy\df_exp_greedy_2000i.csv')
-print(data)
+data_greedy_2000i = pd.read_csv(r'C:\Users\alaya\Documents\Data_Greedy\df_exp_greedy_2000i.csv')
+print('data', data_greedy_2000i)
+df = pd.DataFrame()
+scores1= data_greedy_2000i[data_greedy_2000i['split_numbers'] == 1]['scores']
+scores2 = data_greedy_2000i[data_greedy_2000i['split_numbers'] == 2]['scores']
+scores3 = data_greedy_2000i[data_greedy_2000i['split_numbers'] == 3]['scores']
+scores4 = data_greedy_2000i[data_greedy_2000i['split_numbers'] == 4]['scores']
+scores5 = data_greedy_2000i[data_greedy_2000i['split_numbers'] == 5]['scores']
+
+data = [scores1, scores2, scores3, scores4, scores5]
+
+plt.boxplot(data)
+plt.xlabel("split")
+plt.ylabel("Score distribution")
+plt.title('Greedy 2000 iterations, splits 1 till 5')
+
+ax = plt.gca()
+ax.invert_yaxis()
+
+plt.savefig('Greedy_vs_Important Parts_try1.pdf')
+plt.show()

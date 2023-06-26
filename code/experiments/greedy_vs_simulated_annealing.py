@@ -1,8 +1,11 @@
 from ..algorithms.greedy import Greedy
 from ..algorithms.simulated_annealing import SimulatedAnnealing
+from ..classes.protein import Protein
+from ..algorithms.simulated_annealing import SimulatedAnnealing
 
 import pandas as pd
 import matplotlib.pyplot as plt
+import numpy as np
 
 df_exp_greedy_simanneal = pd.DataFrame()
 split_numbers = []
@@ -10,61 +13,61 @@ score_after_greedy = []
 score_after_simanneal = []
 befores = []
 
-# CHANGE
-n = 1
+n = 100
 
-for i in range(1, 5):
-    for j in range(n):
+for i in range(n):
+    for j in range(1, 6):
 
-        before_list = []
-
-        for number in range(i):
-            if number < i:
-                before_list.append(number)
-
-        for before in before_list:
+        for before in range(j):
             test_protein = Protein("HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH")
 
-            greedy_protein = Greedy(test_protein, 3, splits=i, before=before)
+            greedy_protein = Greedy(test_protein, 3, splits=j, before=before)
             greedy_protein.run()
 
-            print(f'Value of the folding after Greedy:'
-                f'{greedy_protein.protein.score}')
-
-            split_numbers.append(i)
+            split_numbers.append(j)
             score_after_greedy.append(greedy_protein.protein.score)
             befores.append(before)
 
-            # CHANGE TEMP BASED ON IDEAL SIMULATED ANNEALING
+            # CHANGE TEMP BASED ON IDEAL SIMULATED ANNEALING AND ITERATIONS
             simanneal_protein = SimulatedAnnealing(greedy_protein.protein, 10, folded=True, dimensions=3, temperature=20)
-            simanneal_protein.run_i_iterations(greedy_protein.protein, iterations=10000, bonds=10)
-
-            print(f'Value of the folding after Simulated Annealing x Greedy:'
-                    f'{simanneal_protein.protein.score}')
+            simanneal_protein.run_i_iterations(greedy_protein.protein, iterations=1000, bonds=10)
             
             score_after_simanneal.append(simanneal_protein.protein.score)
+
+        print(f'Greedy x Simulated Annealing split {j} completed')
 
 df_exp_greedy_simanneal['split_numbers'] = split_numbers
 df_exp_greedy_simanneal['score_after_greedy'] = score_after_greedy
 df_exp_greedy_simanneal['befores'] = befores
 df_exp_greedy_simanneal['score_after_simulated_annealing'] = score_after_simanneal
 
-print(df_exp_greedy_simanneal.head())
 df_exp_greedy_simanneal.to_csv(path_or_buf=r"C:\Users\sofie\minorAI\Algoritmen en Heuristieken\data\df_exp_greedy_simanneal_try1")
 
 # -------------------- VISUALIZE --------------------
 df_exp_greedy_simanneal = pd.read_csv(r"C:\Users\sofie\minorAI\Algoritmen en Heuristieken\data\df_exp_greedy_simanneal_try1")
 print(df_exp_greedy_simanneal)
 
-befores = df_exp_greedy_simanneal['scores_after_greedy']
-afters = df_exp_greedy_simanneal['scores_after_simanneal']
+before_scores = df_exp_greedy_simanneal['score_after_greedy']
+afters_scores = df_exp_greedy_simanneal['score_after_simulated_annealing']
+split_numbs = df_exp_greedy_simanneal['split_numbers']
 
-plt.scatter(np.zeros(len(befores)), befores)
-plt.scatter(np.ones(len(afters)), afters)
+plt.scatter(np.zeros(len(before_scores)), before_scores, c='black')
+plt.scatter(np.ones(len(afters_scores)), afters_scores, c='black')
 
-for i in range(len(befores)):
-    plt.plot( [0,1], [befores[i], afters[i]])
-    plt.legend(f'Split: {df_exp_greedy_simanneal['split_numbers'][i]} and before: {df_exp_greedy_simanneal['befores'][i]}')
+colors = ['blue', 'red', 'green', 'orange', 'purple']
+
+for i in range(len(before_scores)):
+    plt.plot([0,1], [before_scores[i], afters_scores[i]], color=colors[split_numbs[i] - 1])
+
+from matplotlib.lines import Line2D
+custom_lines = [Line2D([0], [0], color='blue', lw=4),
+                Line2D([0], [0], color='red', lw=4),
+                Line2D([0], [0], color='green', lw=4), Line2D([0], [0], color='orange', lw=4), Line2D([0], [0], color='purple', lw=4)]
+
+
+ax = plt.gca()
+ax.invert_yaxis()
+ax.legend(custom_lines, ['Split = 1', 'Split = 2', 'Split = 3', 'Split = 4', 'Split = 5'], loc='upper left')
 
 plt.xticks([0,1], ['Score after greedy', 'Score after simulated annealing'])
 plt.title('Greedy combined with Simulated Annealing')
