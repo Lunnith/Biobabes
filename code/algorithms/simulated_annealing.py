@@ -13,17 +13,18 @@ class SimulatedAnnealing(Hill_climber):
     Most of the functions are similar to those of the HillClimber class, which is why
     we use that as a parent class.
     """
-    def __init__(self, protein: Protein, start_n: int, folded: bool = False, dimensions: int = 3, temperature: int = 1, prints: bool = False) -> None:
+    def __init__(self, protein: Protein, start_n: int, folded: bool = False, dimensions: int = 3, temperature: int = 1, prints: bool = False, temp_scheme: str = 'exp') -> None:
         # use init of Hillclimber class
         super().__init__(protein, dimensions, folded=folded, prints=prints)
 
         # starting temperature and current temperature
         self.T0 = temperature
         self.T = temperature
+        self.temp_scheme = temp_scheme
 
         self.start_n = start_n
     
-    def update_temperature(self) -> None:
+    def update_temperature(self, alpha=0.99) -> None:
         """
         Method to implement a linear cooling scheme. Temperature becomes zero after all iterations
         passed to the run() method have passed.
@@ -37,11 +38,20 @@ class SimulatedAnnealing(Hill_climber):
             self.n_float = self.n_float - beta
             self.n = round(self.n_float)
             
-        alpha = 0.99
-        if self.T > 0.01:
-            self.T = self.T * alpha
-        else:
-            self.T = 0.01
+        # alpha = alpha
+        if self.temp_scheme == 'exp':
+            if self.T > 0.01:
+                self.T = self.T * alpha
+            else:
+                self.T = 0.01
+        elif self.temp_scheme == 'lin':
+            alpha = self.T0 / self.iterations
+
+            if self.T > 0.01:
+                self.T = self.T - alpha
+            else:
+                self.T = 0.01
+
 
     def check_solution(self, new_folding: Protein) -> None:
         """
