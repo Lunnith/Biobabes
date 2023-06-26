@@ -13,9 +13,9 @@ class SimulatedAnnealing(Hill_climber):
     Most of the functions are similar to those of the HillClimber class, which is why
     we use that as a parent class.
     """
-    def __init__(self, protein: Protein, start_n: int, folded: bool = False, dimensions: int = 3, temperature: int = 1) -> None:
+    def __init__(self, protein: Protein, start_n: int, folded: bool = False, dimensions: int = 3, temperature: int = 1, prints: bool = False) -> None:
         # use init of Hillclimber class
-        super().__init__(protein, dimensions, folded=folded)
+        super().__init__(protein, dimensions, folded=folded, prints=prints)
 
         # starting temperature and current temperature
         self.T0 = temperature
@@ -58,6 +58,31 @@ class SimulatedAnnealing(Hill_climber):
         # pull a random number between 0 and 1 and see if we accept the graph
         if random.random() < probability:
             self.protein = new_folding
+            self.lowest_score = new_folding.score
+            self.improvement.append("Y") #Change got accepted
+            if self.prints: print(f"Score updated to", new_score, end=" ")
+            updated = True
+        else: 
+            self.improvement.append("N")
+            updated = False
         
         # update temperature
         self.update_temperature()
+        return updated
+
+    def reset_temperature(self, new_t=None, new_n=None, reset_protein=None):
+        """
+        This can be run when experimenting, it resets the temperature 
+        after a run back to the start_temperature.
+
+        It has also got a function to manipulate the temperature or the start_n for the next run.
+        """
+        if new_t is not None:
+            self.T = new_t
+        else: self.T = self.T0
+
+        if new_n is not None:
+            self.start_n = new_n
+        
+        if reset_protein is not None:
+            self.protein = reset_protein
