@@ -48,7 +48,7 @@ for test in range(0,5):
         results_dict = {}
 
         for temp in testing_temperatures:
-            sa = SimulatedAnnealing(protein, start_n, folded=folded, dimensions=dimensions, temperature=temp, temp_scheme=scheme)
+            sa = SimulatedAnnealing(protein, start_n, folded=folded, dimensions=dimensions, temperature=temp, temp_scheme=scheme, prints=True)
             sa_protein, sa_lowest_score, sa_scores, sa_improvement = sa.run_i_iterations(testing_protein, iterations, start_n, sim_annealing=True, sample_number=temp)
             sa_scores = unpack_scores(sa_scores, sa_improvement)
 
