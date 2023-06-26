@@ -280,7 +280,7 @@ class Hill_climber():
             self.check_score(new_protein)
             scores.append(new_protein.score)
             updated = self.check_solution(new_protein)
-            if updated == True: 
+            if updated and self.prints: 
                 print(f"in iteration {i} of sample run {sample_number}.", end=" ")
                 if sim_annealing: print(f"(start_n={bonds}, n_now = {self.n})")
                 else: print(f"(n={self.n})")
