@@ -56,8 +56,13 @@ class Hill_climber():
     """
     def __init__(self, protein: Protein, dimensions=3, prints=False, folded=False) -> None:
         #Initiate first folding
-        self.protein = protein
-        if not folded: 
+        if folded:
+            if len(protein.sequence_list) < 1:
+                raise Exception("The sequence_list of this protein seems empty. \n\
+                Are you sure that the input protein is folded?")
+            else: self.protein = protein
+
+        elif not folded: 
             if len(protein.sequence_list) > 1:
                 raise Exception("By default, Hill_climber assumes that you input an unfolded protein.\n\
                 If you want to input a protein that is already folded, use the keyword 'folded=True'")
@@ -250,7 +255,7 @@ class Hill_climber():
             self.improvement.append("N") #No
 
 
-    def run_i_iterations(self, protein: Protein, iterations: int, bonds: int) -> tuple[Protein, int, list, list]:
+    def run_i_iterations(self, protein: Protein, iterations: int, bonds: int, sample_number: int=None, sim_annealing=False) -> tuple[Protein, int, list, list]:
         """
         runs the change_n_bonds for a given amount of iterations.
         Then, returns the protein with the best score, the actual score, the list of scores that 
@@ -275,7 +280,10 @@ class Hill_climber():
             self.check_score(new_protein)
             scores.append(new_protein.score)
             updated = self.check_solution(new_protein)
-            if updated == True: print(f"in iteration {i}. (n={self.n})")
+            if updated == True: 
+                print(f"in iteration {i} of sample run {sample_number}.", end=" ")
+                if sim_annealing: print(f"(start_n={bonds}, n_now = {self.n})")
+                else: print(f"(n={self.n})")
 
         return self.protein, self.lowest_score, scores, self.improvement
     
@@ -304,7 +312,7 @@ class Hill_climber():
         plt.show()
 
 
-    def experiment(self, protein: Protein, iterations: int, sample_size=1, max_n=10) -> Protein:
+    def experiment(self, protein: Protein, iterations: int, sample_size=1, max_n=10, sim_annealing=False) -> Protein:
         """
         Runs an experiment with a given protein. The sample size is the amount of times to run the algorithm.
         It then runs the algorithm for each n amount of bonds to change, with the given amount of iterations.
@@ -316,7 +324,9 @@ class Hill_climber():
         start = time.time()
         if max_n > 10: raise ValueError("Please only insert a max_n of 10 or smaller")
 
-        first_random_fold = copy.deepcopy(protein)
+        if len(protein.sequence_list) < 1: first_random_fold = copy.deepcopy(random_assignment(protein, 3))
+        if len(protein.sequence_list) > 1: first_random_fold = copy.deepcopy(protein)
+
         best_protein = first_random_fold
         best_score = first_random_fold.score
         
@@ -328,7 +338,9 @@ class Hill_climber():
                 all_scores[iteration] = []
 
             for sample_run in range(sample_size):
-                protein_for_n, lowest_score_for_n, scores, improvement = self.run_i_iterations(first_random_fold, iterations, n)
+                if sim_annealing: 
+                    self.reset_temperature(new_n=n, reset_protein=first_random_fold)
+                protein_for_n, lowest_score_for_n, scores, improvement = self.run_i_iterations(first_random_fold, iterations, n, sample_run+1, sim_annealing=sim_annealing)
 
                 if lowest_score_for_n < best_score:
                     best_protein = protein_for_n
