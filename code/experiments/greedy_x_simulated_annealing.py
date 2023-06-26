@@ -1,1 +1,2 @@
-from ..algorithms.greedy import Greedy
+from ..code.classes.protein import Protein
+from ..code.algorithms import greedy
