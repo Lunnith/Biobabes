@@ -335,6 +335,7 @@ class Hill_climber():
             results_dict = {}
 
         for n in range(1, max_n+1):
+            lowest_score_for_n = 0
             if self.prints: print(f"\nStarting new N: {n}")
 
             all_scores = {}
@@ -344,11 +345,13 @@ class Hill_climber():
             for sample_run in range(sample_size):
                 if sim_annealing: 
                     self.reset_temperature(new_n=n, reset_protein=first_random_fold)
-                protein_for_n, lowest_score_for_n, scores, improvement = self.run_i_iterations(first_random_fold, iterations, n, sample_run+1, sim_annealing=sim_annealing)
+                protein_for_n, new_lowest_score_for_n, scores, improvement = self.run_i_iterations(first_random_fold, iterations, n, sample_run+1, sim_annealing=sim_annealing)
 
-                if lowest_score_for_n < best_score:
-                    best_protein = protein_for_n
-                    best_score = lowest_score_for_n
+                if new_lowest_score_for_n < lowest_score_for_n:
+                    lowest_score_for_n = new_lowest_score_for_n
+                    if new_lowest_score_for_n < best_score:
+                        best_protein = protein_for_n
+                        best_score = lowest_score_for_n
 
                 for iteration in range(iterations+1):
                     if improvement[iteration] == "Y" or improvement[iteration] == "S":
@@ -356,12 +359,14 @@ class Hill_climber():
                         all_scores[iteration].append(improved_score)
                     else:
                         all_scores[iteration].append(None)
-         
+
             temp_df = pd.DataFrame.from_dict(all_scores, orient='index')
             temp_df = temp_df.fillna(method='ffill')
             temp_df['Average'] = temp_df.mean(axis=1)
+
             if plot: self.plot_hillclimb(temp_df.index, temp_df['Average'], n)
-            elif not plot: results_dict[n] = temp_df["Average"]
+            elif not plot: 
+                results_dict[n] = [*temp_df["Average"], lowest_score_for_n]
         
         end = time.time()
         if self.prints: 
