@@ -312,7 +312,7 @@ class Hill_climber():
         plt.show()
 
 
-    def experiment(self, protein: Protein, iterations: int, sample_size=1, max_n=10, sim_annealing=False) -> Protein:
+    def experiment(self, protein: Protein, iterations: int, sample_size=1, max_n=10, sim_annealing=False, plot=True) -> Protein:
         """
         Runs an experiment with a given protein. The sample size is the amount of times to run the algorithm.
         It then runs the algorithm for each n amount of bonds to change, with the given amount of iterations.
@@ -329,7 +329,10 @@ class Hill_climber():
 
         best_protein = first_random_fold
         best_score = first_random_fold.score
-        
+
+        if not plot: 
+            results_dict = {}
+
         for n in range(1, max_n+1):
             if self.prints: print(f"\nStarting new N: {n}")
 
@@ -352,15 +355,19 @@ class Hill_climber():
                         all_scores[iteration].append(improved_score)
                     else:
                         all_scores[iteration].append(None)
-                        
+         
             temp_df = pd.DataFrame.from_dict(all_scores, orient='index')
             temp_df = temp_df.fillna(method='ffill')
             temp_df['Average'] = temp_df.mean(axis=1)
-            self.plot_hillclimb(temp_df.index, temp_df['Average'], n)
+            if plot: self.plot_hillclimb(temp_df.index, temp_df['Average'], n)
+            elif not plot: results_dict[n] = temp_df["Average"]
         
         end = time.time()
-        if self.prints: print(f"\n\nBest score has become", best_score)
-        if self.prints: print(f"Runtime experiment: {end-start} seconds.\n")
-        self.optimize_graph(max_n, iterations)
-
-        return best_protein
+        if self.prints: 
+            print(f"\n\nBest score has become", best_score)
+            self.prints: print(f"Runtime experiment: {end-start} seconds.\n")
+        if plot: 
+            self.optimize_graph(max_n, iterations)
+            return best_protein
+        elif not plot:
+            return best_protein, results_dict
