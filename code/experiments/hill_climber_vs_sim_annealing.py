@@ -5,6 +5,9 @@ from ..algorithms.simulated_annealing import SimulatedAnnealing
 from ..visualization.visualize import *
 
 sequence = "HCPHPCPHPCHCHPHPPPHPPPHPPPPHPCPHPPPHPHHHCCHCHCHCHH"
+# note: You can now run hill_climber.experiment() and simulated_annealing.experiment()
+#       And it will return a dataframe with the lines that would be plotted
+#   Now, create a function to compare these.
 
 # protein = Protein(sequence)
 # hill_climber = Hill_climber(protein, prints=True, dimensions=3)
@@ -24,7 +27,7 @@ folded_protein, best_score, scores, improvement = sim_annealing.run_i_iterations
 # visualize_protein(folded_protein, 3)
 # protein = Protein(sequence)
 if protein.score > -20:
-    best_protein, results = sim_annealing.experiment(folded_protein, 50, sample_size=2, max_n=3, sim_annealing=True, plot=False)
+    best_protein, results = sim_annealing.experiment(folded_protein, 50, sample_size=2, max_n=10, sim_annealing=True, plot=False)
     print(results)
     visualize_protein(best_protein, 3)
 else: print("Score too good:", protein.score)
