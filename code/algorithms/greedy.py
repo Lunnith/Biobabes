@@ -1,7 +1,6 @@
 from code.classes.protein import Protein
 from code.classes.aminoacid import Aminoacid
 import random
-import copy
 from operator import add
 import itertools
 
@@ -87,7 +86,7 @@ class Greedy():
         elif self.dimensions == 3:
             self.directions = set(((1, 0, 0, 1), (-1, 0, 0, -1), (0, 1, 0, 2), (0, -1, 0, -2), (0, 0, 1, 3), (0, 0, -1, -3)))
 
-        # initiate all directions for the splits,the aminoacids before and for the left over aminoacids at the end
+        # initiate all directions for the splits,the aminoacids before and for the leftover aminoacids at the end
         self.list_directions = self.create_directions(self.splits)
         self.list_directions_left = self.create_directions(self.amino_left)
         self.list_directions_before = self.create_directions(self.amino_before)
@@ -97,7 +96,7 @@ class Greedy():
         """
         This function creates all direction combinations for every state of a sequence part
         """
-        #create an empty directions list and fill it with all possible directions times the amount of the size of the sequence part
+        # create an empty directions list and fill it with all possible directions, times the amount of the size of the sequence part
         directions = []
         for i in range(size):
             if self.dimensions == 2:
@@ -126,7 +125,7 @@ class Greedy():
         i = 1
         while i in range(len(self.protein.sequence)):
             
-            # initiate an empty list for best state directions with the same (best) score
+            # initiate an empty list for best state directions with the same (best) score ## weg?
             best_state_directions = []
 
             # initiate an empty list for states with the same (best) score
@@ -268,7 +267,7 @@ class Greedy():
         """
         self.all_bonds()
         self.check_all_interactions()
-        self.protein.create_output()
+        #self.protein.create_output()
 
 
 
