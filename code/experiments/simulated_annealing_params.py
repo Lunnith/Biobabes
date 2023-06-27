@@ -31,7 +31,7 @@ for test in range(0,2):
     # which will be run with the best parameters found in this experiment.
 
     # Define repeating testing params:
-    iterations = 1500
+    iterations = 2500
     dimensions = 3
     folded = True
     start_n = 10
@@ -51,7 +51,7 @@ for test in range(0,2):
             temp_df = pd.DataFrame()
             for sample in range(0,10):
                 sa = SimulatedAnnealing(protein, start_n, folded=folded, dimensions=dimensions, temperature=temp, temp_scheme=scheme, prints=True)
-                sa_protein, sa_lowest_score, sa_scores, sa_improvement = sa.run_i_iterations(testing_protein, iterations, start_n, sim_annealing=True, sample_number=temp)
+                sa_protein, sa_lowest_score, sa_scores, sa_improvement = sa.run_i_iterations(testing_protein, iterations, start_n, sim_annealing=True, sample_number=f"[scheme={scheme}, temp={temp}, sample={sample}]")
                 sa_scores = unpack_scores(sa_scores, sa_improvement)
 
                 temp_df[sample] = pd.DataFrame.from_dict(sa_scores, orient='index')
