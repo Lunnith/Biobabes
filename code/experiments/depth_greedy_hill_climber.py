@@ -31,6 +31,8 @@ depth_first = DepthFirst(test_protein, 2)
 depth_first.run(P_pruning=True, directions_pruning=True)
 print('Depth First completed')
 
+df_exp_depth_greedy_hill.to_csv(path_or_buf=fr"{path}\df_exp_depth_greedy_hill_complete")
+
 # make a dictionary with the splits as keys and the number of iterations per 'before' as the value
 dict_splits = {1: 2000, 2: 1000, 3: 667, 4: 500, 5: 400}
 
@@ -46,6 +48,7 @@ for key, value in dict_splits.items():
             greedy_scores.append(greedy_protein.protein.score)
             greedy_iterations += 1
 
+df_exp_depth_greedy_hill.to_csv(path_or_buf=fr"{path}\df_exp_depth_greedy_hill_complete")
 # run hill climber with test protein
 n = 50
 
@@ -60,19 +63,21 @@ for i in range(n):
 
 print('Hillclimber completed')
 
+df_exp_depth_greedy_hill.to_csv(path_or_buf=fr"{path}\df_exp_depth_greedy_hill_complete")
 # run simulated annealing with test protein
+n = 50
 for i in range(n):
-    for j in range(1, 11):
-        test_protein = Protein("HHPHHHPHPHHHPH")
+    test_protein = Protein("HHPHHHPHPHHHPH")
 
-        # CHANGE TEMP BASED ON IDEAL SIMULATED ANNEALING
-        simanneal_protein = SimulatedAnnealing(test_protein, start_n=j, folded=False, dimensions=2, temperature=20)
-        simanneal_protein.run_i_iterations(test_protein, iterations=500, bonds=j)
+    simanneal_protein = SimulatedAnnealing(test_protein, start_n=10, folded=False, dimensions = 2, temperature = 10)
+    simanneal_protein.run_i_iterations(test_protein, iterations = 500, bonds=j)
 
-        sim_anneal_scores.append(simanneal_protein.protein.score)
-        sim_anneal_iterations += 1
+    sim_anneal_scores.append(simanneal_protein.protein.score)
+    sim_anneal_iterations += 1
 
 print('Simulated Annealing completed')
+
+df_exp_depth_greedy_hill.to_csv(path_or_buf=fr"{path}\df_exp_depth_greedy_hill_complete")
 
 # store all results in dataframe and save dataframe on computer
 df_exp_depth_greedy_hill['Depth_first_score'] = [depth_first_scores_list]

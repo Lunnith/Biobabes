@@ -30,23 +30,25 @@ random_protein_short, score_list_short, best_score_short = random_reassignment(t
 end = time.time()
 random_time_short = end - start
 
-start = time.time()
+# this part is commented because it was already run in another experiment
+# start = time.time()
 
-random_protein_long, score_list_long, best_score_long = random_reassignment(test_protein_long, 3, k=1000000)
+# random_protein_long, score_list_long, best_score_long = random_reassignment(test_protein_long, 3, k=1000000)
 
-end = time.time()
-random_time_long = end - start
+# end = time.time()
+# random_time_long = end - start
 
 df_short_scores["Random score"] = [random_protein_short.score]
 df_short_scores["Random time"] = [random_time_short]
 
-df_long_scores["Random score"] = [random_protein_long.score]
-df_long_scores["Random time"] = [random_time_long]
+df_long_scores["Random score"] = [-39]
+df_long_scores["Random time"] = [28220]
 
 print('Random done!')
 
 df_short_scores.to_csv(path_or_buf=fr"{path}\df_short_scores_complete")
 df_long_scores.to_csv(path_or_buf=fr"{path}\df_long_scores_complete")
+
 # ---------------------------- Greedy ----------------------------
 # run greedy algorithm for short and long protein and store results
 greedy_scores_short = []
@@ -54,7 +56,7 @@ greedy_scores_long = []
 
 start = time.time()
 
-n = 25000
+n = 2500
 
 for i in range(n):
     test_protein_short = Protein("HHPHHHPHPHHHPH")
@@ -87,6 +89,7 @@ print('Greedy done!')
 
 df_short_scores.to_csv(path_or_buf=fr"{path}\df_short_scores_complete")
 df_long_scores.to_csv(path_or_buf=fr"{path}\df_long_scores_complete")
+
 # ---------------------------- Greedy with depth search ----------------------------
 # run greedy with depth algorithm for short and long protein and store results
 greedy_beam_scores_short = []
@@ -148,6 +151,7 @@ print('Depth First done!')
 
 df_short_scores.to_csv(path_or_buf=fr"{path}\df_short_scores_complete")
 df_long_scores.to_csv(path_or_buf=fr"{path}\df_long_scores_complete")
+
 # ---------------------------- Depth First - Important Parts ----------------------------
 # run important parts algorithm for short and long protein and store results
 important_parts_scores_short_on_P = []
@@ -182,7 +186,7 @@ df_long_scores.to_csv(path_or_buf=fr"{path}\df_long_scores_complete")
 # run hill climber algorithm for short and long protein and store results
 start = time.time()
 
-test_protein_short = Protein("HHHHHHHH")
+test_protein_short = Protein("HHPHHHPHPHHHPH")
 hill_climber_protein_short = Hill_climber(test_protein_short, dimensions = 3, folded = False)
 hill_climber_protein_short.experiment(test_protein_short, iterations = 500, sample_size = 50, max_n = 1, plot = False)
 
@@ -190,7 +194,7 @@ end = time.time()
 hill_climber_time_short = end - start
 
 start = time.time()
-test_protein_long = Protein("HHHHHHHH")
+test_protein_long = Protein("HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH")
 hill_climber_protein_long = Hill_climber(test_protein_long, dimensions = 3, folded = False)
 hill_climber_protein_long.experiment(test_protein_long, iterations = 500, sample_size = 50, max_n = 1, plot = False)
 
@@ -210,21 +214,20 @@ df_long_scores.to_csv(path_or_buf=fr"{path}\df_long_scores_complete")
 
 # ---------------------------- Simulated Annealing ----------------------------
 # run simulated annealing algorithm for short and long protein and store results
-# fill in the right parameters
 start = time.time()
 
-test_protein_short = Protein("HHHHHHHHHH")
-simanneal_protein_short = SimulatedAnnealing(test_protein_short, start_n = 10, folded = False, dimensions = 3,  temperature = 20)
-simanneal_protein_short.run_i_iterations(test_protein_short, iterations=1000, bonds=10, sim_annealing=True)
+test_protein_short = Protein("HHPHHHPHPHHHPH")
+simanneal_protein_short = SimulatedAnnealing(test_protein_short, start_n = 10, folded = False, dimensions = 3,  temperature = 10)
+simanneal_protein_short.run_i_iterations(test_protein_short, iterations = 1000, bonds = 10, sim_annealing=True)
 
 end = time.time()
 sim_anneal_short_time = end - start
 
 start = time.time()
 
-test_protein_long = Protein("HHHHHHHHHH")
-simanneal_protein_long = SimulatedAnnealing(test_protein_long, start_n = 10, folded = False, dimensions = 3,  temperature = 20)
-simanneal_protein_long.run_i_iterations(test_protein_long, iterations=1000, bonds=10, sim_annealing=True)
+test_protein_long = Protein("HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH")
+simanneal_protein_long = SimulatedAnnealing(test_protein_long, start_n = 10, folded = False, dimensions = 3,  temperature = 10)
+simanneal_protein_long.run_i_iterations(test_protein_long, iterations = 1000, bonds = 10, sim_annealing = True)
 
 end = time.time()
 sim_anneal_long_time = end - start

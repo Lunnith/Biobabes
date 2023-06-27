@@ -19,7 +19,7 @@ score_after_greedy = []
 score_after_simanneal = []
 
 # make a dictionary with the splits as keys and the number of iterations per 'before' as the value
-dict_splits = {1: 2000, 2: 1000, 3: 667, 4: 500, 5: 400}
+dict_splits = {1: 50, 2: 25, 3: 16, 4: 12, 5: 10}
 
 # run greedy with depth with different split and before size and afterwards run simulated annealing on the folded by greedy protein
 for key, value in dict_splits.items():
@@ -34,8 +34,8 @@ for key, value in dict_splits.items():
             score_after_greedy.append(greedy_protein.protein.score)
 
             # CHANGE TEMP BASED ON IDEAL SIMULATED ANNEALING AND ITERATIONS
-            simanneal_protein = SimulatedAnnealing(greedy_protein.protein, 10, folded=True, dimensions=3, temperature=20)
-            simanneal_protein.run_i_iterations(greedy_protein.protein, iterations=1000, bonds=10)
+            simanneal_protein = SimulatedAnnealing(greedy_protein.protein, start_n = 10, folded = True, dimensions = 3, temperature = 10)
+            simanneal_protein.run_i_iterations(greedy_protein.protein, iterations = 500, bonds = 10)
             
             score_after_simanneal.append(simanneal_protein.protein.score)
 
