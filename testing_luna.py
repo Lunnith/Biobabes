@@ -3,7 +3,14 @@ from code.classes.aminoacid import Aminoacid
 from code.visualization.visualize import *
 from code.algorithms.hill_climber import *
 from code.algorithms.randomise import *
-from code.experiments.hill_climber_vs_sim_annealing import *
+
+try:
+    print(int("hi"))
+except: print(8)
+
+
+# from code.experiments.hill_climber_vs_sim_annealing import *
+from code.experiments.simulated_annealing_params import *
 import time
 
 #NOTE TO SELF: 2D version is buggy
