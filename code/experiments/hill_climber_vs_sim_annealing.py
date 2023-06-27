@@ -25,7 +25,7 @@ dimensions = 3
 prints = True
 folded = True
 
-iterations = 500
+iterations = 1000
 sample_size = 50
 max_n = 10
 plot = False
