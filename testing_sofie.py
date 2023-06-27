@@ -256,3 +256,22 @@ import time
 numb = 1
 list = [numb]
 print(list)
+
+
+depth_first_scores_list = []
+depth_first_iterations_list = []
+greedy_scores_list = []
+greedy_iterations_list = []
+hill_climber_scores_list = []
+hill_climber_iterations_list = []
+sim_anneal_scores_list = []
+sim_anneal_iterations_list = []
+
+depth_first_scores_list.append(depth_first.protein.score)
+depth_first_iterations_list.append(depth_first_iterations)
+greedy_scores_list.append(min(greedy_scores))
+greedy_iterations_list.append(greedy_iterations)
+hill_climber_scores_list.append(min(hill_climber_scores))
+hill_climber_iterations_list.append(hill_climber_iterations)
+sim_anneal_scores_list.append(min(sim_anneal_scores))
+sim_anneal_iterations_list.append(sim_anneal_iterations)
