@@ -7,10 +7,10 @@ import pandas as pd
 from operator import add
 import time    
 
-
+# select a sequence and create two empty dataframes for all scores and for summary results
 sequence = "HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH"
-df_exp_greedy_big_parts = pd.DataFrame()
-df_exp_greedy_big_parts_total = pd.DataFrame()
+df_exp_greedy = pd.DataFrame()
+df_exp_greedy_total = pd.DataFrame()
 
 # make empty lists to fill during the experiment
 splits = []
@@ -36,10 +36,8 @@ for key, value in dict_splits.items():
 
     # for every before in the range of the split do the number of iterations for that split
     for before in range(key):
-        print(before)
 
         for i in range(value):
-            print(i)
 
             # make a protein, initialize greedy with the right parameters and run the algorithm
             protein = Protein(sequence)
@@ -53,8 +51,7 @@ for key, value in dict_splits.items():
 
             # if the score is lower than the best score, set best score at protein score
             if greedy_test.protein.score < best_score:
-                best_protein = copy.deepcopy(greedy_test.protein)
-                best_score = best_protein.score
+                best_score = greedy_test.protein.score
     
     # stop the timer and append time of the split, with the split number and the best score to total lists
     end_time = time.time()
@@ -62,24 +59,25 @@ for key, value in dict_splits.items():
     splits_total.append(key)
     best_scores.append(best_score)
 
-print(best_protein)
-print(best_score)
-
 # create a dataframe with split numbers, scores and befores for every iteration, for a distribution of scores
-df_exp_greedy_big_parts['split_numbers'] = splits
-df_exp_greedy_big_parts['scores'] = scores
-df_exp_greedy_big_parts['befores'] = befores
+df_exp_greedy['split_numbers'] = splits
+df_exp_greedy['scores'] = scores
+df_exp_greedy['befores'] = befores
 
 # create a dataframe with splits, best scores and total time for the summarized results of one experiment
-df_exp_greedy_big_parts_total['split_number'] = splits_total
-df_exp_greedy_big_parts_total['best_scores'] = best_scores
-df_exp_greedy_big_parts_total['total_time'] = total_time
+df_exp_greedy_total['split_number'] = splits_total
+df_exp_greedy_total['best_scores'] = best_scores
+df_exp_greedy_total['total_time'] = total_time
 
-# visualize the best protein
-visualize_protein(best_protein, 3)
+# check the data
+print(df_exp_greedy.head())
+print(df_exp_greedy_total.head())
 
-print(df_exp_greedy_big_parts.head())
-#df_exp_greedy_big_parts.to_csv(path_or_buf=r'C:\Users\alaya\Documents\Data_Greedy\df_exp_greedy_big_parts')
-
-print(df_exp_greedy_big_parts_total.head())
-#df_exp_greedy_big_parts_total.to_csv(path_or_buf=r'C:\Users\alaya\Documents\Data_Greedy\df_exp_greedy_big_parts_total')
+# plot the data using a boxplot for ever split to show score distributions
+sns.boxplot(data = df_exp_greedy, x = 'split_numbers', y = 'scores')
+ax = plt.gca()
+ax.invert_yaxis()
+plt.xlabel('Split')
+plt.ylabel('Score')
+plt.title('Score distributions Greedy with depth 2000 iterations')
+plt.show()
