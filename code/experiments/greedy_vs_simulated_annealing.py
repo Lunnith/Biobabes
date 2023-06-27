@@ -30,7 +30,7 @@ for key, value in dict_splits.items():
             greedy_protein = Greedy(test_protein, 3, splits=key, before=before)
             greedy_protein.run()
 
-            split_numbers.append(j)
+            split_numbers.append(key)
             score_after_greedy.append(greedy_protein.protein.score)
 
             # CHANGE TEMP BASED ON IDEAL SIMULATED ANNEALING AND ITERATIONS
