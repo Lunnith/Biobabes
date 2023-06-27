@@ -21,8 +21,7 @@ befores = []
 total_time = []
 
 # make a dictionary with the splits as keys and the number of iterations per 'before' as the value
-dict_splits = {1: 2000, 2: 1000, 3: 667, 4: 500, 5: 400}
-
+dict_splits = {1: 2000, 2: 1000, 3: 667, 4: 500, 5: 400} # this one takes about 3 hours
 for key, value in dict_splits.items():
     
     # start the clock for measuring the time of one every split
@@ -51,6 +50,7 @@ for key, value in dict_splits.items():
 
             # if the score is lower than the best score, set best score at protein score
             if greedy_test.protein.score < best_score:
+                best_protein = copy.deepcopy(greedy_test.protein)
                 best_score = greedy_test.protein.score
     
     # stop the timer and append time of the split, with the split number and the best score to total lists
@@ -58,6 +58,9 @@ for key, value in dict_splits.items():
     total_time.append(end_time - start_time)
     splits_total.append(key)
     best_scores.append(best_score)
+    if best_score <= best_scores[-1]:
+        print(best_score)
+        best_protein_total = best_protein
 
 # create a dataframe with split numbers, scores and befores for every iteration, for a distribution of scores
 df_exp_greedy['split_numbers'] = splits
@@ -69,9 +72,10 @@ df_exp_greedy_total['split_number'] = splits_total
 df_exp_greedy_total['best_scores'] = best_scores
 df_exp_greedy_total['total_time'] = total_time
 
-# check the data
+# check the data and visualize the best protein
 print(df_exp_greedy.head())
 print(df_exp_greedy_total.head())
+visualize_protein(best_protein_total, 3)
 
 # plot the data using a boxplot for ever split to show score distributions
 sns.boxplot(data = df_exp_greedy, x = 'split_numbers', y = 'scores')
