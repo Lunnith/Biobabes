@@ -1,10 +1,8 @@
 from code.classes.protein import Protein
 from code.visualization.visualize import *
 from code.algorithms import greedy as gr
-import random
 import copy
 import pandas as pd
-from operator import add
 import time    
 
 # select a sequence and create two empty dataframes for all scores and for summary results
@@ -59,7 +57,6 @@ for key, value in dict_splits.items():
     splits_total.append(key)
     best_scores.append(best_score)
     if best_score <= best_scores[-1]:
-        print(best_score)
         best_protein_total = best_protein
 
 # create a dataframe with split numbers, scores and befores for every iteration, for a distribution of scores
