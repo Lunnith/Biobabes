@@ -139,4 +139,8 @@ class ImportantParts(DepthFirst):
             if score < best_score and new_protein.is_valid():
                 best_fold = new_protein
 
-        self.protein = best_fold
+        if best_fold == None:
+            self.protein = new_protein
+            self.protein.score = 0
+        else:
+            self.protein = best_fold
