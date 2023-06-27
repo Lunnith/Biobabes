@@ -2,7 +2,6 @@ from ..algorithms.randomise import random_reassignment
 import matplotlib.pyplot as plt
 from ..visualization.visualize import *
 from ..classes.protein import Protein
-from ..classes.aminoacid import Aminoacid
 import time
 
 # start the timer
