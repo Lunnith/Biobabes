@@ -19,7 +19,7 @@ def unpack_scores(scores, improvement):
             all_scores[iteration].append(None)
     return all_scores
 
-for test in range(0,10):
+for test in range(0,2):
     sequence = "HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH" 
     protein = random_assignment(Protein(sequence), 3)
     while len(sequence) != len(protein.sequence_list) or protein.score < -10:
@@ -31,7 +31,7 @@ for test in range(0,10):
     # which will be run with the best parameters found in this experiment.
 
     # Define repeating testing params:
-    iterations = 2500
+    iterations = 1500
     dimensions = 3
     folded = True
     start_n = 10
@@ -73,5 +73,5 @@ for test in range(0,10):
     end = time.time() 
     print(f"runtime {end-start} seconds")   
 
-    plt.savefig(f"{iterations} Iterations Averaged {test}")
+    plt.savefig(f"{iterations} Iterations Averaged {test} Try idk")
     plt.clf()
