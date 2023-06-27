@@ -1,5 +1,6 @@
 from ..classes.protein import Protein
 from ..algorithms.randomise import random_reassignment
+from ..algorithms.depth_first import DepthFirst
 from .visualize import *
 
 class UserInterface():
@@ -26,13 +27,11 @@ class UserInterface():
             print(f"The lowest score that this algorithm found is {protein.score}.")
             asked_process = input("Do you wish to run another algorithm, continuing with this folded protein? \n\
                                   If yes, input 'Yes' or 'y'. Otherwise, the folded protein will be shown and the program will quit.").lower()
-            if asked_process != "yes" or asked_process != 'y':
-                process_further = False
+            if asked_process == "yes" or asked_process == 'y':
+                continue
+            else: process_further = False
         visualize_protein(protein, dimensions=3)    
         
-
-        
-
     
     def determine_sequence(self):
         correct = False
@@ -82,10 +81,10 @@ class UserInterface():
                 C) Greedy\n\
                 D) Hill-climber (with or without Simulated Annealing)")
             algorithm = input("For more information about an algorithm, or to run it, input either 'A', 'B', 'C' or 'D'.\n\"").lower()
-            if algorithm == 'a': print("This algorithm randomly assigns a direction for each bond of the protein. After a certain amount of iterations, it returns the protein with the best achieved score yet.")
-            elif algorithm == 'b': print("This algorithm computes every possible fold and is guaranteed to find the optimum folding. \nWARNING: This algorithm becomes VERY slow with a sequence length of more than 12.")
-            elif algorithm == 'c': print("This algorithm looks for the best possible next move, but greedy desicions at the beginning of the folding process might prevent it from getting an optimal score.")
-            elif algorithm == 'd': print("This algorithm makes small changes to the folding, hoping to improve the score. After a certain amount of iterations, it returns the best fold yet.")
+            if algorithm == 'a': print("\nThis algorithm randomly assigns a direction for each bond of the protein. After a certain amount of iterations, it returns the protein with the best achieved score yet.")
+            elif algorithm == 'b': print("\nThis algorithm computes every possible fold and is guaranteed to find the optimum folding. \nWARNING: This algorithm becomes VERY slow with a sequence length of more than 12.")
+            elif algorithm == 'c': print("\nThis algorithm looks for the best possible next move, but greedy desicions at the beginning of the folding process might prevent it from getting an optimal score.")
+            elif algorithm == 'd': print("\nThis algorithm makes small changes to the folding, hoping to improve the score. After a certain amount of iterations, it returns the best fold yet.")
             elif algorithm == 'q': break
             else: 
                 print("That is not a valid option. If you wish to quit, input 'Q'.")
@@ -99,7 +98,7 @@ class UserInterface():
     def use_random(self, protein):
         correct_kwargs = False
         while not correct_kwargs:
-            print("The only parameter to give the random algorithm is the amount of iterations you would like to run.")
+            print("\nThe only parameter to give the random algorithm is the amount of iterations you would like to run.")
             kwargs = input("How many iterations would you like to use? \n").lower()
             if kwargs == 'q': return protein
             try: kwargs = int(kwargs)
@@ -112,7 +111,38 @@ class UserInterface():
         return protein
     
     def use_depth_first(self, protein):
-        return protein
+        depth_first = DepthFirst(protein, 3)
+
+        correct_kwargs = False
+        while not correct_kwargs:
+            pruning_correct = False
+            while not pruning_correct:
+                print("\nThe depth first algorithm has serveral options:")
+                print("This algorithm can use P_pruning or Directions_pruning, in order to accept longer sequences.")
+                kwargs = input("Do you want to use pruning?\n").lower()
+                if kwargs == 'q': return protein
+
+                elif kwargs == 'yes' or kwargs == 'y': 
+                    pruning = input("Do you want to use A) P_pruning, or B) Directions_pruning?\n").lower()
+                    if pruning == 'a' or pruning == 'b': pruning_correct = True
+                    continue
+                
+                elif kwargs == 'no' or 'n': 
+                    pruning = None
+                    pruning_correct = True
+
+            if pruning == 'q': return protein
+            elif pruning == 'a': pruning = 'P_pruning'
+            elif pruning == 'b': pruning = 'Directions_pruning'
+            
+            kwargs = input(f"Now using the following pruning method: {pruning}. Correct?\n").lower()
+            if kwargs == "yes" or kwargs == "y": correct_kwargs = True
+
+        if pruning == None: depth_first.run()
+        elif pruning == 'P_pruning': depth_first.run(P_pruning=True)
+        elif pruning == 'Directions_pruning': depth_first.run(directions_pruning=True)
+
+        return depth_first.protein
 
     def use_greedy(self, protein):
         return protein
