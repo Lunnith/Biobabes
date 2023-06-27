@@ -35,6 +35,7 @@ for test in range(0,2):
     dimensions = 3
     folded = True
     start_n = 10
+    samples = 50
 
     # define variable testing params:
     testing_temperatures = range(1, 25+1)
@@ -49,7 +50,7 @@ for test in range(0,2):
 
         for temp in testing_temperatures:
             temp_df = pd.DataFrame()
-            for sample in range(0,10):
+            for sample in range(0,samples):
                 sa = SimulatedAnnealing(protein, start_n, folded=folded, dimensions=dimensions, temperature=temp, temp_scheme=scheme, prints=True)
                 sa_protein, sa_lowest_score, sa_scores, sa_improvement = sa.run_i_iterations(testing_protein, iterations, start_n, sim_annealing=True, sample_number=f"[scheme={scheme}, temp={temp}, sample={sample}]")
                 sa_scores = unpack_scores(sa_scores, sa_improvement)
