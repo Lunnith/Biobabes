@@ -252,3 +252,7 @@ import time
 # plt.xticks(['Greedy', 'Important Parts'])
 # plt.savefig('Greedy_vs_Important Parts.pdf')
 # plt.show()
+
+numb = 1
+list = [numb]
+print(list)
