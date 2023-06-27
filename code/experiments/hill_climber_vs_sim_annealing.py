@@ -25,9 +25,9 @@ dimensions = 3
 prints = True
 folded = True
 
-iterations = 20
-sample_size = 10
-max_n = 5
+iterations = 500
+sample_size = 50
+max_n = 10
 plot = False
 
 # Run the experiment for the Hill Climber
