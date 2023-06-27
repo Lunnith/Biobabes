@@ -98,10 +98,10 @@ df_exp_depth_greedy_hill['Hill_climber_iterations'] = hill_climber_iterations_li
 df_exp_depth_greedy_hill['Sim_anneal_scores'] = sim_anneal_scores_list
 df_exp_depth_greedy_hill['Sim_anneal_iterations'] = sim_anneal_iterations_list
 
-df_exp_depth_greedy_hill.to_csv(path_or_buf=r"C:\Users\sofie\minorAI\Algoritmen en Heuristieken\data\df_exp_depth_greedy_hill_try1")
+df_exp_depth_greedy_hill.to_csv(path_or_buf=r'C:\Users\alaya\Documents\Data_Greedy\df_exp_depth_greedy_hill_try1')
 
 # -------------------- VISUALIZE --------------------
-df_exp_depth_greedy_hill = pd.read_csv(r"C:\Users\sofie\minorAI\Algoritmen en Heuristieken\data\df_exp_depth_greedy_hill_try1")
+df_exp_depth_greedy_hill = pd.read_csv(path_or_buf=r'C:\Users\alaya\Documents\Data_Greedy\df_exp_depth_greedy_hill_try1')
 
 iterations = [int(df_exp_depth_greedy_hill['Depth_first_iterations']), int(df_exp_depth_greedy_hill['Greedy_iterations']), int(df_exp_depth_greedy_hill['Hill_climber_iterations']), int(df_exp_depth_greedy_hill['Sim_anneal_iterations'])]
 scores = [int(df_exp_depth_greedy_hill['Depth_first_score']), int(df_exp_depth_greedy_hill['Greedy_score']), int(df_exp_depth_greedy_hill['Hill_climber_scores']), int(df_exp_depth_greedy_hill['Sim_anneal_scores'])]
