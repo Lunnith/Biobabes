@@ -25,9 +25,9 @@ Below, a description of the approach of the different algorithms is given. Examp
 
 ### Approach of different algorithms
 ## Random algorithm
-
-## Greedy
-
+The random algorithm makes a protein using random chosen bonds at each step. The algorithm stops when it is stuck and will return the shorter protein.
+## Greedy (with depth)
+The greedy algorithm makes the protein step by step and choses the bond direction that leads to the best score. When the protein gets stuck, it goes back one step and tries again without being able to go to the stuck position. To use greedy depth, you can determine at how many future bonds you want to look at each step. So if you want to use split = 3, you go trough all possible directions these 3 bonds can go together and see which leads to the best score. If there are multiple directions that lead to the same best score, the algorithm will chose one at random. The larger the split, the slower the agorithm, because it will have to look at all the states for this selection of bonds (similar to depth first algorithm). When there are bonds at the end that can not be devided by the split anymore, these will be seen as one split (but smaller) and the best directions of the bonds will be determined in the same way. It is further possible to set the amount of aminoacids before the splits start, so the aminoacids within one split are not the same each time. When using the input variable 'before' it will use the number in before as the amount of bonds before starting with the normal splits (best direction determined the same way as with the bonds after the splits that do not fit anymore).
 ## Depth First
 The Depth First algorithm is a constructive algorithm that searches through all the possible foldings of a protein and saves the protein with the lowest score. It creates child states by adding an extended version of the previous state in all possible directions. This algorithm can be used for folding in 2D and 3D. Furthermore, it has two optional forms of pruning that can be used. The first one is P-pruning, which decreases the amount of states that have to be judged by making a rule that several P's in a row can't all fold in the same direction. The second one is directions pruning, which also reduced the amount of states to be judged by making a rule that if only 2 directions have been used after folding the protein for 2/3, these states won't be expanded.
 
@@ -38,6 +38,9 @@ The Important Parts algorithm is a faster way to use the Depth First Algorithm. 
 
 ### Experiments
 **INPUT NEEDED**
+
+## Randomise
+This experiment runs an amount of iterations and creates a random generated protein every time. It will then give a list with all the scores, the best folded protein and the corresponding best score. It will then make a histogram of all the scores and the best score and the used time
 ## Compare all
 This experiment compares the outcome (lowest score achieved) and time for all algorithms for both a short and a long protein and creates a combined barchart to visualize the results. This experiment can be run by the following code:
 
