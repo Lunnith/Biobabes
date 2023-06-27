@@ -70,7 +70,7 @@ for i in range(n):
     test_protein = Protein("HHPHHHPHPHHHPH")
 
     simanneal_protein = SimulatedAnnealing(test_protein, start_n=10, folded=False, dimensions = 2, temperature = 10)
-    simanneal_protein.run_i_iterations(test_protein, iterations = 500, bonds=j)
+    simanneal_protein.run_i_iterations(test_protein, iterations = 500, bonds=10)
 
     sim_anneal_scores.append(simanneal_protein.protein.score)
     sim_anneal_iterations += 1
@@ -80,17 +80,17 @@ print('Simulated Annealing completed')
 df_exp_depth_greedy_hill.to_csv(path_or_buf=fr"{path}\df_exp_depth_greedy_hill_complete")
 
 # store all results in dataframe and save dataframe on computer
-df_exp_depth_greedy_hill['Depth_first_score'] = [depth_first_scores_list]
-df_exp_depth_greedy_hill['Depth_first_iterations'] = [depth_first_iterations_list]
+df_exp_depth_greedy_hill['Depth_first_score'] = [depth_first.protein.score]
+df_exp_depth_greedy_hill['Depth_first_iterations'] = [depth_first_iterations]
                                                       
-df_exp_depth_greedy_hill['Greedy_score'] = [greedy_scores_list]
-df_exp_depth_greedy_hill['Greedy_iterations'] = [greedy_iterations_list]
+df_exp_depth_greedy_hill['Greedy_score'] = [min(greedy_scores)]
+df_exp_depth_greedy_hill['Greedy_iterations'] = [greedy_iterations]
 
-df_exp_depth_greedy_hill['Hill_climber_scores'] = [hill_climber_scores_list]
-df_exp_depth_greedy_hill['Hill_climber_iterations'] = [hill_climber_iterations_list]
+df_exp_depth_greedy_hill['Hill_climber_scores'] = [min(hill_climber_scores)]
+df_exp_depth_greedy_hill['Hill_climber_iterations'] = [hill_climber_iterations]
 
-df_exp_depth_greedy_hill['Sim_anneal_scores'] = [sim_anneal_scores_list]
-df_exp_depth_greedy_hill['Sim_anneal_iterations'] = [sim_anneal_iterations_list]
+df_exp_depth_greedy_hill['Sim_anneal_scores'] = [min(sim_anneal_scores)]
+df_exp_depth_greedy_hill['Sim_anneal_iterations'] = [sim_anneal_iterations]
 
 df_exp_depth_greedy_hill.to_csv(path_or_buf=fr"{path}\df_exp_depth_greedy_hill_complete")
 
