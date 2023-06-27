@@ -348,7 +348,7 @@ class Hill_climber():
                 if sim_annealing: 
                     self.reset_temperature(new_n=n, reset_protein=first_random_fold)
                 protein_for_n, new_lowest_score_for_n, scores, improvement = self.run_i_iterations(first_random_fold, iterations, n, sample_run+1, sim_annealing=sim_annealing)
-                lowest_n_per_sample[sample_run] = new_lowest_score_for_n
+                if result_each_sample: lowest_n_per_sample[sample_run] = new_lowest_score_for_n
 
                 if new_lowest_score_for_n < lowest_score_for_n:
                     lowest_score_for_n = new_lowest_score_for_n
