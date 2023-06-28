@@ -1,5 +1,6 @@
 from ..classes.protein import Protein
 from .randomise import random_assignment
+
 import matplotlib.pyplot as plt
 import pandas as pd
 import random

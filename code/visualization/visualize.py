@@ -1,7 +1,8 @@
+from ..classes.protein import Protein
+
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
-from ..classes.protein import Protein
 
 def visualize_protein(protein: Protein, dimensions: int) -> None:
     """

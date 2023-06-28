@@ -4,6 +4,7 @@ from ..algorithms.hill_climber import Hill_climber
 from ..algorithms.simulated_annealing import SimulatedAnnealing
 from ..visualization.visualize import *
 from ..algorithms.randomise import random_assignment
+
 import copy
 import time
 
