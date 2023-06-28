@@ -7,8 +7,7 @@ from ..algorithms.randomise import random_assignment
 import copy
 import time
 
-
-def unpack_scores(scores, improvement):
+def unpack_scores(scores: list, improvement: list) -> dict:
     all_scores = {}
     for iteration in range(iterations+1):
         all_scores[iteration] = []
@@ -19,14 +18,14 @@ def unpack_scores(scores, improvement):
             all_scores[iteration].append(None)
     return all_scores
 
-for test in range(0,2):
+for test in range(0,5):
     sequence = "HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH" 
     protein = random_assignment(Protein(sequence), 3)
     while len(sequence) != len(protein.sequence_list) or protein.score < -10:
         protein = random_assignment(Protein(sequence), 3)
     testing_protein = copy.deepcopy(protein)
 
-    # For these experiments, we'll keep the starting n at 10, as this n decreases during the run
+    # For these experiments, we'll keep the starting n at 10, as this n decreases during the run anyways
     # The best value for n will be found in the hill_climber vs sim_annealing experiment, 
     # which will be run with the best parameters found in this experiment.
 
@@ -74,5 +73,5 @@ for test in range(0,2):
     end = time.time() 
     print(f"runtime {end-start} seconds")   
 
-    plt.savefig(f"{iterations} Iterations Averaged {test} Try idk")
+    plt.savefig(f"{iterations}iters_{samples}samples_run{test}")
     plt.clf()

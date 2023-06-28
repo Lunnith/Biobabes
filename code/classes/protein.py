@@ -22,7 +22,7 @@ class Protein():
     -----------
     add_aminoacid(acid):
         add aminoacid to list
-    create_bonds(acid, previous_acid, direction):
+    create_bond(acid, previous_acid, direction):
         create bond between two aminoacids
     get_temp_sequence(temp_protein):
         returns temporary sequence of temporary protein
@@ -69,7 +69,6 @@ class Protein():
         # create bond between previous and new acid based on step of previous acid
         acid.location = list(map(add, previous_acid.location, direction[0:3]))
 
-        #coordinates = (acid.location_x, acid.location_y, acid.location_z)
         coordinates = tuple(acid.location)
 
         # only validate location if there is no other acid on that location
@@ -91,7 +90,7 @@ class Protein():
     
     def is_valid(self) -> bool:
         """
-        Method to check if protein didn't fold over it self.
+        Method to check if protein didn't fold over itself.
         """
         for acid in self.sequence_list:
 

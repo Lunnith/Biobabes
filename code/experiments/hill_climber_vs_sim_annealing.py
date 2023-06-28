@@ -7,12 +7,10 @@ from ..algorithms.randomise import random_assignment
 import copy
 
 sequence = "HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH"
-# note: You can now run hill_climber.experiment() and simulated_annealing.experiment()
-#       And it will return a dataframe with the lines that would be plotted
-#   Now, create a function to compare these.
 
 #Prepare protein
 protein = random_assignment(Protein(sequence), 3)
+#Make sure to start with a protein with a low score, but is fully folded.,
 while len(sequence) != len(protein.sequence_list) or protein.score < -10:
     protein = random_assignment(Protein(sequence), 3)
 protein_hc = copy.deepcopy(protein)
@@ -22,7 +20,7 @@ print(f"Starting score = {protein.score}")
 
 # Make sure to use the same kwargs for both experiments
 dimensions = 3
-prints = True
+prints = False
 folded = True
 
 iterations = 1000
@@ -65,11 +63,8 @@ best_sa = copy.deepcopy(df_results_sa.T.iloc[-1])
 df_both_messy = pd.concat((df_hc, df_sa))
 df_both_messy = pd.DataFrame(df_both_messy)
 df_both = df_both_messy.melt(id_vars=['Algorithm'], var_name='Bonds changed', value_name='Score')
-print(df_both)
 
 #Plot results
-used_n = range(0, max_n)
-
 ax = sns.boxplot(data=df_both, y='Score', x='Bonds changed', hue='Algorithm')
 ax.invert_yaxis()
 plt.show()

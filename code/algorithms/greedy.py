@@ -272,6 +272,7 @@ class Greedy():
         self.all_bonds()
         self.check_all_interactions()
         #self.protein.create_output()
+        self.protein.used_coordinates = self.used_coordinates_G
 
 
 

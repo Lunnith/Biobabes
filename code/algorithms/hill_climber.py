@@ -54,8 +54,9 @@ class Hill_climber():
     experiment(protein, iterations, sample_size=1, max_n=10):
         Run an experiment with multiple runs per different amount of bonds to change
     """
-    def __init__(self, protein: Protein, dimensions=3, prints=False, folded=False) -> None:
+    def __init__(self, protein: Protein, dimensions : int = 3, prints: bool = False, folded: bool = False) -> None:
         #Initiate first folding
+        self.states = 0
         if folded:
             if len(protein.sequence_list) < 1:
                 raise Exception("The sequence_list of this protein seems empty. \n\
@@ -89,7 +90,7 @@ class Hill_climber():
             self.directions = {1: [1, 0, 0, 1], -1: [-1, 0, 0, -1], 2: [0, 1, 0, 2], -2: [0, -1, 0, -2], 3: [0, 0, 1, 3], -3: [0, 0, -1, -3]}
 
 
-    def change_bond(self, protein: Protein, given_index=None, skip_bonds=None) -> tuple[Protein, int]:
+    def change_bond(self, protein: Protein, given_index: bool = None, skip_bonds: bool = None) -> tuple[Protein, int]:
         """
         This function takes a folded protein and optionally the index of the bond to change.
         If no index is given, a random bond of the protein is changed.
@@ -98,6 +99,7 @@ class Hill_climber():
         Note:
         This function only changes the direction of the bond and doesn't update any coördinates!
         """
+        self.states += 1
         test_protein = copy.deepcopy(protein)
         if given_index == None:
             index_changing_bond = random.randint(2, len(test_protein.sequence_list)-1)
@@ -196,7 +198,7 @@ class Hill_climber():
         return protein
     
 
-    def change_n_bonds(self, protein: Protein, n: int="self_n") -> Protein:
+    def change_n_bonds(self, protein: Protein, n: int = "self_n") -> Protein:
         """
         Loop n times over the function change_bond,
         so that n bonds have been changed.
@@ -255,7 +257,7 @@ class Hill_climber():
             self.improvement.append("N") #No
 
 
-    def run_i_iterations(self, protein: Protein, iterations: int, bonds: int, sample_number: int=None, sim_annealing=False) -> tuple[Protein, int, list, list]:
+    def run_i_iterations(self, protein: Protein, iterations: int, bonds: int, sample_number: int = None, sim_annealing: bool = False) -> tuple[Protein, int, list, list]:
         """
         runs the change_n_bonds for a given amount of iterations.
         Then, returns the protein with the best score, the actual score, the list of scores that 
@@ -312,7 +314,7 @@ class Hill_climber():
         plt.show()
 
 
-    def experiment(self, protein: Protein, iterations: int, sample_size=1, max_n=10, sim_annealing=False, plot=True, result_each_sample=False) -> Protein:
+    def experiment(self, protein: Protein, iterations: int, sample_size: int = 1, max_n: int = 10, sim_annealing: bool = False, plot: bool = True, result_each_sample: bool = False) -> tuple[Protein, list]:
         """
         Runs an experiment with a given protein. The sample size is the amount of times to run the algorithm.
         It then runs the algorithm for each n amount of bonds to change, with the given amount of iterations.
@@ -382,5 +384,5 @@ class Hill_climber():
         elif not plot:
             results = pd.DataFrame.from_dict(results_dict, orient='index')
 
-        if result_per_sample: return best_protein, results, result_per_sample
+        if result_each_sample: return best_protein, results, result_per_sample
         else: return best_protein, results
