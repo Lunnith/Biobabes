@@ -292,7 +292,6 @@ scores_long = [int(df_long_scores['Random score'].iloc[0]), int(df_long_scores['
 dict_of_time = {}
 for algorithm in df_long_scores.columns:
     dict_of_time[algorithm] = [int(round(df_long_scores[algorithm].iloc[0] / 60))]
-print(dict_of_time)
 df_long_scores = pd.DataFrame.from_dict(dict_of_time)
 
 time_long = [int(df_long_scores['Random time'].iloc[0]), int(df_long_scores['Greedy time'].iloc[0]), int(df_long_scores['Greedy depth time'].iloc[0]), int(df_long_scores['Important Parts time'].iloc[0]), int(df_long_scores['Hill climber time'].iloc[0]), int(df_long_scores['Simulated Annealing time'].iloc[0])]
