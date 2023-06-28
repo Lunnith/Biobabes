@@ -55,10 +55,11 @@ This experiment compares the outcome (lowest score achieved) and number of itera
 python -m code.experiments.depth_greedy_hill_climber
 ```
 
-## Greedy combined with Simulated Annealing
-This experiment uses a folded protein made by the Greedy with depth algorithm and inputs this in the Simulated Annealing algorithm to see if this will lead to an even better folded protein than just using Greedy with depth. In a plot, the difference in score after the greedy algorithm and after the Simulated Annealing algorithm is shown. This experiment can be run by the following code:
+## Greedy combined with Simulated Annealing or Hill Climber
+This experiment uses a folded protein made by the Greedy with depth algorithm and inputs this in the Hill Climber or Simulated Annealing algorithm to see if this will lead to an even better folded protein than just using Greedy with depth. In a plot, the difference in score after the greedy algorithm and after the HillClimber/Simulated Annealing algorithm is shown. If the experiment is now runned, Greedy combined with Simulated Annealing will be performed. If you want to combine Greedy with HillClimber, you should use the commented code. This experiment can be run by the following code:
+
 ```
-python -m code.experiments.greedy_vs_simulated_annealing
+python -m code.experiments.greedy_vs_simulated_annealing_or_hillclimber
 ```
 ## Greedy with depth vs Important Parts
 This experiment compares the score distribution of running the Greedy with depth algorithm with split size 5 and running the Important Parts algorithm when using splitting on size with a size of 5. This experiment can be run by the following code:
