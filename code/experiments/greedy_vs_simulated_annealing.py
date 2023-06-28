@@ -1,7 +1,7 @@
 from ..algorithms.greedy import Greedy
 from ..algorithms.simulated_annealing import SimulatedAnnealing
 from ..classes.protein import Protein
-from ..algorithms.simulated_annealing import SimulatedAnnealing
+from ..algorithms.hill_climber import Hill_climber
 from matplotlib.lines import Line2D
 
 import pandas as pd
@@ -22,31 +22,38 @@ score_after_simanneal = []
 dict_splits = {1: 50, 2: 25, 3: 16, 4: 12, 5: 10}
 
 # run greedy with depth with different split and before size and afterwards run simulated annealing on the folded by greedy protein
-for key, value in dict_splits.items():
-    for before in range(key):
-        for i in range(value):
-            test_protein = Protein("HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH")
+# for key, value in dict_splits.items():
+#     for before in range(key):
+#         for i in range(value):
+n = 10
+for i in range(n):
+        test_protein = Protein("HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH")
 
-            greedy_protein = Greedy(test_protein, 3, splits=key, before=before)
-            greedy_protein.run()
+        greedy_protein = Greedy(test_protein, 3, splits=1, before=0)
+        greedy_protein.run()
 
-            split_numbers.append(key)
-            score_after_greedy.append(greedy_protein.protein.score)
+        split_numbers.append(1)
+        score_after_greedy.append(greedy_protein.protein.score)
 
-            simanneal_protein = SimulatedAnnealing(greedy_protein.protein, start_n = 10, folded = True, dimensions = 3, temperature = 10)
-            simanneal_protein.run_i_iterations(greedy_protein.protein, iterations = 500, bonds = 10, sim_annealing=True)
-            
-            score_after_simanneal.append(simanneal_protein.protein.score)
+        print(f'Score after greedy: {greedy_protein.protein.score}')
+
+        simanneal_protein = SimulatedAnnealing(greedy_protein.protein, start_n = 10, folded = True, dimensions = 3, temperature = 10)
+        simanneal_protein.run_i_iterations(greedy_protein.protein, iterations = 500, bonds = 10, sim_annealing=True)
+        
+        score_after_simanneal.append(simanneal_protein.protein.score)
+
+        print(f'Score after simulated annealing: {simanneal_protein.protein.score}')
 
 # store all results in the dataframe
 df_exp_greedy_simanneal['split_numbers'] = split_numbers
 df_exp_greedy_simanneal['score_after_greedy'] = score_after_greedy
 df_exp_greedy_simanneal['score_after_simulated_annealing'] = score_after_simanneal
 
-df_exp_greedy_simanneal.to_csv(path_or_buf=fr"{path}\df_exp_greedy_simanneal_complete")
+df_exp_greedy_simanneal.to_csv(path_or_buf=fr"{path}\df_exp_greedy_simanneal_bugfix")
 
 # -------------------- VISUALIZE --------------------
-df_exp_greedy_simanneal = pd.read_csv(fr"{path}\df_exp_greedy_simanneal_complete")
+df_exp_greedy_simanneal = pd.read_csv(fr"{path}\df_exp_greedy_simanneal_bugfix")
+print(df_exp_greedy_simanneal)
 
 # create a scatterplot with connected lines of the scores of the folding after greedy and the scores after simulated annealing
 before_scores = df_exp_greedy_simanneal['score_after_greedy']
@@ -71,5 +78,5 @@ ax.legend(custom_lines, ['Split = 1', 'Split = 2', 'Split = 3', 'Split = 4', 'Sp
 
 plt.xticks([0,1], ['Score after greedy', 'Score after simulated annealing'])
 plt.title('Greedy combined with Simulated Annealing')
-plt.savefig(fr"{path}\Greedy_combined_with_Simulated_Annealing_complete.pdf")
+plt.savefig(fr"{path}\Greedy_combined_with_Simulated_Annealing_BUG.pdf")
 plt.show()

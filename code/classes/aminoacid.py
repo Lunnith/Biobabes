@@ -14,9 +14,9 @@ class Aminoacid():
     type: string
         polar, hydrophobic or cysteine aminoacid
     color: string
-        polar = 'royalgreen'
+        polar = 'blue'
         hydrophobic = 'red'
-        cysteine = 'limegreen'
+        cysteine = 'green'
 
     Methods:
     -----------
@@ -51,7 +51,6 @@ class Aminoacid():
         """
         return math.sqrt((self.location[0] - other.location[0])**2 + (self.location[1] - other.location[1])**2 + (self.location[2] - other.location[2])**2)
    
-
     def check_interactions(self, protein: Protein, index: int = -1) -> None:
         """
         Check surrounding of aminoacid for other aminoacids, if they are present, check type
