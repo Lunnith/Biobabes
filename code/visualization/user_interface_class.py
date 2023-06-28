@@ -34,6 +34,7 @@ class UserInterface():
                 protein = copy.deepcopy(original_protein)
                 continue
             if algorithm == 'stop': break
+
             protein = self.run_algorithm(algorithm, protein)
             
             print(f"\nThe lowest score that this algorithm found is {protein.score}.")
@@ -46,20 +47,18 @@ class UserInterface():
         if self.folded: visualize_protein(protein, dimensions=3)
         else: print("\nThis protein is not folded and thus cannot be visualised.")  
 
+
     def run_algorithm(self, algorithm, protein): 
         """
         Initiate the start of the chosen algorithm
         """
-        if algorithm == 'a': 
-            protein = self.use_random(protein)
-        if algorithm == 'b': 
-            protein = self.use_depth_first(protein)
-        if algorithm == 'c': 
-            protein = self.use_greedy(protein)
-        if algorithm == 'd': 
-            protein = self.use_hill_climber(protein)   
+        if algorithm == 'a': protein = self.use_random(protein)
+        if algorithm == 'b': protein = self.use_depth_first(protein)
+        if algorithm == 'c': protein = self.use_greedy(protein)
+        if algorithm == 'd': protein = self.use_hill_climber(protein)   
         return protein  
     
+
     def determine_sequence(self):
         """
         Ask the user what sequence to use.
@@ -121,6 +120,7 @@ class UserInterface():
             else: continued = False
         return algorithm
     
+
     def determine_algorithm_folded(self, protein):
         """
         Only gets called upon if self.folded = True
@@ -166,6 +166,7 @@ class UserInterface():
         protein = random_reassignment(protein, 3, k=kwargs)[0]
         self.folded = True
         return protein
+    
     
     def use_depth_first(self, protein):
         """
@@ -219,6 +220,7 @@ class UserInterface():
         self.folded = True
         return depth_first.protein
 
+
     def use_greedy(self, protein):
         """
         Asks the user for the parameters nessecary and runs the Greedy algorithm.
@@ -250,6 +252,7 @@ class UserInterface():
         greedy.run()
         self.folded = True
         return greedy.protein
+
 
     def use_hill_climber(self, protein):
         """
