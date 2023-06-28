@@ -32,11 +32,10 @@ depth_first = DepthFirst(test_protein, 2)
 depth_first.run(P_pruning=False, directions_pruning=False)
 print('Depth First completed')
 
-df_exp_depth_greedy_hill.to_csv(path_or_buf=fr"{path}\df_exp_depth_greedy_hill_complete")
-
 # make a dictionary with the splits as keys and the number of iterations per 'before' as the value
 dict_splits = {1: 10, 2: 5, 3: 4, 4: 3}
 total_states = 0
+
 # run greedy with depth with different split sizes and before sizes with test protein
 for key, value in dict_splits.items():
     for before in range(key):
@@ -48,8 +47,6 @@ for key, value in dict_splits.items():
 
             greedy_scores.append(greedy_protein.protein.score)
             greedy_states += greedy_protein.states
-
-df_exp_depth_greedy_hill.to_csv(path_or_buf=fr"{path}\df_exp_depth_greedy_hill_complete")
 
 # run hill climber with test protein
 n = 50
@@ -65,8 +62,6 @@ for i in range(n):
 
 print('Hillclimber completed')
 
-df_exp_depth_greedy_hill.to_csv(path_or_buf=fr"{path}\df_exp_depth_greedy_hill_complete")
-
 # run simulated annealing with test protein
 n = 50
 for i in range(n):
@@ -79,8 +74,6 @@ for i in range(n):
     sim_anneal_states += simanneal_protein.states
 
 print('Simulated Annealing completed')
-
-df_exp_depth_greedy_hill.to_csv(path_or_buf=fr"{path}\df_exp_depth_greedy_hill_complete")
 
 # store all results in dataframe and save dataframe on computer
 df_exp_depth_greedy_hill['Depth_first_score'] = [depth_first.protein.score]

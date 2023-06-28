@@ -1,6 +1,5 @@
 import random
 import copy
-from operator import add
 
 def random_assignment(protein, dimensions):
     """

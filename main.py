@@ -56,7 +56,7 @@ if __name__ == "__main__":
 #     # ---------------------------- Depth First - Important Parts ----------------------------
 #     # Note: in this example the protein is split on the number of P's, splitting on size is also possible, you have to specify the size for this
 
-#      important_parts_protein = ImportantParts(test_protein_D, 3)
+#      important_parts_protein = ImportantParts(test_protein_A, 3)
 #      important_parts_protein.run(iterations=1000, split_on_P=True, split_on_size=False)
 
 #      print(f'Value of the folding after Important Parts:'

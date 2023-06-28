@@ -26,8 +26,6 @@ for i in range(n):
 
 print(f'Important Parts done!')
 
-df_exp_greedy_important_parts.to_csv(path_or_buf=fr"{path}\df_exp_greedy_important_parts_complete")
-
 # run greedy with depth algorithm with split size 5 n iterations
 n = 500
 
