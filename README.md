@@ -21,12 +21,12 @@ The main.py document contains an example for all different algorithms on how to 
 python main.py
 ```
 
+Below, a description of the approach of the different algorithms is given. Examples of how to run the algorithms are given in main.py.
 However, if you want to have a little more guidance for this program, we have built a user interface. To use this, run the following command:
 ```
 python user_interface.py
 ```
 
-Below, a description of the approach of the different algorithms is given. Examples of how to run the algorithms are given in main.py.
 
 ### Approach of different algorithms
 #### Random algorithm
