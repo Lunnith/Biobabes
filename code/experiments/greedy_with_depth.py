@@ -6,8 +6,7 @@ import pandas as pd
 import time    
 
 # select a sequence and create two empty dataframes for all scores and for summary results
-#sequence = "HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH"
-sequence = "HHPHHHPHPHHHPH"
+sequence = "HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH"
 df_exp_greedy = pd.DataFrame()
 df_exp_greedy_total = pd.DataFrame()
 
@@ -20,8 +19,7 @@ befores = []
 total_time = []
 
 # make a dictionary with the splits as keys and the number of iterations per 'before' as the value
-dict_splits = {1: 10, 2: 5, 3: 4, 4: 3}
-#{1: 2000, 2: 1000, 3: 667, 4: 500, 5: 400} # this one takes about 3 hours
+dict_splits = {1: 2000, 2: 1000, 3: 667, 4: 500, 5: 400} # this one takes about 3 hours
 for key, value in dict_splits.items():
     
     # start the clock for measuring the time of one every split
@@ -40,7 +38,7 @@ for key, value in dict_splits.items():
 
             # make a protein, initialize greedy with the right parameters and run the algorithm
             protein = Protein(sequence)
-            greedy_test = gr.Greedy(protein, 2, splits = key, before = before)
+            greedy_test = gr.Greedy(protein, 3, splits = key, before = before)
             greedy_test.run()
 
             # append for each iterations the score, the before and the split
@@ -52,7 +50,7 @@ for key, value in dict_splits.items():
             if greedy_test.protein.score < best_score:
                 best_protein = copy.deepcopy(greedy_test.protein)
                 best_score = greedy_test.protein.score
-            print(greedy_test.states)
+
     # stop the timer and append time of the split, with the split number and the best score to total lists
     end_time = time.time()
     total_time.append(end_time - start_time)
@@ -74,7 +72,7 @@ df_exp_greedy_total['total_time'] = total_time
 # check the data and visualize the best protein
 print(df_exp_greedy.head())
 print(df_exp_greedy_total.head())
-visualize_protein(best_protein_total, 2)
+visualize_protein(best_protein_total, 3)
 
 # plot the data using a boxplot for ever split to show score distributions
 sns.boxplot(data = df_exp_greedy, x = 'split_numbers', y = 'scores')

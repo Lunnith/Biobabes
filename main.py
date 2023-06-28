@@ -56,10 +56,10 @@ if __name__ == "__main__":
 #     # ---------------------------- Depth First - Important Parts ----------------------------
 #     # Note: in this example the protein is split on the number of P's, splitting on size is also possible, you have to specify the size for this
 
-#     important_parts_protein = ImportantParts(test_protein_A, 3)
-#     important_parts_protein.run(iterations=1000, split_on_P=True, split_on_size=False)
+#      important_parts_protein = ImportantParts(test_protein_D, 3)
+#      important_parts_protein.run(iterations=1000, split_on_P=True, split_on_size=False)
 
-#     print(f'Value of the folding after Important Parts:'
+#      print(f'Value of the folding after Important Parts:'
 #           f'{important_parts_protein.protein.score}')
     
 #     # ---------------------------- Hill Climber ----------------------------
@@ -79,5 +79,5 @@ if __name__ == "__main__":
 #           f'{simanneal_protein.protein.score}')
     
     # ---------------------------- Visualization ----------------------------
-    visualize_protein(random_protein.protein, 3)
+    visualize_protein(important_parts_protein.protein, 3)
 
