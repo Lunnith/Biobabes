@@ -22,27 +22,21 @@ score_after_simanneal = []
 dict_splits = {1: 50, 2: 25, 3: 16, 4: 12, 5: 10}
 
 # run greedy with depth with different split and before size and afterwards run simulated annealing on the folded by greedy protein
-# for key, value in dict_splits.items():
-#     for before in range(key):
-#         for i in range(value):
-n = 10
-for i in range(n):
-        test_protein = Protein("HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH")
+for key, value in dict_splits.items():
+    for before in range(key):
+        for i in range(value):
+            test_protein = Protein("HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH")
 
-        greedy_protein = Greedy(test_protein, 3, splits=1, before=0)
-        greedy_protein.run()
+            greedy_protein = Greedy(test_protein, 3, splits=1, before=0)
+            greedy_protein.run()
 
-        split_numbers.append(1)
-        score_after_greedy.append(greedy_protein.protein.score)
+            split_numbers.append(1)
+            score_after_greedy.append(greedy_protein.protein.score)
 
-        print(f'Score after greedy: {greedy_protein.protein.score}')
-
-        simanneal_protein = SimulatedAnnealing(greedy_protein.protein, start_n = 10, folded = True, dimensions = 3, temperature = 10)
-        simanneal_protein.run_i_iterations(greedy_protein.protein, iterations = 500, bonds = 10, sim_annealing=True)
-        
-        score_after_simanneal.append(simanneal_protein.protein.score)
-
-        print(f'Score after simulated annealing: {simanneal_protein.protein.score}')
+            simanneal_protein = SimulatedAnnealing(greedy_protein.protein, start_n = 10, folded = True, dimensions = 3, temperature = 10)
+            simanneal_protein.run_i_iterations(greedy_protein.protein, iterations = 500, bonds = 10)
+            
+            score_after_simanneal.append(simanneal_protein.protein.score)
 
 # store all results in the dataframe
 df_exp_greedy_simanneal['split_numbers'] = split_numbers
