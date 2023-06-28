@@ -72,8 +72,8 @@ n = 50
 for i in range(n):
     test_protein = Protein("HHPHHHPHPHHHPH")
 
-    simanneal_protein = SimulatedAnnealing(test_protein, start_n=10, folded=False, dimensions = 2, temperature = 10)
-    simanneal_protein.run_i_iterations(test_protein, iterations = 500, bonds=10)
+    simanneal_protein = SimulatedAnnealing(test_protein, start_n=5, folded=False, dimensions = 2, temperature = 10)
+    simanneal_protein.run_i_iterations(test_protein, iterations = 500, bonds=5)
 
     sim_anneal_scores.append(simanneal_protein.protein.score)
     sim_anneal_states += simanneal_protein.states
