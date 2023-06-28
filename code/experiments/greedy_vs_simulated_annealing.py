@@ -33,9 +33,8 @@ for key, value in dict_splits.items():
             split_numbers.append(key)
             score_after_greedy.append(greedy_protein.protein.score)
 
-            # CHANGE TEMP BASED ON IDEAL SIMULATED ANNEALING AND ITERATIONS
             simanneal_protein = SimulatedAnnealing(greedy_protein.protein, start_n = 10, folded = True, dimensions = 3, temperature = 10)
-            simanneal_protein.run_i_iterations(greedy_protein.protein, iterations = 500, bonds = 10)
+            simanneal_protein.run_i_iterations(greedy_protein.protein, iterations = 500, bonds = 10, sim_annealing=True)
             
             score_after_simanneal.append(simanneal_protein.protein.score)
 
