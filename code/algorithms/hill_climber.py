@@ -56,6 +56,7 @@ class Hill_climber():
     """
     def __init__(self, protein: Protein, dimensions : int = 3, prints: bool = False, folded: bool = False) -> None:
         #Initiate first folding
+        self.states = 0
         if folded:
             if len(protein.sequence_list) < 1:
                 raise Exception("The sequence_list of this protein seems empty. \n\
@@ -98,6 +99,7 @@ class Hill_climber():
         Note:
         This function only changes the direction of the bond and doesn't update any coördinates!
         """
+        self.states += 1
         test_protein = copy.deepcopy(protein)
         if given_index == None:
             index_changing_bond = random.randint(2, len(test_protein.sequence_list)-1)
