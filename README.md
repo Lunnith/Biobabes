@@ -75,10 +75,7 @@ python -m code.experiments.greedy_vs_important_parts
 #### Greedy with depth experiment
 There are a 2 important input variables for testing greedy. The splits and the before. The script of the experiment consists of a dictionary with the value for split as the key and the number of iterations as values. Because for the larger splits, the time will increase, using the dictionary you can adjust the amount of iterations so it will not run too long. In the script it also states that for every split, the 'before' will take the value for all numbers lower than the split number. 
 
-To do the experiment we have conducted, the first split has 2000 iterations. Since the split 2 will do the number of iterations twice (for every 'before' possible), give this a number of iterations of 1000. This was done until split 5. Now all splits have the same number of iterations. The experiment plots a boxplot were you can see what the score distribution is of chosing a split and also gives the time it takes in a dataframe. The experiment can be run with the following code:
-
-python -m code.experiments.greedy_with_depth
-
+To do the experiment we have conducted, the first split has 2000 iterations. Since the split 2 will do the number of iterations twice (for every 'before' possible), give this a number of iterations of 1000. This was done until split 5. Now all splits have the same number of iterations. The experiment plots a boxplot were you can see what the score distribution is of chosing a split and also gives the time it takes in a dataframe. 
 This experiment can be run by the following code:
 
 ```
