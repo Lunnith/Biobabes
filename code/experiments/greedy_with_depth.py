@@ -38,7 +38,7 @@ for key, value in dict_splits.items():
 
             # make a protein, initialize greedy with the right parameters and run the algorithm
             protein = Protein(sequence)
-            greedy_test = gr.Greedy(protein, 2, splits = key, before = before)
+            greedy_test = gr.Greedy(protein, 3, splits = key, before = before)
             greedy_test.run()
 
             # append for each iterations the score, the before and the split
@@ -72,7 +72,7 @@ df_exp_greedy_total['total_time'] = total_time
 # check the data and visualize the best protein
 print(df_exp_greedy.head())
 print(df_exp_greedy_total.head())
-visualize_protein(best_protein_total, 2)
+visualize_protein(best_protein_total, 3)
 
 # plot the data using a boxplot for ever split to show score distributions
 sns.boxplot(data = df_exp_greedy, x = 'split_numbers', y = 'scores')
