@@ -61,8 +61,12 @@ def random_reassignment(protein, dimensions, k=20, func = random_assignment):
             current_score = folded_protein.score
             scores.append(current_score)
 
+            # check if the score of this protein is better than the best score
             if current_score < best_score:
+
+                # set the current score as the new best score and a copy of the protein as the new best fold
                 best_score = current_score
                 best_fold = copy.deepcopy(folded_protein)
     
+    # return the best fold, all scores in a list and the best score
     return best_fold, scores, best_score

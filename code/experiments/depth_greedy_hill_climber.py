@@ -117,11 +117,12 @@ for i in range(len(x_array)):
     ax2 = ax1.twinx()
     ax2.bar(x_array[i] + 0.2, scores[i], width=width, color='blue')
     ax2.set_ylabel("Scores")
-    ax2.set_ylim(min(scores), 0)
+    ax2.set_ylim(min(scores) -1, 0)
     ax2.invert_yaxis()
 
-ax1.legend(["States"], loc=2)
-ax2.legend(["Scores"], loc=1)
+
+ax1.legend(["States"], loc = 2)
+ax2.legend(["Scores"], loc = 1)
 plt.xticks(x_array, ['Depth First', 'Greedy with depth', 'Hill Climber', 'Simulated Annealing'])
 plt.title('Comparison of scores and states of short protein in 2D')
 

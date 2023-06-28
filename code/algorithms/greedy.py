@@ -31,6 +31,9 @@ class Greedy():
     list directions: list of lists
         there are 3 directions lists with all possible states of a sequence part, one for the amount of aminoacids of before beam search, 
         one for the splits and one after
+    
+    States: integer
+        This keeps track of the amount of states that are looked through
 
     Methods:
     -----------
@@ -139,6 +142,7 @@ class Greedy():
 
                 # add one state to the states counter
                 self.states += 1
+                
                 # compute the score using the parts function
                 score = self.parts(state_directions, i)
                 if score == best_score and score != None:
