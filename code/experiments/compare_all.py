@@ -12,7 +12,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 
-path = r"C:\Users\sofie\minorAI\Algoritmen en Heuristieken\data"
+path = r"C:\Users\lunav\Minor\Algoritmen en Heuristieken\data"
 
 # create dataframe to store results
 df_short_scores = pd.DataFrame()
@@ -46,8 +46,8 @@ df_long_scores["Random time"] = [28220]
 
 print('Random done!')
 
-df_short_scores.to_csv(path_or_buf=fr"{path}\df_short_scores_complete")
-df_long_scores.to_csv(path_or_buf=fr"{path}\df_long_scores_complete")
+df_short_scores.to_csv(path_or_buf=fr"{path}\df_short_scores_complete.csv")
+df_long_scores.to_csv(path_or_buf=fr"{path}\df_long_scores_complete.csv")
 
 # ---------------------------- Greedy ----------------------------
 # run greedy algorithm for short and long protein and store results
@@ -87,8 +87,8 @@ df_long_scores["Greedy time"] = [greedy_time_long]
 
 print('Greedy done!')
 
-df_short_scores.to_csv(path_or_buf=fr"{path}\df_short_scores_complete")
-df_long_scores.to_csv(path_or_buf=fr"{path}\df_long_scores_complete")
+df_short_scores.to_csv(path_or_buf=fr"{path}\df_short_scores_complete.csv")
+df_long_scores.to_csv(path_or_buf=fr"{path}\df_long_scores_complete.csv")
 
 # ---------------------------- Greedy with depth search ----------------------------
 # run greedy with depth algorithm for short and long protein and store results
@@ -131,8 +131,8 @@ df_long_scores["Greedy depth time"] = [greedy_beam_time_long]
 
 print('Greedy with depth done!')
 
-df_short_scores.to_csv(path_or_buf=fr"{path}\df_short_scores_complete")
-df_long_scores.to_csv(path_or_buf=fr"{path}\df_long_scores_complete")
+df_short_scores.to_csv(path_or_buf=fr"{path}\df_short_scores_complete.csv")
+df_long_scores.to_csv(path_or_buf=fr"{path}\df_long_scores_complete.csv")
 
 # ---------------------------- Depth First with P and directions pruning ----------------------------
 # run depth first algorithm with P pruning and directions pruning for short protein and store results
@@ -149,8 +149,8 @@ df_short_scores["Depth First time"] = [depth_first_time]
 
 print('Depth First done!')
 
-df_short_scores.to_csv(path_or_buf=fr"{path}\df_short_scores_complete")
-df_long_scores.to_csv(path_or_buf=fr"{path}\df_long_scores_complete")
+df_short_scores.to_csv(path_or_buf=fr"{path}\df_short_scores_complete.csv")
+df_long_scores.to_csv(path_or_buf=fr"{path}\df_long_scores_complete.csv")
 
 # ---------------------------- Depth First - Important Parts ----------------------------
 # run important parts algorithm for short and long protein and store results
@@ -179,8 +179,8 @@ df_long_scores["Important Parts time"] = [important_parts_time_long_on_P]
 
 print('Important Parts done!')
 
-df_short_scores.to_csv(path_or_buf=fr"{path}\df_short_scores_complete")
-df_long_scores.to_csv(path_or_buf=fr"{path}\df_long_scores_complete")
+df_short_scores.to_csv(path_or_buf=fr"{path}\df_short_scores_complete.csv")
+df_long_scores.to_csv(path_or_buf=fr"{path}\df_long_scores_complete.csv")
 
 # ---------------------------- Hill Climber ----------------------------
 # run hill climber algorithm for short and long protein and store results
@@ -209,8 +209,8 @@ df_long_scores["Hill climber time"] = [hill_climber_time_long]
 
 print('Hill Climber done!')
 
-df_short_scores.to_csv(path_or_buf=fr"{path}\df_short_scores_complete")
-df_long_scores.to_csv(path_or_buf=fr"{path}\df_long_scores_complete")
+df_short_scores.to_csv(path_or_buf=fr"{path}\df_short_scores_complete.csv")
+df_long_scores.to_csv(path_or_buf=fr"{path}\df_long_scores_complete.csv")
 
 # ---------------------------- Simulated Annealing ----------------------------
 # run simulated annealing algorithm for short and long protein and store results
@@ -240,8 +240,8 @@ df_long_scores["Simulated Annealing time"] = [sim_anneal_long_time]
 
 print('Simulated Annealing done!')
 
-df_short_scores.to_csv(path_or_buf=fr"{path}\df_short_scores_complete")
-df_long_scores.to_csv(path_or_buf=fr"{path}\df_long_scores_complete")
+df_short_scores.to_csv(path_or_buf=fr"{path}\df_short_scores_complete.csv")
+df_long_scores.to_csv(path_or_buf=fr"{path}\df_long_scores_complete.csv")
 
 # -------------------- VISUALIZE SHORT COMPARISON--------------------
 df_short_scores = pd.read_csv(fr"{path}\df_short_scores_complete")
@@ -272,7 +272,7 @@ ax1.legend(["Time (s)"], loc=2)
 ax2.legend(["Scores"], loc=1)
 
 plt.title('Comparison of all algorithms for short protein')
-plt.savefig(fr"{path}\Full_comparison_short_complete.pdf")
+plt.savefig(fr"{path}\Full_comparison_short_complete.png")
 plt.show()
 
 # -------------------- VISUALIZE LONG COMPARISON--------------------
@@ -304,5 +304,5 @@ ax1.legend(["Time (s)"], loc=2)
 ax2.legend(["Scores"], loc=1)
 
 plt.title('Comparison of all algorithms for long protein')
-plt.savefig(fr"{path}\Full_comparison_long_complete.pdf")
+plt.savefig(fr"{path}\Full_comparison_long_complete.png")
 plt.show()

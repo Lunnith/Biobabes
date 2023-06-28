@@ -312,7 +312,7 @@ class Hill_climber():
         plt.show()
 
 
-    def experiment(self, protein: Protein, iterations: int, sample_size=1, max_n=10, sim_annealing=False, plot=True) -> Protein:
+    def experiment(self, protein: Protein, iterations: int, sample_size=1, max_n=10, sim_annealing=False, plot=True, result_each_sample=False) -> Protein:
         """
         Runs an experiment with a given protein. The sample size is the amount of times to run the algorithm.
         It then runs the algorithm for each n amount of bonds to change, with the given amount of iterations.
@@ -331,8 +331,9 @@ class Hill_climber():
         best_score = first_random_fold.score
         results = None
 
+        if result_each_sample: result_per_sample = {}
         if not plot: 
-            results_dict = {}
+            results_dict = {}  
 
         for n in range(1, max_n+1):
             lowest_score_for_n = 0
@@ -342,10 +343,12 @@ class Hill_climber():
             for iteration in range(iterations+1):
                 all_scores[iteration] = []
 
+            if result_each_sample: lowest_n_per_sample = {}
             for sample_run in range(sample_size):
                 if sim_annealing: 
                     self.reset_temperature(new_n=n, reset_protein=first_random_fold)
                 protein_for_n, new_lowest_score_for_n, scores, improvement = self.run_i_iterations(first_random_fold, iterations, n, sample_run+1, sim_annealing=sim_annealing)
+                if result_each_sample: lowest_n_per_sample[sample_run] = new_lowest_score_for_n
 
                 if new_lowest_score_for_n < lowest_score_for_n:
                     lowest_score_for_n = new_lowest_score_for_n
@@ -360,6 +363,7 @@ class Hill_climber():
                     else:
                         all_scores[iteration].append(None)
 
+            if result_each_sample: result_per_sample[n] = lowest_n_per_sample
             temp_df = pd.DataFrame.from_dict(all_scores, orient='index')
             temp_df = temp_df.fillna(method='ffill')
             temp_df['Average'] = temp_df.mean(axis=1)
@@ -378,4 +382,5 @@ class Hill_climber():
         elif not plot:
             results = pd.DataFrame.from_dict(results_dict, orient='index')
 
-        return best_protein, results
+        if result_each_sample: return best_protein, results, result_per_sample
+        else: return best_protein, results

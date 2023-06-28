@@ -25,46 +25,49 @@ dimensions = 3
 prints = True
 folded = True
 
-iterations = 500
+iterations = 1000
 sample_size = 50
 max_n = 10
 plot = False
 
 # Run the experiment for the Hill Climber
 hill_climber = Hill_climber(protein=protein_hc, prints=prints, dimensions=dimensions, folded=folded)
-best_protein_hc, results_hc = hill_climber.experiment(protein=protein_hc, iterations=iterations, sample_size=sample_size, max_n=max_n, plot=plot, sim_annealing=False)
+best_protein_hc, results_hc, best_results_hc = hill_climber.experiment(protein=protein_hc, iterations=iterations, sample_size=sample_size, max_n=max_n, plot=plot, sim_annealing=False, result_each_sample=True)
 
 # Run the experiment for the Simulated Annealing
 sim_annealing = SimulatedAnnealing(protein=protein_sa, start_n=max_n, dimensions=dimensions, prints=prints, folded=folded)
-best_protein_sa, results_sa = sim_annealing.experiment(protein=protein_sa, iterations=iterations, sample_size=sample_size, max_n=max_n, plot=plot, sim_annealing=True)
+best_protein_sa, results_sa, best_results_sa = sim_annealing.experiment(protein=protein_sa, iterations=iterations, sample_size=sample_size, max_n=max_n, plot=plot, sim_annealing=True, result_each_sample=True)
 
-# unpack results
-# hc_index = []
-# for n in range(1, max_n+1):
-#     hc_index.append(f"n={n}")
-# results_hc.index = hc_index
-results_hc.loc["Algorithm"] = 'Hill Climber'
-df_hc = copy.deepcopy(results_hc.T[0:-1])
-best_hc = copy.deepcopy(results_hc.T.iloc[-1])
+# unpack results per sample into one big dataframe of results
+unpacked_results_hc = {}
+for n in best_results_hc:
+    unpacked_results_hc[n] = []
+    for sample in best_results_hc[n]:
+        unpacked_results_hc[n].append(best_results_hc[n][sample])
+df_results_hc = pd.DataFrame.from_dict(unpacked_results_hc).T
 
-# sa_index = []
-# for n in range(0, max_n):
-#     sa_index.append(f"n={n}")
-# results_sa.index = sa_index
-results_sa.loc["Algorithm"] = 'Simulated Annealing'
-df_sa = copy.deepcopy(results_sa.T[0:-1])
-best_sa = copy.deepcopy(results_sa.T.iloc[-1])
+unpacked_results_sa = {}
+for n in best_results_sa:
+    unpacked_results_sa[n] = []
+    for sample in best_results_sa[n]:
+        unpacked_results_sa[n].append(best_results_sa[n][sample])
+df_results_sa = pd.DataFrame.from_dict(unpacked_results_sa).T
+
+#Combine results
+df_results_hc.loc["Algorithm"] = 'Hill Climber'
+df_hc = copy.deepcopy(df_results_hc.T[0:-1])
+best_hc = copy.deepcopy(df_results_hc.T.iloc[-1])
+
+df_results_sa.loc["Algorithm"] = 'Simulated Annealing'
+df_sa = copy.deepcopy(df_results_sa.T[0:-1])
+best_sa = copy.deepcopy(df_results_sa.T.iloc[-1])
 
 df_both_messy = pd.concat((df_hc, df_sa))
-# print(df_both_messy)
+df_both_messy = pd.DataFrame(df_both_messy)
 df_both = df_both_messy.melt(id_vars=['Algorithm'], var_name='Bonds changed', value_name='Score')
-# df_both.index = df_both['n_used']
-# df_both = df_both.drop(labels='n_used', axis=1)
 print(df_both)
 
 #Plot results
-# fig, axs = plt.subplots(1, 2, figsize=(12, 5))
-# ax = 0
 used_n = range(0, max_n)
 
 ax = sns.boxplot(data=df_both, y='Score', x='Bonds changed', hue='Algorithm')
