@@ -4,13 +4,11 @@ from code.visualization.visualize import *
 from code.algorithms.hill_climber import *
 from code.algorithms.randomise import *
 
-try:
-    print(int("hi"))
-except: print(8)
+
 
 
 # from code.experiments.hill_climber_vs_sim_annealing import *
-from code.experiments.simulated_annealing_params import *
+# from code.experiments.simulated_annealing_params import *
 import time
 
 #NOTE TO SELF: 2D version is buggy
@@ -22,23 +20,27 @@ sequence = "HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH"
 
 
 # # --------------------------Testing Hill_climber------------------------------
-# protein = Protein(sequence)
-# # folded_protein = random_assignment(protein, 3)
-# hill_climber = Hill_climber(protein, prints=True, folded=False, dimensions=3)
+protein = Protein(sequence)
+folded_protein = random_assignment(protein, 3)
+
+visualize_protein(folded_protein, 3)
+hill_climber = Hill_climber(folded_protein, prints=True, folded=True, dimensions=3)
+print(hill_climber.states)
 # folded_protein = hill_climber.protein
 
 # # print("Starting score =", hill_climber.lowest_score)
-# folded_protein, index = hill_climber.change_bond(folded_protein)
-# # visualize_protein(folded_protein, 3)
-# folded_protein = hill_climber.refold_into_valid_state(folded_protein)
-
-# # visualize_protein(folded_protein, 3)
+folded_protein, index = hill_climber.change_bond(folded_protein)
+print(hill_climber.states)
 
 
+visualize_protein(folded_protein, 3)
 
-# folded_protein, best_score, scores, improvement = hill_climber.run_i_iterations(protein, 10, 1)
+
+
+folded_protein, best_score, scores, improvement = hill_climber.run_i_iterations(protein, 10, 1)
+print(hill_climber.states)
 # # print(best_score)
-# # visualize_protein(folded_protein, 3)
+visualize_protein(folded_protein, 3)
 # protein = Protein(sequence)
 # if folded_protein.score > -20:
 #     best_protein = hill_climber.experiment(protein, 500, 2, max_n=10)

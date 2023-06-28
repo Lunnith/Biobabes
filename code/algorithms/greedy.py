@@ -70,6 +70,8 @@ class Greedy():
         self.splits = splits
         self.dimensions = dimensions
 
+        self.states = 0
+
         # set the amount of aminoacids before the sequence parts start (0 means it start immediatly)
         self.amino_before = before
 
@@ -148,7 +150,9 @@ class Greedy():
             # go through all states and compute the score
             best_score = 1
             for state_directions in list_directions:
-                
+
+                # add one state to the states counter
+                self.states += 1
                 # compute the score using the parts function
                 score = self.parts(state_directions, i)
                 if score == best_score and score != None:
