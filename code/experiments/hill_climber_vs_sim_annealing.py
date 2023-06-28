@@ -24,7 +24,7 @@ prints = False
 folded = True
 
 iterations = 1000
-sample_size = 50
+sample_size = 100
 max_n = 10
 plot = False
 
@@ -33,7 +33,7 @@ hill_climber = Hill_climber(protein=protein_hc, prints=prints, dimensions=dimens
 best_protein_hc, results_hc, best_results_hc = hill_climber.experiment(protein=protein_hc, iterations=iterations, sample_size=sample_size, max_n=max_n, plot=plot, sim_annealing=False, result_each_sample=True)
 
 # Run the experiment for the Simulated Annealing
-sim_annealing = SimulatedAnnealing(protein=protein_sa, start_n=max_n, dimensions=dimensions, prints=prints, folded=folded)
+sim_annealing = SimulatedAnnealing(protein=protein_sa, start_n=max_n, temperature=10, dimensions=dimensions, prints=prints, folded=folded)
 best_protein_sa, results_sa, best_results_sa = sim_annealing.experiment(protein=protein_sa, iterations=iterations, sample_size=sample_size, max_n=max_n, plot=plot, sim_annealing=True, result_each_sample=True)
 
 # unpack results per sample into one big dataframe of results
@@ -67,4 +67,5 @@ df_both = df_both_messy.melt(id_vars=['Algorithm'], var_name='Bonds changed', va
 #Plot results
 ax = sns.boxplot(data=df_both, y='Score', x='Bonds changed', hue='Algorithm')
 ax.invert_yaxis()
+plt.savefig(f"{iterations}it_{sample_size}samples")
 plt.show()

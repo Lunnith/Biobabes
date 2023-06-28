@@ -2,6 +2,7 @@ from ..algorithms.randomise import random_reassignment
 import matplotlib.pyplot as plt
 from ..visualization.visualize import *
 from ..classes.protein import Protein
+
 import time
 
 # start the timer
@@ -29,5 +30,5 @@ plt.hist(scores, rwidth = 0.75, bins = 22, align = 'right') # adjust the bins de
 plt.title(f'Random algoritme {k} iteraties')
 plt.xlabel('Score')
 plt.ylabel('Frequentie')
-plt.text(x = -20, y = 1200, s = f'Beste score: {best_score}, time: {total_time} sec', fontsize = 10) # adjust placement of the text depending on results
+plt.text(x = -20, y = 1200, s = f'Best score: {best_score}, time: {total_time} sec', fontsize = 10) # adjust placement of the text depending on results
 plt.show()

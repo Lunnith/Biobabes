@@ -5,7 +5,8 @@ from ..classes.protein import Protein
 import pandas as pd
 import matplotlib.pyplot as plt
 
-path = r"C:\Users\sofie\minorAI\Algoritmen en Heuristieken\data"
+input_path = input('Please specify the path on which you want to save the data and the visualization of the results \n')
+path = fr"{input_path}"
 
 # create dataframe to store results
 df_exp_greedy_important_parts = pd.DataFrame()
@@ -60,5 +61,5 @@ ax = plt.gca()
 ax.invert_yaxis()
 
 plt.xticks([1, 2], ['Greedy with depth', 'Important Parts'])
-plt.savefig(fr"{path}\Greedy_vs_Important_Parts_complete.pdf")
+plt.savefig(fr"{path}\Greedy_vs_Important_Parts_complete.png")
 plt.show()

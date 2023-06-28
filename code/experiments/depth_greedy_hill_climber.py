@@ -8,7 +8,8 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-path = r"C:\Users\alaya\Documents\Data_experiments"
+input_path = input('Please specify the path on which you want to save the data and the visualization of the results \n')
+path = fr"{input_path}"
 
 # create dataframe to store results
 df_exp_depth_greedy_hill = pd.DataFrame()
@@ -49,6 +50,7 @@ for key, value in dict_splits.items():
             greedy_states += greedy_protein.states
 
 df_exp_depth_greedy_hill.to_csv(path_or_buf=fr"{path}\df_exp_depth_greedy_hill_complete")
+
 # run hill climber with test protein
 n = 50
 
@@ -64,6 +66,7 @@ for i in range(n):
 print('Hillclimber completed')
 
 df_exp_depth_greedy_hill.to_csv(path_or_buf=fr"{path}\df_exp_depth_greedy_hill_complete")
+
 # run simulated annealing with test protein
 n = 50
 for i in range(n):
@@ -123,5 +126,5 @@ ax2.legend(["Scores"], loc = 1)
 plt.xticks(x_array, ['Depth First', 'Greedy with depth', 'Hill Climber', 'Simulated Annealing'])
 plt.title('Comparison of scores and states of short protein in 2D')
 
-plt.savefig(fr"{path}\Depth_First_vs_Greedy_vs_Hill_Climber_vs_Simulated_Annealing_complete.pdf")
+plt.savefig(fr"{path}\Depth_First_vs_Greedy_vs_Hill_Climber_vs_Simulated_Annealing_complete.png")
 plt.show()

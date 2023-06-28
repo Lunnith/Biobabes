@@ -1,9 +1,14 @@
+from ..classes.protein import Protein
 
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
 
-def visualize_protein(protein, dimensions):
+def visualize_protein(protein: Protein, dimensions: int) -> None:
+    """
+    Takes the protein to visualize and the amount of dimensions to visualize in.
+    Then, executes the right visualization method.
+    """
     if dimensions == 2:
         visualize_protein2D(protein)
     elif dimensions == 3:
@@ -12,7 +17,8 @@ def visualize_protein(protein, dimensions):
         print("ERROR: This function is written for either 2 or 3 dimensions.")
         return
 
-def visualize_protein2D(protein):
+
+def visualize_protein2D(protein: Protein) -> None:
     """
     Visualize the folded protein with aminoacids and bonds in 2D.
     """
@@ -31,7 +37,7 @@ def visualize_protein2D(protein):
     plt.show()
 
 
-def visualize_protein3D(protein):
+def visualize_protein3D(protein: Protein) -> None:
     """
     Visualize the folded protein with aminoacids and bonds in 3D.
     """
@@ -55,7 +61,7 @@ def visualize_protein3D(protein):
     plt.show()
 
 
-def equal_axis(x_list, y_list, z_list=None):
+def equal_axis(x_list: list, y_list: list, z_list: list = None) -> None:
     """
     Make sure that the x-axis, y-axis and z-axis are both of the same length, 
     so that the protein gets shown with equally long bonds.
@@ -97,23 +103,33 @@ def equal_axis(x_list, y_list, z_list=None):
     else:
         plt.xlim([min_x - 1, max_x + 1])
         plt.ylim([min_y - 1, max_y + 1])
-        
-def get_min_max_length(list):
+
+
+def get_min_max_length(list: list) -> tuple[int, int, int]:
+    """
+    Takes a list of coördinates on one axis
+    Then returns the lowest coördinate, the highest coördinate and the range inbetween.
+    """
     min_list = min(list)
     max_list = max(list)
     return min_list, max_list, (max_list - min_list)
 
-def calculate_axis_change(diff, min_smaller_axis, max_smaller_axis):
-        if diff % 2 == 0:
-            max_smaller_axis += diff // 2
-            min_smaller_axis -= diff // 2
-        elif diff % 2 == 1:
-            max_smaller_axis += diff // 2 + 1
-            min_smaller_axis -= diff // 2
-        return min_smaller_axis, max_smaller_axis
+
+def calculate_axis_change(diff: int, min_smaller_axis: int, max_smaller_axis: int) -> tuple[int, int]:
+    """
+    Takes difference in range of two axis and also the the highest and lowest coördinate of the smallest axis.
+    Then, enlargens the smallest axis to the right size and returns the new highest and lowest coördinate.
+    """
+    if diff % 2 == 0:
+        max_smaller_axis += diff // 2
+        min_smaller_axis -= diff // 2
+    elif diff % 2 == 1:
+        max_smaller_axis += diff // 2 + 1
+        min_smaller_axis -= diff // 2
+    return min_smaller_axis, max_smaller_axis
 
 
-def visualize_bonds(protein, dimensions=2, axs=None):
+def visualize_bonds(protein: Protein, dimensions:int = 2, axs: plt.Axes=None) -> plt.Axes:
     """
     color hh = 'deepskyblue'
     color cc = 'lime'
@@ -144,7 +160,7 @@ def visualize_bonds(protein, dimensions=2, axs=None):
         return
 
 
-def visualize_scores(list_of_scores):
+def visualize_scores(list_of_scores: list) -> None:
     sns.histplot(list_of_scores, kde=True, bins=len(set(list_of_scores)), discrete=True)
     plt.xlabel("Score", loc='right')
     plt.xticks(list_of_scores)
