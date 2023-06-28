@@ -3,8 +3,11 @@ from ..algorithms.randomise import random_reassignment
 from ..algorithms.depth_first import DepthFirst
 from ..algorithms.important_parts import ImportantParts
 from ..algorithms.greedy import Greedy
+from ..algorithms.hill_climber import Hill_climber
+from ..algorithms.simulated_annealing import SimulatedAnnealing
 from .visualize import *
 
+#Note: make exceptions for folded proteins and the choices u can make.
 class UserInterface():
     def __init__(self) -> None:
         print("Hello and welcome to our Protein folder!")
@@ -91,7 +94,7 @@ class UserInterface():
             else: 
                 print("That is not a valid option. If you wish to quit, input 'Q'.")
 
-            verification = input("Do you wish to continue with this algorithm?\nIf yes, input 'Yes' or 'y'.").lower()
+            verification = input("Do you wish to continue with this algorithm?\nIf yes, input 'Yes' or 'y'.\n").lower()
             if verification == 'yes' or verification == 'y':
                 continued = True
             else: continued = False
@@ -164,7 +167,7 @@ class UserInterface():
         while not correct_kwargs:
             splits_correct = False
             while not splits_correct:
-                print("The Greedy algorithm by default uses a split size of 1. which means it only looks for the best score per addition of a single aminoacid. Increasing the split size increases the duration of the algorithm.")
+                print("\nThe Greedy algorithm by default uses a split size of 1. which means it only looks for the best score per addition of a single aminoacid. Increasing the split size increases the duration of the algorithm.")
                 splits = input("Do you want to increase the split size? If yes, input 'Yes' or 'y'.\n").lower()
                 if splits == 'q': return protein
                 if splits == "yes" or splits == "y":
@@ -186,6 +189,39 @@ class UserInterface():
         return greedy.protein
 
     def use_hill_climber(self, protein):
+        hill_climber = Hill_climber(protein)
+        simanneal = False
+        correct_kwargs = False
+        print("The Hill-Climber algorithm will make a small change to the protein each iteration. If the change resulted in a better score, the change gets accepted.")
+        print("The Hill-Climber algorithm without Simulated Annealing rejects all changes that have a negative impact. Because of this, the Hill-Climber could end up at a local optimum. The version with Simulated Annealing sometimes acceps a worse score, in order to be able to get out of these local optima and hopefully end up in the global optimum.")
+        
+        while not correct_kwargs:
+            anneal = input("would you like to use the Simulated Annealing addition? If yes, input 'Yes' or 'y'.\n").lower()
+            if anneal == 'q': return protein
+            if anneal == "yes" or anneal == 'y':
+                simanneal = True
+            
+            try: n = int(input("How many bonds would you like to change at the same time?\n"))
+            except:
+                print("Please insert a number.")
+                continue
+            if n > 10:
+                print("Please insert a maximum of 10")
+                continue
+
+            try: iterations = int(input("How many iterations do you want to execute?\n"))
+            except:
+                print("Please insert a number.")
+                continue
+
+            kwargs = input(f"Now using {iterations} iterations, changing {n} bonds, and the use of Simulated Annealing is {simanneal}, correct?\n").lower()
+            if kwargs == "yes" or kwargs == "y":
+                correct_kwargs = True
+            else: simanneal = False
+
+        if simanneal:
+            hill_climber = SimulatedAnnealing(protein, start_n=n)
+        protein = hill_climber.run_i_iterations(protein, iterations, n, sim_annealing=simanneal)[0]
         return protein
 
     
