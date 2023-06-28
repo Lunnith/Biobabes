@@ -6,34 +6,50 @@ from ..algorithms.greedy import Greedy
 from ..algorithms.hill_climber import Hill_climber
 from ..algorithms.simulated_annealing import SimulatedAnnealing
 from .visualize import *
+import copy
 
 
 class UserInterface():
+    """
+    This class is defined to automatically run the userinterface for the protein folding program.
+    """
     def __init__(self) -> None:
         print("Hello and welcome to our Protein folder! (At any time if you want to quit, just insert 'Q'!)")
         self.folded = False
         self.run()
     
     def run(self):
-        protein = self.determine_sequence()
+        """
+        Run the user interface.
+        """
+        original_protein = self.determine_sequence()
+        protein = copy.deepcopy(original_protein)
         process_further = True
 
         while process_further:
             if not self.folded: algorithm = self.determine_algorithm_unfolded()
-            elif self.folded: algorithm = self.determine_algorithm_folded()
+            elif self.folded: algorithm = self.determine_algorithm_folded(protein)
 
-            if algorithm == 'refolded': continue
+            if algorithm == 'refolded':
+                protein = copy.deepcopy(original_protein)
+                continue
+            if algorithm == 'stop': break
             protein = self.run_algorithm(algorithm, protein)
             
-            print(f"The lowest score that this algorithm found is {protein.score}.")
+            print(f"\nThe lowest score that this algorithm found is {protein.score}.")
             asked_process = input("Do you wish to run another algorithm, continuing with this folded protein? \n\
-                                  If yes, input 'Yes' or 'y'. Otherwise, the folded protein will be shown and the program will quit.").lower()
+                                  If yes, input 'Yes' or 'y'. Otherwise, the folded protein will be shown and the program will quit.\n").lower()
             if asked_process == "yes" or asked_process == 'y':
                 continue
             else: process_further = False
-        visualize_protein(protein, dimensions=3)    
+
+        if self.folded: visualize_protein(protein, dimensions=3)
+        else: print("\nThis protein is not folded and thus cannot be visualised.")  
 
     def run_algorithm(self, algorithm, protein): 
+        """
+        Initiate the start of the chosen algorithm
+        """
         if algorithm == 'a': 
             protein = self.use_random(protein)
         if algorithm == 'b': 
@@ -45,10 +61,13 @@ class UserInterface():
         return protein  
     
     def determine_sequence(self):
+        """
+        Ask the user what sequence to use.
+        """
         correct = False
         while not correct:
             print("     Would you like to fold one of our given proteins? Insert 'Yes' or 'y'. ")
-            own_sequence = input("     would you like to fold your own sequence? Insert your own sequence: \n").upper()
+            own_sequence = input("     If you would like to fold your own sequence, please insert your sequence: \n").upper()
             if own_sequence == "YES" or own_sequence == "Y":
                 sequence = input("\nPlease, pick one of the following sequences:\n\
                 Sequences excluding C's: \n\
@@ -84,6 +103,10 @@ class UserInterface():
     
 
     def determine_algorithm_unfolded(self):
+        """
+        Only gets called upon if self.folded = False.
+        Asks the user which algorithm to run.
+        """
         continued = False
 
         while continued == False:
@@ -98,20 +121,26 @@ class UserInterface():
             else: continued = False
         return algorithm
     
-    def determine_algorithm_folded():
-        print("As the protein is already folded, not every algorithm can be run anymore.")
-        print("The only algorithm that can improve the pre-folded protein is the Hill-Climber (with our without Simulated Annealing)")
+    def determine_algorithm_folded(self, protein):
+        """
+        Only gets called upon if self.folded = True
+        Asks the user how to continue.
+        """
+        print("\n\nAs the protein is already folded, not every algorithm can be run anymore.")
+        print("The only algorithm that can improve the pre-folded protein is the Hill-Climber (with, or without Simulated Annealing) algorithm.")
         print("However, if the score you have found is too low and you still want to try the other algorithms, we can unfold the protein for you.")
         choice_correct = False
         while not choice_correct:
-            choice = input("Do you wish to unfold your protein and run another algorithm? If yes, input 'Yes' or 'y'.\n\
+            choice = input("\nDo you wish to unfold your protein and run another algorithm? If yes, input 'Yes' or 'y'.\n\
                         If you want to run the Hill-Climber algorithm, input 'Run' or 'r'. \n\
-                        If you don't want to run the Hill-Climber and keep the folding like this, input 'No' or 'n'.").lower()
+                        If you don't want to run the Hill-Climber and keep the folding like this, input 'No' or 'n'.\n").lower()
             if choice == 'yes' or choice == 'y':
-                choice = input("Are you sure that you want to reject the fold you have gotten until now?/n").lower()
-                if choice == 'yes' or choice == 'y':
-                    self.fold = False
+                choice_correct = True
+                choice_sure = input(f"Are you sure that you want to reject the fold (score={protein.score}) you have gotten until now? ").lower()
+                if choice_sure == 'yes' or choice_sure == 'y':
+                    self.folded = False
                     algorithm = 'refolded'
+                    return algorithm
             elif choice == "run" or choice == 'r': algorithm = 'd'
             elif choice == "no" or choice == 'n' or choice == 'q': algorithm = 'stop'
 
@@ -119,6 +148,9 @@ class UserInterface():
 
 
     def use_random(self, protein):
+        """
+        Asks the user for the parameters nessecary and runs the Random algorithm.
+        """
         print("\nThis algorithm randomly assigns a direction for each bond of the protein. After a certain amount of iterations, it returns the protein with the best achieved score yet.")
         correct_kwargs = False
         while not correct_kwargs:
@@ -136,6 +168,9 @@ class UserInterface():
         return protein
     
     def use_depth_first(self, protein):
+        """
+        Asks the user for the parameters nessecary and runs the Depth-First algorithm.
+        """
         print("\nThis algorithm computes every possible fold and is guaranteed to find the optimum folding. \nWARNING: This algorithm becomes VERY slow with a sequence length of more than 12.")
         depth_first = DepthFirst(protein, 3)
         important_parts = ImportantParts(protein, 3)
@@ -185,6 +220,9 @@ class UserInterface():
         return depth_first.protein
 
     def use_greedy(self, protein):
+        """
+        Asks the user for the parameters nessecary and runs the Greedy algorithm.
+        """
         print("\nThis algorithm looks for the best possible next move, but greedy desicions at the beginning of the folding process might prevent it from getting an optimal score.")
         correct_kwargs = False
 
@@ -214,13 +252,16 @@ class UserInterface():
         return greedy.protein
 
     def use_hill_climber(self, protein):
+        """
+        Asks the user for the parameters nessecary and runs the Hill Climber algorithm.
+        """
         print("\nThis algorithm makes small changes to the folding, hoping to improve the score. After a certain amount of iterations, it returns the best fold yet.")
         simanneal = False
         correct_kwargs = False
         folded = self.folded
 
         hill_climber = Hill_climber(protein, folded=folded)
-        print("The Hill-Climber algorithm without Simulated Annealing rejects all changes that have a negative impact. Because of this, the Hill-Climber could end up at a local optimum. The version with Simulated Annealing sometimes acceps a worse score, in order to be able to get out of these local optima and hopefully end up in the global optimum.")
+        print("The Hill-Climber algorithm without Simulated Annealing rejects all changes that have a negative impact. Because of this, the Hill-Climber could end up at a local optimum. The version with Simulated Annealing sometimes accepts a worse score, in order to be able to get out of these local optima and hopefully end up in the global optimum.")
         
         while not correct_kwargs:
             anneal = input("would you like to use the Simulated Annealing addition? If yes, input 'Yes' or 'y'.\n").lower()
@@ -251,6 +292,3 @@ class UserInterface():
         protein = hill_climber.run_i_iterations(protein, iterations, n, sim_annealing=simanneal)[0]
         self.folded = True
         return protein
-
-    
-UserInterface()
