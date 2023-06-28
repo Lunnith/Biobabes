@@ -7,7 +7,20 @@ from ..algorithms.randomise import random_assignment
 import copy
 import time
 
+def prepare_protein(sequence : 'str') -> Protein:
+    """
+    Prepares the protein and makes sure that the starting score is not too high, 
+    but the protein is folded all the way through.
+    """
+    protein = random_assignment(Protein(sequence), 3)
+    while len(sequence) != len(protein.sequence_list) or protein.score < -10:
+        protein = random_assignment(Protein(sequence), 3)
+    return protein
+
 def unpack_scores(scores: list, improvement: list) -> dict:
+    """
+    Takes the list of scores and the corresponding list of improvements and creates one dictionary of both.
+    """
     all_scores = {}
     for iteration in range(iterations+1):
         all_scores[iteration] = []
@@ -17,12 +30,6 @@ def unpack_scores(scores: list, improvement: list) -> dict:
         else:
             all_scores[iteration].append(None)
     return all_scores
-
-def prepare_protein(sequence : 'str') -> Protein:
-    protein = random_assignment(Protein(sequence), 3)
-    while len(sequence) != len(protein.sequence_list) or protein.score < -10:
-        protein = random_assignment(Protein(sequence), 3)
-    return protein
 
 # For these experiments, we'll keep the starting n at 10, as this n decreases during the run anyways
 # The best value for n will be found in the hill_climber vs sim_annealing experiment, 
@@ -57,6 +64,7 @@ for test in range(0,5):
                 sa_scores = unpack_scores(sa_scores, sa_improvement)
 
                 temp_df[sample] = pd.DataFrame.from_dict(sa_scores, orient='index')
+            #Get the average scores per iteration of all samples
             temp_df = temp_df.fillna(method='ffill') 
             temp_df['Average'] = temp_df.mean(axis=1)
             results_dict[temp] = temp_df["Average"]
