@@ -18,26 +18,28 @@ def unpack_scores(scores: list, improvement: list) -> dict:
             all_scores[iteration].append(None)
     return all_scores
 
-for test in range(0,5):
-    sequence = "HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH" 
+def prepare_protein(sequence : 'str') -> Protein:
     protein = random_assignment(Protein(sequence), 3)
     while len(sequence) != len(protein.sequence_list) or protein.score < -10:
         protein = random_assignment(Protein(sequence), 3)
+    return protein
+
+# For these experiments, we'll keep the starting n at 10, as this n decreases during the run anyways
+# The best value for n will be found in the hill_climber vs sim_annealing experiment, 
+# which will be run with the best parameters found in this experiment.
+
+# Define repeating testing params:
+sequence = "HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH"
+iterations = 2500
+dimensions = 3
+folded = True
+start_n = 10
+samples = 50
+testing_temperatures = range(1, 25+1)
+
+for test in range(0,5):
+    protein = prepare_protein(sequence)
     testing_protein = copy.deepcopy(protein)
-
-    # For these experiments, we'll keep the starting n at 10, as this n decreases during the run anyways
-    # The best value for n will be found in the hill_climber vs sim_annealing experiment, 
-    # which will be run with the best parameters found in this experiment.
-
-    # Define repeating testing params:
-    iterations = 2500
-    dimensions = 3
-    folded = True
-    start_n = 10
-    samples = 50
-
-    # define variable testing params:
-    testing_temperatures = range(1, 25+1)
 
     #Try different starting temperatures and different temperature schemes:
     start = time.time()
