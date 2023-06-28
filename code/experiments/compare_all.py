@@ -244,7 +244,7 @@ df_short_scores.to_csv(path_or_buf=fr"{path}\df_short_scores_complete.csv")
 df_long_scores.to_csv(path_or_buf=fr"{path}\df_long_scores_complete.csv")
 
 # -------------------- VISUALIZE SHORT COMPARISON--------------------
-df_short_scores = pd.read_csv(fr"{path}\df_short_scores_complete")
+df_short_scores = pd.read_csv(fr"{path}\df_short_scores_complete.csv")
 
 # create a combined barchart of the scores and the time for all algorithms for the short protein
 time_short = [int(df_short_scores ['Random time'].iloc[0]), int(df_short_scores['Greedy time'].iloc[0]), int(df_short_scores['Greedy depth time'].iloc[0]), int(df_short_scores['Depth First time'].iloc[0]), int(df_short_scores['Important Parts time'].iloc[0]), int(df_short_scores['Hill climber time'].iloc[0]), int(df_short_scores['Simulated Annealing time'].iloc[0])]
@@ -276,7 +276,7 @@ plt.savefig(fr"{path}\Full_comparison_short_complete.png")
 plt.show()
 
 # -------------------- VISUALIZE LONG COMPARISON--------------------
-df_long_scores = pd.read_csv(fr"{path}\df_long_scores_complete")
+df_long_scores = pd.read_csv(fr"{path}\df_long_scores_complete.csv")
 
 # create a combined barchart of the scores and the time for all algorithms for the long protein
 time_long = [int(df_long_scores['Random time'].iloc[0]), int(df_long_scores['Greedy time'].iloc[0]), int(df_long_scores['Greedy depth time'].iloc[0]), int(df_long_scores['Important Parts time'].iloc[0]), int(df_long_scores['Hill climber time'].iloc[0]), int(df_long_scores['Simulated Annealing time'].iloc[0])]
