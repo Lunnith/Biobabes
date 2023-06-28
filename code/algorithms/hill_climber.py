@@ -382,5 +382,5 @@ class Hill_climber():
         elif not plot:
             results = pd.DataFrame.from_dict(results_dict, orient='index')
 
-        if result_per_sample: return best_protein, results, result_per_sample
+        if result_each_sample: return best_protein, results, result_per_sample
         else: return best_protein, results
