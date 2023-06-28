@@ -21,7 +21,7 @@ The main.py document contains an example for all different algorithms on how to 
 python main.py
 ```
 
-However, if you want to have a little more guidance for this program, we have built a userinterface. To use this, run the following command:
+However, if you want to have a little more guidance for this program, we have built a user interface. To use this, run the following command:
 ```
 python user_interface.py
 ```
