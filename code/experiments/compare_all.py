@@ -12,7 +12,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 
-path = r"C:\Users\lunav\Minor\Algoritmen en Heuristieken\data"
+input_path = input('Please specify the path on which you want to save the data and the visualization of the results \n')
+path = fr"{input_path}"
 
 # create dataframe to store results
 df_short_scores = pd.DataFrame()
@@ -186,17 +187,21 @@ df_long_scores.to_csv(path_or_buf=fr"{path}\df_long_scores_complete.csv")
 # run hill climber algorithm for short and long protein and store results
 start = time.time()
 
-test_protein_short = Protein("HHPHHHPHPHHHPH")
-hill_climber_protein_short = Hill_climber(test_protein_short, dimensions = 3, folded = False)
-hill_climber_protein_short.experiment(test_protein_short, iterations = 500, sample_size = 50, max_n = 1, plot = False)
+n = 50
+
+for i in range(n):
+    test_protein_short = Protein("HHPHHHPHPHHHPH")
+    hill_climber_protein_short = Hill_climber(test_protein_short, dimensions = 3, folded = False)
+    hill_climber_protein_short.run_i_iterations(test_protein_short, iterations = 500, bonds = 1)
 
 end = time.time()
 hill_climber_time_short = end - start
 
 start = time.time()
-test_protein_long = Protein("HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH")
-hill_climber_protein_long = Hill_climber(test_protein_long, dimensions = 3, folded = False)
-hill_climber_protein_long.experiment(test_protein_long, iterations = 500, sample_size = 50, max_n = 1, plot = False)
+for i in range(n):
+    test_protein_long = Protein("HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH")
+    hill_climber_protein_long = Hill_climber(test_protein_long, dimensions = 3, folded = False)
+    hill_climber_protein_long.run_i_iterations(test_protein_long, iterations = 500, bonds = 1)
 
 end = time.time()
 hill_climber_time_long = end - start
@@ -216,18 +221,20 @@ df_long_scores.to_csv(path_or_buf=fr"{path}\df_long_scores_complete.csv")
 # run simulated annealing algorithm for short and long protein and store results
 start = time.time()
 
-test_protein_short = Protein("HHPHHHPHPHHHPH")
-simanneal_protein_short = SimulatedAnnealing(test_protein_short, start_n = 10, folded = False, dimensions = 3,  temperature = 10)
-simanneal_protein_short.run_i_iterations(test_protein_short, iterations = 1000, bonds = 10, sim_annealing=True)
+for i in range(50):
+    test_protein_short = Protein("HHPHHHPHPHHHPH")
+    simanneal_protein_short = SimulatedAnnealing(test_protein_short, start_n = 10, folded = False, dimensions = 3,  temperature = 10)
+    simanneal_protein_short.run_i_iterations(test_protein_short, iterations = 1000, bonds = 10, sim_annealing=True)
 
 end = time.time()
 sim_anneal_short_time = end - start
 
 start = time.time()
 
-test_protein_long = Protein("HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH")
-simanneal_protein_long = SimulatedAnnealing(test_protein_long, start_n = 10, folded = False, dimensions = 3,  temperature = 10)
-simanneal_protein_long.run_i_iterations(test_protein_long, iterations = 1000, bonds = 10, sim_annealing = True)
+for i in range(n):
+    test_protein_long = Protein("HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH")
+    simanneal_protein_long = SimulatedAnnealing(test_protein_long, start_n = 10, folded = False, dimensions = 3,  temperature = 10)
+    simanneal_protein_long.run_i_iterations(test_protein_long, iterations = 1000, bonds = 10, sim_annealing = True)
 
 end = time.time()
 sim_anneal_long_time = end - start
