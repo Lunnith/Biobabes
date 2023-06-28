@@ -1,5 +1,5 @@
-from code.classes.protein import Protein
-from code.classes.aminoacid import Aminoacid
+from ..classes.protein import Protein
+from ..classes.aminoacid import Aminoacid
 import random
 from operator import add
 import itertools

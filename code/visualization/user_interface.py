@@ -1,6 +1,8 @@
 from ..classes.protein import Protein
 from ..algorithms.randomise import random_reassignment
 from ..algorithms.depth_first import DepthFirst
+from ..algorithms.important_parts import ImportantParts
+from ..algorithms.greedy import Greedy
 from .visualize import *
 
 class UserInterface():
@@ -112,13 +114,21 @@ class UserInterface():
     
     def use_depth_first(self, protein):
         depth_first = DepthFirst(protein, 3)
+        important_parts = ImportantParts(protein, 3)
 
         correct_kwargs = False
         while not correct_kwargs:
             pruning_correct = False
             while not pruning_correct:
                 print("\nThe depth first algorithm has serveral options:")
-                print("This algorithm can use P_pruning or Directions_pruning, in order to accept longer sequences.")
+                print("For example, the sequence can automatically be split into important parts, to be able to handle longer sequences.")
+                important_parts_answer = input("Would you like to use this option? If yes, type 'Yes' or 'y'.\n").lower()
+                if important_parts_answer == 'yes' or important_parts_answer == 'y':
+                    pruning = 'Important_parts'
+                    pruning_correct = True
+                    continue
+
+                print("This algorithm can use P_pruning or Directions_pruning, which makes it only a little bit faster.")
                 kwargs = input("Do you want to use pruning?\n").lower()
                 if kwargs == 'q': return protein
 
@@ -130,6 +140,7 @@ class UserInterface():
                 elif kwargs == 'no' or 'n': 
                     pruning = None
                     pruning_correct = True
+                    continue
 
             if pruning == 'q': return protein
             elif pruning == 'a': pruning = 'P_pruning'
@@ -139,13 +150,40 @@ class UserInterface():
             if kwargs == "yes" or kwargs == "y": correct_kwargs = True
 
         if pruning == None: depth_first.run()
+        elif pruning == 'Important_parts': 
+            important_parts.run()
+            return important_parts.protein
         elif pruning == 'P_pruning': depth_first.run(P_pruning=True)
         elif pruning == 'Directions_pruning': depth_first.run(directions_pruning=True)
 
         return depth_first.protein
 
     def use_greedy(self, protein):
-        return protein
+        correct_kwargs = False
+
+        while not correct_kwargs:
+            splits_correct = False
+            while not splits_correct:
+                print("The Greedy algorithm by default uses a split size of 1. which means it only looks for the best score per addition of a single aminoacid. Increasing the split size increases the duration of the algorithm.")
+                splits = input("Do you want to increase the split size? If yes, input 'Yes' or 'y'.\n").lower()
+                if splits == 'q': return protein
+                if splits == "yes" or splits == "y":
+                    split_size = int(input("Please input the desired split size: "))
+                    splits_correct = True
+                    break
+                else: 
+                    split_size = 1
+                    splits_correct=True
+                    break
+            
+            kwargs = input(f"Now using a split size of {split_size}, correct?\n").lower()
+            if kwargs == "yes" or kwargs == "y":
+                splits_correct = True
+                correct_kwargs = True
+
+        greedy = Greedy(protein, 3, splits=split_size)
+        greedy.run()
+        return greedy.protein
 
     def use_hill_climber(self, protein):
         return protein
