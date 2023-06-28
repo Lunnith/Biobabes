@@ -1,6 +1,4 @@
 from ..classes.protein import Protein
-from ..classes.aminoacid import Aminoacid
-from ..algorithms.hill_climber import Hill_climber
 from ..algorithms.simulated_annealing import SimulatedAnnealing
 from ..visualization.visualize import *
 from ..algorithms.randomise import random_assignment
