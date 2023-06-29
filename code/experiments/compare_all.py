@@ -1,11 +1,11 @@
-from ..classes.protein import Protein
+from code.classes.protein import Protein
 
-from ..algorithms.randomise import *
-from ..algorithms.greedy import Greedy
-from ..algorithms.depth_first import DepthFirst
-from ..algorithms.important_parts import ImportantParts
-from ..algorithms.hill_climber import Hill_climber
-from ..algorithms.simulated_annealing import SimulatedAnnealing
+from code.algorithms.randomise import *
+from code.algorithms.greedy import Greedy
+from code.algorithms.depth_first import DepthFirst
+from code.algorithms.important_parts import ImportantParts
+from code.algorithms.hill_climber import Hill_climber
+from code.algorithms.simulated_annealing import SimulatedAnnealing
 
 import time
 import pandas as pd
