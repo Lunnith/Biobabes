@@ -274,7 +274,7 @@ for i in range(len(x_array)):
     ax2.set_ylim(min(scores_short)-1, 0)
     ax2.invert_yaxis()
 
-plt.xticks(x_array, ['Random', 'Greedy', 'Greedy with depth', 'Depth First', 'Important Parts', 'Hill Climber', 'Simulated Annealing'])
+plt.xticks(x_array, ['Random', 'Greedy', 'Greedy\nWith depth', 'Depth\nFirst', 'Important\nParts', 'Hill\nClimber', 'Simulated\nAnnealing'])
 ax1.legend(["Time"], loc=2)
 ax2.legend(["Scores"], loc=1)
 
@@ -313,7 +313,7 @@ for i in range(len(x_array)):
     ax2.set_ylim(min(scores_long)-5, 0)
     ax2.invert_yaxis()
 
-plt.xticks(x_array, ['Random', 'Greedy', 'Greedy with depth', 'Important Parts', 'Hill Climber', 'Simulated Annealing'])
+plt.xticks(x_array, ['Random', 'Greedy', 'Greedy\nwith depth', 'Important\nParts', 'Hill\nClimber', 'Simulated\nAnnealing'])
 ax1.legend(["Time"], loc=2)
 ax2.legend(["Scores"], loc=1)
 
