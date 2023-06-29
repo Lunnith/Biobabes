@@ -265,17 +265,17 @@ width = float(0.40)
 for i in range(len(x_array)):
     ax1.bar(x_array[i] - 0.2, time_short[i], width=width, color='orange')
     ax1.set_xlabel("Algorithms")
-    ax1.set_ylabel("Time")
+    ax1.set_ylabel("Time (seconds)")
     
     ax2 = ax1.twinx()
 
     ax2.bar(x_array[i] + 0.2, scores_short[i], width=width, color='blue')
     ax2.set_ylabel("Scores")
-    ax2.set_ylim(min(scores_short), 0)
+    ax2.set_ylim(min(scores_short)-1, 0)
     ax2.invert_yaxis()
 
-plt.xticks(x_array, ['Random', 'Greedy', 'Greedy with depth', 'Depth First', 'Important Parts', 'Hill Climber', 'Simulated Annealing'])
-ax1.legend(["Time (s)"], loc=2)
+plt.xticks(x_array, ['Random', 'Greedy', 'Greedy\nWith depth', 'Depth\nFirst', 'Important\nParts', 'Hill\nClimber', 'Simulated\nAnnealing'])
+ax1.legend(["Time"], loc=2)
 ax2.legend(["Scores"], loc=1)
 
 plt.title('Comparison of all algorithms for short protein')
@@ -286,8 +286,15 @@ plt.show()
 df_long_scores = pd.read_csv(fr"{path}\df_long_scores_complete.csv")
 
 # create a combined barchart of the scores and the time for all algorithms for the long protein
-time_long = [int(df_long_scores['Random time'].iloc[0]), int(df_long_scores['Greedy time'].iloc[0]), int(df_long_scores['Greedy depth time'].iloc[0]), int(df_long_scores['Important Parts time'].iloc[0]), int(df_long_scores['Hill climber time'].iloc[0]), int(df_long_scores['Simulated Annealing time'].iloc[0])]
 scores_long = [int(df_long_scores['Random score'].iloc[0]), int(df_long_scores['Greedy score'].iloc[0]), int(df_long_scores['Greedy score with depth'].iloc[0]), int(df_long_scores['Important Parts score'].iloc[0]), int(df_long_scores['Hill climber score'].iloc[0]), int(df_long_scores['Simulated Annealing score'].iloc[0])]
+
+# Calculate the minutes
+dict_of_time = {}
+for algorithm in df_long_scores.columns:
+    dict_of_time[algorithm] = [int(round(df_long_scores[algorithm].iloc[0] / 60))]
+df_long_scores = pd.DataFrame.from_dict(dict_of_time)
+
+time_long = [int(df_long_scores['Random time'].iloc[0]), int(df_long_scores['Greedy time'].iloc[0]), int(df_long_scores['Greedy depth time'].iloc[0]), int(df_long_scores['Important Parts time'].iloc[0]), int(df_long_scores['Hill climber time'].iloc[0]), int(df_long_scores['Simulated Annealing time'].iloc[0])]
 
 fig, ax1 = plt.subplots()
 
@@ -297,17 +304,17 @@ width = float(0.40)
 for i in range(len(x_array)):
     ax1.bar(x_array[i] - 0.2, time_long[i], width=width, color='orange')
     ax1.set_xlabel("Algorithms")
-    ax1.set_ylabel("Time")
+    ax1.set_ylabel("Time (minutes)")
 
     ax2 = ax1.twinx()
 
     ax2.bar(x_array[i] + 0.2, scores_long[i], width=width, color='blue')
     ax2.set_ylabel("Scores")
-    ax2.set_ylim(min(scores_long), 0)
+    ax2.set_ylim(min(scores_long)-5, 0)
     ax2.invert_yaxis()
 
-plt.xticks(x_array, ['Random', 'Greedy', 'Greedy with depth', 'Important Parts', 'Hill Climber', 'Simulated Annealing'])
-ax1.legend(["Time (s)"], loc=2)
+plt.xticks(x_array, ['Random', 'Greedy', 'Greedy\nwith depth', 'Important\nParts', 'Hill\nClimber', 'Simulated\nAnnealing'])
+ax1.legend(["Time"], loc=2)
 ax2.legend(["Scores"], loc=1)
 
 plt.title('Comparison of all algorithms for long protein')
