@@ -3,6 +3,7 @@ from ..algorithms.simulated_annealing import SimulatedAnnealing
 from ..visualization.visualize import *
 from ..algorithms.randomise import random_assignment
 
+import pandas as pd
 import copy
 import time
 
@@ -36,11 +37,11 @@ def unpack_scores(scores: list, improvement: list) -> dict:
 
 # Define repeating testing params:
 sequence = "HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH"
-iterations = 2500
+iterations = 3000
 dimensions = 3
 folded = True
 start_n = 10
-samples = 50
+samples = 100
 testing_temperatures = range(1, 25+1)
 
 for test in range(0,5):
