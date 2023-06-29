@@ -34,7 +34,6 @@ print('Depth First completed')
 
 # make a dictionary with the splits as keys and the number of iterations per 'before' as the value
 dict_splits = {1: 10, 2: 5, 3: 4, 4: 3}
-total_states = 0
 
 # run greedy with depth with different split sizes and before sizes with test protein
 for key, value in dict_splits.items():
@@ -55,7 +54,7 @@ for i in range(n):
     test_protein = Protein("HHPHHHPHPHHHPH")
 
     hill_climber_protein = Hill_climber(test_protein, 2)
-    hill_climber_protein.run_i_iterations(test_protein, iterations=500, bonds=1)
+    hill_climber_protein.run_i_iterations(test_protein, iterations = 500, bonds = 1)
 
     hill_climber_scores.append(hill_climber_protein.protein.score)
     hill_climber_states += hill_climber_protein.states
@@ -67,8 +66,8 @@ n = 50
 for i in range(n):
     test_protein = Protein("HHPHHHPHPHHHPH")
 
-    simanneal_protein = SimulatedAnnealing(test_protein, start_n=5, folded=False, dimensions = 2, temperature = 10)
-    simanneal_protein.run_i_iterations(test_protein, iterations = 500, bonds=5)
+    simanneal_protein = SimulatedAnnealing(test_protein, start_n = 5, folded=False, dimensions = 2, temperature = 10)
+    simanneal_protein.run_i_iterations(test_protein, iterations = 500, bonds = 5)
 
     sim_anneal_scores.append(simanneal_protein.protein.score)
     sim_anneal_states += simanneal_protein.states
@@ -94,8 +93,8 @@ df_exp_depth_greedy_hill.to_csv(path_or_buf=fr"{path}\df_exp_depth_greedy_hill_c
 df_exp_depth_greedy_hill = pd.read_csv(fr"{path}\df_exp_depth_greedy_hill_complete")
 
 # create combined barchart of states and scores for all algorithms
-states = [int(df_exp_depth_greedy_hill['Depth_first_states']), int(df_exp_depth_greedy_hill['Greedy_states']), int(df_exp_depth_greedy_hill['Hill_climber_states']), int(df_exp_depth_greedy_hill['Sim_anneal_states'])]
-scores = [int(df_exp_depth_greedy_hill['Depth_first_score']), int(df_exp_depth_greedy_hill['Greedy_score']), int(df_exp_depth_greedy_hill['Hill_climber_scores']), int(df_exp_depth_greedy_hill['Sim_anneal_scores'])]
+states = [int(df_exp_depth_greedy_hill['Depth_first_states'].iloc[0]), int(df_exp_depth_greedy_hill['Greedy_states'].iloc[0]), int(df_exp_depth_greedy_hill['Hill_climber_states'].iloc[0]), int(df_exp_depth_greedy_hill['Sim_anneal_states'].iloc[0])]
+scores = [int(df_exp_depth_greedy_hill['Depth_first_score'].iloc[0]), int(df_exp_depth_greedy_hill['Greedy_score'].iloc[0]), int(df_exp_depth_greedy_hill['Hill_climber_scores'].iloc[0]), int(df_exp_depth_greedy_hill['Sim_anneal_scores'].iloc[0])]
 
 fig, ax1 = plt.subplots()
 
