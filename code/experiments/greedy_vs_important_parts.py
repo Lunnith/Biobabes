@@ -16,7 +16,7 @@ greedy_scores = []
 important_parts_scores = []
 
 # run important parts algorithm with split size 5 n iterations
-n = 1000
+n = 400
 
 for i in range(n):
     test_protein = Protein("HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH")
@@ -27,7 +27,7 @@ for i in range(n):
 print(f'Important Parts done!')
 
 # run greedy with depth algorithm with split size 5 n iterations
-n = 500
+n = 80
 
 for i in range(n):
     for before in range(5):
@@ -53,7 +53,7 @@ data = [df_exp_greedy_important_parts['greedy_scores'], df_exp_greedy_important_
 plt.boxplot(data)
 plt.xlabel("Algorithm")
 plt.ylabel("Score distribution")
-plt.title('Greedy vs Important Parts, split size = 5, 1000 iterations')
+plt.title('Greedy vs Important Parts, split size = 5, 400 iterations')
 
 ax = plt.gca()
 ax.invert_yaxis()
