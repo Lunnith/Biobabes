@@ -94,8 +94,8 @@ df_exp_depth_greedy_hill.to_csv(path_or_buf=fr"{path}\df_exp_depth_greedy_hill_c
 df_exp_depth_greedy_hill = pd.read_csv(fr"{path}\df_exp_depth_greedy_hill_complete")
 
 # create combined barchart of states and scores for all algorithms
-states = [int(df_exp_depth_greedy_hill['Depth_first_states']), int(df_exp_depth_greedy_hill['Greedy_states']), int(df_exp_depth_greedy_hill['Hill_climber_states']), int(df_exp_depth_greedy_hill['Sim_anneal_states'])]
-scores = [int(df_exp_depth_greedy_hill['Depth_first_score']), int(df_exp_depth_greedy_hill['Greedy_score']), int(df_exp_depth_greedy_hill['Hill_climber_scores']), int(df_exp_depth_greedy_hill['Sim_anneal_scores'])]
+states = [int(df_exp_depth_greedy_hill['Depth_first_states'].iloc[0]), int(df_exp_depth_greedy_hill['Greedy_states'].iloc[0]), int(df_exp_depth_greedy_hill['Hill_climber_states'].iloc[0]), int(df_exp_depth_greedy_hill['Sim_anneal_states'].iloc[0])]
+scores = [int(df_exp_depth_greedy_hill['Depth_first_score'].iloc[0]), int(df_exp_depth_greedy_hill['Greedy_score'].iloc[0]), int(df_exp_depth_greedy_hill['Hill_climber_scores'].iloc[0]), int(df_exp_depth_greedy_hill['Sim_anneal_scores'].iloc[0])]
 
 fig, ax1 = plt.subplots()
 
