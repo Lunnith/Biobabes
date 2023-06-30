@@ -7,6 +7,7 @@ import time
 
 # select a sequence and create two empty dataframes for all scores and for summary results
 sequence = "HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH"
+#sequence = "HHPHHHPHPHHHPH"
 df_exp_greedy = pd.DataFrame()
 df_exp_greedy_total = pd.DataFrame()
 

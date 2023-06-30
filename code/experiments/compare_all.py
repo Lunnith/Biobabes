@@ -26,24 +26,27 @@ test_protein_long = Protein("HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH"
 # run random algorithm for short and long protein and store results
 start = time.time()
 
-random_protein_short, score_list_short, best_score_short = random_reassignment(test_protein_short, 3, k=1000000)
+random_protein_short, score_list_short, best_score_short = random_reassignment(copy.deepcopy(test_protein_short), 3, k=100000)
 
 end = time.time()
 random_time_short = end - start
 
-# this part is commented because it was already run in another experiment
-# start = time.time()
-
-# random_protein_long, score_list_long, best_score_long = random_reassignment(test_protein_long, 3, k=1000000)
-
-# end = time.time()
-# random_time_long = end - start
-
 df_short_scores["Random score"] = [random_protein_short.score]
 df_short_scores["Random time"] = [random_time_short]
 
-df_long_scores["Random score"] = [-39]
-df_long_scores["Random time"] = [28220]
+# this part is commented because it was already run in another experiment
+start = time.time()
+
+random_protein_long, score_list_long, best_score_long = random_reassignment(copy.deepcopy(test_protein_long), 3, k=100000)
+
+end = time.time()
+random_time_long = end - start
+
+df_long_scores["Random score"] = [random_protein_long.score]
+df_long_scores["Random time"] = [random_time_long]
+
+# df_long_scores["Random score"] = [-39]
+# df_long_scores["Random time"] = [28220]
 
 print('Random done!')
 
@@ -60,9 +63,7 @@ start = time.time()
 n = 2500
 
 for i in range(n):
-    test_protein_short = Protein("HHPHHHPHPHHHPH")
-
-    greedy_protein_short = Greedy(test_protein_short, 3, splits=1)
+    greedy_protein_short = Greedy(copy.deepcopy(test_protein_short), 3, splits=1)
     greedy_protein_short.run()
     greedy_scores_short.append(greedy_protein_short.protein.score)
 
@@ -71,9 +72,7 @@ greedy_time_short = end - start
 
 start = time.time()
 for i in range(n):
-    test_protein_long = Protein("HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH")
-
-    greedy_protein_long = Greedy(test_protein_long, 3, splits=1)
+    greedy_protein_long = Greedy(copy.deepcopy(test_protein_long), 3, splits=1)
     greedy_protein_long.run()
     greedy_scores_long.append(greedy_protein_long.protein.score)
 
@@ -98,13 +97,11 @@ greedy_beam_scores_long = []
 
 start = time.time()
 
-n = 500
+n = 25
 
 for i in range(n):
     for before in range(4):
-        test_protein_short = Protein("HHPHHHPHPHHHPH")
-
-        greedy_beam_protein_short = Greedy(test_protein_short, 3, splits=4, before=before)
+        greedy_beam_protein_short = Greedy(copy.deepcopy(test_protein_short), 3, splits=4, before=before)
         greedy_beam_protein_short.run()
         greedy_beam_scores_short.append(greedy_beam_protein_short.protein.score)
 
@@ -113,11 +110,10 @@ greedy_beam_time_short = end - start
 
 start = time.time()
 
+n = 500
 for i in range(n):
     for before in range(4):
-        test_protein_long = Protein("HCPHPHPHCHHHHPCCPPHPPPHPPPPCPPPHPPPHPHHHHCHPHPHPHH")
-
-        greedy_beam_protein_long = Greedy(test_protein_long, 3, splits=4, before=before)
+        greedy_beam_protein_long = Greedy(copy.deepcopy(test_protein_long), 3, splits=4, before=before)
         greedy_beam_protein_long.run()
         greedy_beam_scores_long.append(greedy_beam_protein_long.protein.score)
 
@@ -139,7 +135,7 @@ df_long_scores.to_csv(path_or_buf=fr"{path}\df_long_scores_complete.csv")
 # run depth first algorithm with P pruning and directions pruning for short protein and store results
 start = time.time()
 
-depth_first_protein = DepthFirst(test_protein_short, 3)
+depth_first_protein = DepthFirst(copy.deepcopy(test_protein_short), 3)
 depth_first_protein.run(P_pruning=True, directions_pruning=True)
 
 end = time.time()
@@ -159,14 +155,14 @@ important_parts_scores_short_on_P = []
 important_parts_scores_long_on_P = []
 
 start = time.time()
-important_parts_protein_short_on_P = ImportantParts(test_protein_short, 3)
+important_parts_protein_short_on_P = ImportantParts(copy.deepcopy(test_protein_short), 3)
 important_parts_protein_short_on_P.run(iterations=1000, split_on_P=True, split_on_size=False)
 
 end = time.time()
 important_parts_time_short_on_P = end - start
 
 start = time.time()
-important_parts_protein_long_on_P = ImportantParts(test_protein_long, 3)
+important_parts_protein_long_on_P = ImportantParts(copy.deepcopy(test_protein_long), 3)
 important_parts_protein_long_on_P.run(iterations=1000, split_on_P=True, split_on_size=False)
 
 end = time.time()
