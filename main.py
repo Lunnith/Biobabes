@@ -47,20 +47,20 @@ if __name__ == "__main__":
 #     # Note: for longer proteins (+16 aminoacids) this will take longer than an hour until forever.
 #     # Note 2: turning on P_pruning and directions_pruning accelerates the algorithm a bit
 
-#     depth_first_protein = DepthFirst(test_protein_A, 3)
-#     depth_first_protein.run()
+    # depth_first_protein = DepthFirst(test_protein_A, 3)
+    # depth_first_protein.run()
 
-#     print(f'Value of the folding after Depth First:'
-#           f'{depth_first_protein.protein.score}')
+    # print(f'Value of the folding after Depth First:'
+    #       f'{depth_first_protein.protein.score}')
     
 #     # ---------------------------- Depth First - Important Parts ----------------------------
 #     # Note: in this example the protein is split on the number of P's, splitting on size is also possible, you have to specify the size for this
 
-#      important_parts_protein = ImportantParts(test_protein_A, 3)
-#      important_parts_protein.run(iterations=1000, split_on_P=True, split_on_size=False)
+    # important_parts_protein = ImportantParts(test_protein_A, 2)
+    # important_parts_protein.run(iterations=1000, split_on_P=True, split_on_size=False)
 
-#      print(f'Value of the folding after Important Parts:'
-#           f'{important_parts_protein.protein.score}')
+    # print(f'Value of the folding after Important Parts:'
+    #     f'{important_parts_protein.protein.score}')
     
 #     # ---------------------------- Hill Climber ----------------------------
 #     # Note: it is also possible to insert an already folded protein into hill climber or simulated annealing, specify folded = True when initializing

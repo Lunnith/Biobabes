@@ -73,7 +73,7 @@ class ImportantParts(DepthFirst):
         # loop through sequence parts and apply depth first to every part
         for part in sequence_parts:
             protein_part = Protein(part)
-            depth_first = DepthFirst(protein_part, 3)
+            depth_first = DepthFirst(protein_part, self.dimensions)
             depth_first.run(directions_pruning=True, P_pruning=True)
 
             part_directions = []
@@ -83,7 +83,7 @@ class ImportantParts(DepthFirst):
                 for direction in self.directions:
                     if direction[3] == acid.step:
                         part_directions.append(direction)
-            
+
             best_directions.append(part_directions)
 
         return best_directions

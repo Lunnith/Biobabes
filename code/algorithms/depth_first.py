@@ -38,17 +38,19 @@ class DepthFirst():
         runs depth fold algorithm
 
     """
-    def __init__(self, protein: Protein, dimensions: int) -> None:
+    def __init__(self, protein: Protein, dimensions: int = 2) -> None:
         # initialize protein and add first aminoacid with location and step
         self.protein = protein
         self.protein.add_aminoacid(self.protein.sequence[0])
         self.protein.sequence_list[0].location = [0,0,0]
         self.protein.used_coordinates.add((tuple([0,0,0])))
+        
+        self.dimensions = dimensions
 
         # initialize directions based on dimensions
         self.directions = set(((1, 0, 0, 1), (-1, 0, 0, -1), (0, 1, 0, 2), (0, -1, 0, -2)))
 
-        if dimensions == 3:
+        if self.dimensions == 3:
             self.directions.update(((0, 0, 1, 3), (0, 0, -1, -3)))
 
         self.states = [copy.deepcopy(self.protein)]
